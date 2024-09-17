@@ -1,12 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { Link } from 'expo-router'
+import { StyleSheet, Text, View, Button } from 'react-native';
+import { router } from 'expo-router'
 
 export default function Inbox() {
+    const navigateToMessage = () => {
+        router.push('/InboxTab/message')
+    }
+
     return (
         <View style={styles.container}>
             <Text>Inbox page</Text>
-            <Link href={"/InboxTab/message"}>Go to single message page</Link>
+            <Button
+                onPress={navigateToMessage}
+                title='Go to message page'
+                accessibilityLabel='Navigation button'
+            />
             <StatusBar style="auto" />
         </View>
     );
@@ -15,6 +23,7 @@ export default function Inbox() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        gap: 4,
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',

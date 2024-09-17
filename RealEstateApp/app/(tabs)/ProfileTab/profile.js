@@ -1,12 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { Link } from 'expo-router'
+import { StyleSheet, Text, View, Button } from 'react-native';
+import { router } from 'expo-router'
 
 export default function Profile() {
+    const navigateToEditPage = () => {
+        router.push('/ProfileTab/editprofile')
+    }
+
     return (
         <View style={styles.container}>
             <Text>Profile Page</Text>
-            <Link href={"/ProfileTab/editprofile"}>Go to edit profile page</Link>
+            <Button
+                onPress={navigateToEditPage}
+                title='Go to edit profile page'
+                accessibilityLabel='Navigation button'
+            />
             <StatusBar style="auto" />
         </View>
     );
@@ -15,6 +23,7 @@ export default function Profile() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        gap: 4,
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',

@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 export default function MonitorDetails() {
     return (
         <View style={styles.container}>
-            <Text>This is the details page for monitor.</Text>
+            <Text>Monitor details page</Text>
             <StatusBar style="auto" />
         </View>
     );

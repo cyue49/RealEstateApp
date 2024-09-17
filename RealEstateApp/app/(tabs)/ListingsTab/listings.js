@@ -1,12 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { Link } from 'expo-router'
+import { StyleSheet, Text, View, Button } from 'react-native';
+import { router } from 'expo-router'
 
 export default function Listings() {
+    const navigateToDetails = () => {
+        router.push('/ListingsTab/listingdetails')
+    }
+
     return (
         <View style={styles.container}>
-            <Text>This is the homepage showing all the listings.</Text>
-            <Link href={"/ListingsTab/listingdetails"}>Go to single listing page</Link>
+            <Text>Listings page</Text>
+            <Button
+                onPress={navigateToDetails}
+                title='Go to single listing page'
+                accessibilityLabel='Navigation button'
+            />
             <StatusBar style="auto" />
         </View>
     );
@@ -15,6 +23,7 @@ export default function Listings() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        gap: 4,
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',

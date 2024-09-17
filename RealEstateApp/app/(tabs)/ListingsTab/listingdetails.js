@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 export default function ListingDetails() {
     return (
         <View style={styles.container}>
-            <Text>This is the details page for a listing.</Text>
+            <Text>Listing details page</Text>
             <StatusBar style="auto" />
         </View>
     );
