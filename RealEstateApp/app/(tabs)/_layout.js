@@ -5,14 +5,32 @@ export default function TabLayout() {
     return (
         <Tabs
             screenOptions={{
-                headerShown: false,
+                headerShown: false
             }}>
             <Tabs.Screen
-                name="index"
+                name="listings"
                 options={{
-                    title: 'Home',
+                    title: 'Listings'
                 }}
-            />,
+            />
+            <Tabs.Screen
+                name="inbox"
+                options={{
+                    title: 'Inbox'
+                }}
+            />
+            <Tabs.Screen
+                name="monitor"
+                options={{
+                    title: 'Monitor'
+                }}
+            />
+            <Tabs.Screen
+                name="profile"
+                options={{
+                    title: 'Profile'
+                }}
+            />
         </Tabs>
     );
 }
