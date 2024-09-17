@@ -8,25 +8,25 @@ export default function TabLayout() {
                 headerShown: false
             }}>
             <Tabs.Screen
-                name="listings"
+                name="ListingsTab"
                 options={{
                     title: 'Listings'
                 }}
             />
             <Tabs.Screen
-                name="inbox"
+                name="InboxTab"
                 options={{
                     title: 'Inbox'
                 }}
             />
             <Tabs.Screen
-                name="monitor"
+                name="MonitorTab"
                 options={{
                     title: 'Monitor'
                 }}
             />
             <Tabs.Screen
-                name="profile"
+                name="ProfileTab"
                 options={{
                     title: 'Profile'
                 }}

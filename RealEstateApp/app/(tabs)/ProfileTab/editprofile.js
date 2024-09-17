@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function Inbox() {
+export default function EditProfile() {
     return (
         <View style={styles.container}>
-            <Text>Inbox page</Text>
+            <Text>Edit Profile Page</Text>
             <StatusBar style="auto" />
         </View>
     );

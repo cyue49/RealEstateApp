@@ -2,11 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { Link } from 'expo-router'
 
-export default function Index() {
+export default function Profile() {
     return (
         <View style={styles.container}>
-            <Text>This is the homepage showing all the listings.</Text>
-            <Link href={"/listings/listingdetails"}>Go to single listing page</Link>
+            <Text>Profile Page</Text>
+            <Link href={"/ProfileTab/editprofile"}>Go to edit profile page</Link>
+            <StatusBar style="auto" />
         </View>
     );
 }

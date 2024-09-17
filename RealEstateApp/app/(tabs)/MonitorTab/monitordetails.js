@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function Monitor() {
+export default function MonitorDetails() {
     return (
         <View style={styles.container}>
-            <Text>Monitor Page</Text>
+            <Text>This is the details page for monitor.</Text>
             <StatusBar style="auto" />
         </View>
     );
