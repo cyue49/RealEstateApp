@@ -2,27 +2,27 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { router } from 'expo-router'
 
-export default function SignUp() {
-    const signup = () => {
+export default function SignIn() {
+    const signin = () => {
         router.replace('/ListingsTab/listings')
     }
 
-    const goToSignin = () => {
-        router.replace('/signin')
+    const goToSignup = () => {
+        router.replace('/signup')
     }
 
     return (
         <View style={styles.container}>
-            <Text>Sign Up Page</Text>
+            <Text>Sign In Page</Text>
             <Button
-                onPress={signup}
-                title='Sign Up'
-                accessibilityLabel='Sign up button'
+                onPress={signin}
+                title='Sign In'
+                accessibilityLabel='Sign in button'
             />
             <Button
-                onPress={goToSignin}
-                title='Sign In instead'
-                accessibilityLabel='Go to sign in page button'
+                onPress={goToSignup}
+                title='Sign Up Instead'
+                accessibilityLabel='Go to sign up page button'
             />
             <StatusBar style="auto" />
         </View>
