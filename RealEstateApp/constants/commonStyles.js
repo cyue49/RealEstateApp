@@ -1,14 +1,5 @@
 import { StyleSheet } from 'react-native'
-
-export const Colors = {
-    appGreen: '#80e091',
-    appPurple: '#a89fec',
-    appYellow: '#d1e497',
-    appPink: '#e3b7c8',
-    appBlue: '#a3daec',
-    appDark: '#070707',
-    appLight: '#ececec',
-}
+import { Colors } from './Colors'
 
 export const styles = StyleSheet.create({
     containerCenter: {
@@ -21,3 +12,23 @@ export const styles = StyleSheet.create({
         backgroundColor: Colors.appLight
     }
 });
+
+export const headerOptions = {
+    headerStyle: {
+        backgroundColor: Colors.appBlue,
+    },
+    headerTintColor: Colors.appDark,
+    headerTitleStyle: {
+        fontWeight: 'bold',
+    }
+}
+
+export const bottomTabBarOptions = {
+    headerShown: false,
+    tabBarInactiveTintColor: Colors.appLight,
+    tabBarActiveTintColor: Colors.appDark,
+    tabBarStyle: {
+        height: 80,
+        backgroundColor: Colors.appBlue
+    }
+}
