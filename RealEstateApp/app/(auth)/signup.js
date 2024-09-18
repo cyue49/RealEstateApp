@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { Text, View, Button } from 'react-native';
 import { router } from 'expo-router'
+import { styles } from '../../constants/commonStyles'
 
 export default function SignUp() {
     const signup = () => {
@@ -12,7 +13,7 @@ export default function SignUp() {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={styles.containerCenter}>
             <Text>Sign Up Page</Text>
             <Button
                 onPress={signup}
@@ -28,13 +29,3 @@ export default function SignUp() {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        gap: 4,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});

@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { Text, View } from 'react-native';
-import { styles } from '../../../commonStyles'
+import { styles } from '../../../constants/commonStyles'
 
 export default function EditProfile() {
     return (

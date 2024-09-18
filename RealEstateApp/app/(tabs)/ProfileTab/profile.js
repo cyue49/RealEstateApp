@@ -1,11 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, Button } from 'react-native';
 import { router } from 'expo-router'
-import { styles } from '../../../commonStyles'
+import { styles } from '../../../constants/commonStyles'
 
 export default function Profile() {
     const navigateToEditPage = () => {
         router.push('/ProfileTab/editprofile')
+    }
+
+    const navigateToSignIn = () => {
+        router.replace('/signin')
     }
 
     return (
@@ -14,6 +18,11 @@ export default function Profile() {
             <Button
                 onPress={navigateToEditPage}
                 title='Go to edit profile page'
+                accessibilityLabel='Navigation button'
+            />
+            <Button
+                onPress={navigateToSignIn}
+                title='Go to sign in page'
                 accessibilityLabel='Navigation button'
             />
             <StatusBar style="auto" />

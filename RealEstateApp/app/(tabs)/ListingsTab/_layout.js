@@ -1,5 +1,5 @@
 import { Stack } from "expo-router";
-import { Colors } from '../../../commonStyles'
+import { Colors } from '../../../constants/commonStyles'
 
 export default function Layout() {
     return (
@@ -8,7 +8,7 @@ export default function Layout() {
                 headerStyle: {
                     backgroundColor: Colors.appBlue,
                 },
-                headerTintColor: Colors.appPurple,
+                headerTintColor: Colors.appDark,
                 headerTitleStyle: {
                     fontWeight: 'bold',
                 }

@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Colors } from '../../commonStyles'
+import { Colors } from '../../constants/commonStyles'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
@@ -10,7 +10,7 @@ export default function TabLayout() {
             screenOptions={{
                 headerShown: false,
                 tabBarInactiveTintColor: Colors.appLight,
-                tabBarActiveTintColor: Colors.appPurple,
+                tabBarActiveTintColor: Colors.appDark,
                 tabBarStyle: {
                     height: 80,
                     backgroundColor: Colors.appBlue
