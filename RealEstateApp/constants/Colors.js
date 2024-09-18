@@ -1,9 +1,8 @@
 export const Colors = {
-    appGreen: '#80e091',
-    appPurple: '#a89fec',
-    appYellow: '#d1e497',
-    appPink: '#e3b7c8',
-    appBlue: '#a3daec',
     appDark: '#070707',
-    appLight: '#ececec',
+    appLight: '#FAFAFA',
+    appGray: '#A3A3A3',
+    appBlue: '#2976D4',
+    appBlueLight: '#E7F0FA',
+    appBlueDark: '#1A4E8E'
 }
