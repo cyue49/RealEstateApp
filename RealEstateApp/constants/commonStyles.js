@@ -15,9 +15,9 @@ export const styles = StyleSheet.create({
 
 export const headerOptions = {
     headerStyle: {
-        backgroundColor: Colors.appBlue,
+        backgroundColor: Colors.appBlue
     },
-    headerTintColor: Colors.appDark,
+    headerTintColor: Colors.appLight,
     headerTitleStyle: {
         fontWeight: 'bold',
     }
@@ -25,10 +25,19 @@ export const headerOptions = {
 
 export const bottomTabBarOptions = {
     headerShown: false,
-    tabBarInactiveTintColor: Colors.appLight,
-    tabBarActiveTintColor: Colors.appDark,
+    tabBarInactiveTintColor: Colors.appGray,
+    tabBarActiveTintColor: Colors.appBlue,
+    tabBarActiveBackgroundColor: Colors.appBlueLight,
+    tabBarInactiveBackgroundColor: Colors.appLight,
     tabBarStyle: {
         height: 80,
-        backgroundColor: Colors.appBlue
+        backgroundColor: Colors.appLight,
+        fontSize: 12
+    },
+    tabBarItemStyle: {
+        margin: 5,
+        padding: 3,
+        borderRadius: 50,
+        borderTopWidth: 0
     }
 }
