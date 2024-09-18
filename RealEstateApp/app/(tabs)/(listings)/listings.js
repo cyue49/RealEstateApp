@@ -4,8 +4,9 @@ import { router } from 'expo-router'
 import { styles } from '../../../constants/commonStyles'
 
 export default function Listings() {
+    const tempId = 1;
     const navigateToDetails = () => {
-        router.push('/ListingsTab/listingdetails')
+        router.push(`./listingdetails/${tempId}`)
     }
 
     return (

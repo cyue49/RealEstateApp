@@ -3,17 +3,18 @@ import { Text, View, Button } from 'react-native';
 import { router } from 'expo-router'
 import { styles } from '../../../constants/commonStyles'
 
-export default function Inbox() {
-    const navigateToMessage = () => {
-        router.push('/InboxTab/message')
+export default function Monitor() {
+    const tempId = 1;
+    const navigateToDetails = () => {
+        router.push(`./monitordetails/${tempId}`)
     }
 
     return (
         <View style={[styles.containerCenter, styles.tabPageStyles]}>
-            <Text>Inbox page</Text>
+            <Text>Monitor Page</Text>
             <Button
-                onPress={navigateToMessage}
-                title='Go to message page'
+                onPress={navigateToDetails}
+                title='Go to monitor details page'
                 accessibilityLabel='Navigation button'
             />
             <StatusBar style="auto" />

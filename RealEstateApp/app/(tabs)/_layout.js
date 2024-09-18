@@ -8,28 +8,28 @@ export default function TabLayout() {
         <Tabs
             screenOptions={bottomTabBarOptions}>
             <Tabs.Screen
-                name="ListingsTab"
+                name="(listings)"
                 options={{
                     title: 'Listings',
                     tabBarIcon: ({ color }) => <TabBarIcon name='home' color={color} />
                 }}
             />
             <Tabs.Screen
-                name="InboxTab"
+                name="(inbox)"
                 options={{
                     title: 'Inbox',
                     tabBarIcon: ({ color }) => <TabBarIcon name='inbox' color={color} />
                 }}
             />
             <Tabs.Screen
-                name="MonitorTab"
+                name="(monitor)"
                 options={{
                     title: 'Monitor',
                     tabBarIcon: ({ color }) => <TabBarIcon name='check-square' color={color} />
                 }}
             />
             <Tabs.Screen
-                name="ProfileTab"
+                name="(profile)"
                 options={{
                     title: 'Profile',
                     tabBarIcon: ({ color }) => <TabBarIcon name='user' color={color} />

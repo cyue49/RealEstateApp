@@ -9,7 +9,7 @@ export default function Layout() {
                 title: 'Inbox',
                 headerShown: false
             }} />
-            <Stack.Screen name="message" options={{
+            <Stack.Screen name="message/[id]" options={{
                 title: 'Message'
             }} />
         </Stack>

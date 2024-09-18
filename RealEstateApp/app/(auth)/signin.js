@@ -5,7 +5,7 @@ import { styles } from '../../constants/commonStyles'
 
 export default function SignIn() {
     const signin = () => {
-        router.replace('/ListingsTab/listings')
+        router.replace('/listings')
     }
 
     const goToSignup = () => {

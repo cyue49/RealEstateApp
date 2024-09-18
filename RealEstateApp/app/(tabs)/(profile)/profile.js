@@ -5,7 +5,7 @@ import { styles } from '../../../constants/commonStyles'
 
 export default function Profile() {
     const navigateToEditPage = () => {
-        router.push('/ProfileTab/editprofile')
+        router.push('./editprofile')
     }
 
     const navigateToSignIn = () => {

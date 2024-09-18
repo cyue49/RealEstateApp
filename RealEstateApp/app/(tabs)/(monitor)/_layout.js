@@ -5,12 +5,12 @@ export default function Layout() {
     return (
         <Stack
             screenOptions={headerOptions}>
-            <Stack.Screen name="listings" options={{
-                title: 'Listings',
+            <Stack.Screen name="monitor" options={{
+                title: 'Monitor',
                 headerShown: false
             }} />
-            <Stack.Screen name="listingdetails" options={{
-                title: 'Listing Details'
+            <Stack.Screen name="monitordetails/[id]" options={{
+                title: 'Monitor Details'
             }} />
         </Stack>
     );
