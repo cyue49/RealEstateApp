@@ -1,20 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { styles } from '../../../commonStyles'
 
 export default function EditProfile() {
     return (
-        <View style={styles.container}>
+        <View style={[styles.containerCenter, styles.tabPageStyles]}>
             <Text>Edit Profile Page</Text>
             <StatusBar style="auto" />
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});

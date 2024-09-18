@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { Text, View, Button } from 'react-native';
 import { router } from 'expo-router'
+import { styles } from '../../../commonStyles'
 
 export default function Monitor() {
     const navigateToDetails = () => {
@@ -8,7 +9,7 @@ export default function Monitor() {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.containerCenter, styles.tabPageStyles]}>
             <Text>Monitor Page</Text>
             <Button
                 onPress={navigateToDetails}
@@ -19,13 +20,3 @@ export default function Monitor() {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        gap: 4,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});

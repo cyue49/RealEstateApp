@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { Text, View, Button } from 'react-native';
 import { router } from 'expo-router'
+import { styles } from '../../../commonStyles'
 
 export default function Profile() {
     const navigateToEditPage = () => {
@@ -8,7 +9,7 @@ export default function Profile() {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.containerCenter, styles.tabPageStyles]}>
             <Text>Profile Page</Text>
             <Button
                 onPress={navigateToEditPage}
@@ -19,13 +20,3 @@ export default function Profile() {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        gap: 4,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
