@@ -1,23 +1,43 @@
-import { StatusBar } from 'expo-status-bar';
-import { Text, View, Button } from 'react-native';
+import { StyleSheet, SafeAreaView, FlatList } from 'react-native';
 import { router } from 'expo-router'
-import { styles } from '../../../constants/commonStyles'
+import { Colors } from '../../../constants/Colors'
+import MessageCard from '../../../components/inbox/MessageCard'
 
 export default function Inbox() {
-    const tempId = 1;
-    const navigateToMessage = () => {
-        router.push(`./message/${tempId}`)
+    const tempData = [
+        {
+            id: '1',
+            username: 'Landlord 1',
+            previewMessage: 'Hello, I am interested in your property!',
+            latestMessageTime: '12:00pm'
+        },
+        {
+            id: '2',
+            username: 'Landlord 2',
+            previewMessage: 'Hello! I saw your posting about a property in Montreal. I am interested in your property!',
+            latestMessageTime: '11:00pm'
+        }
+    ]
+
+    const navigateToMessage = (id) => {
+        router.push(`./message/${id}`)
     }
 
     return (
-        <View style={[styles.containerCenter, styles.tabPageStyles]}>
-            <Text>Inbox page</Text>
-            <Button
-                onPress={navigateToMessage}
-                title='Go to message page'
-                accessibilityLabel='Navigation button'
+        <SafeAreaView style={styles.container}>
+            <FlatList
+                data={tempData}
+                renderItem={({ item }) => <MessageCard inboxItem={item} onPress={() => navigateToMessage(item.id)} />}
+                keyExtractor={item => item.id}
+
             />
-            <StatusBar style="auto" />
-        </View>
+        </SafeAreaView>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: Colors.appLight
+    }
+});
