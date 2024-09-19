@@ -22,4 +22,8 @@ public class FirebaseAuthService {
             return FirebaseAuth.getInstance().getUser(userID);
     }
 
+    public UserRecord getUserByEmail(String email) throws FirebaseAuthException {
+        return FirebaseAuth.getInstance().getUserByEmail(email);
+    }
+
 }

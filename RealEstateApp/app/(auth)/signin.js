@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { Text, View, Button, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 import { useState } from "react"; 
+import axios from 'axios';
 //import { styles } from "../../constants/commonStyles";
 
 export default function SignIn() {
@@ -10,7 +11,7 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const signin = () => {
+  const goToHome = () => {
     router.replace("/listings");
   };
 
@@ -19,12 +20,20 @@ export default function SignIn() {
   };
 
   const handleSignIn = async () => {
-    // try {
-    //   await signInWithEmailAndPassword(auth, email, password);
-    //   navigation.navigate('Home'); // Navigate to home page after sign-in
-    // } catch (error) {
-    //   setError(error.message);
-    // }
+    try {
+        // Replace with your backend URL
+        const response = await axios.post('http://192.168.2.25:8081/user/signin', {
+          email,
+          password,
+        });
+        
+        // Handle successful sign-in (e.g., navigate to home screen)
+        console.log('Sign-in successful:');//, response.data);
+        goToHome();
+      } catch (error) {
+        console.log("Error:", error)
+        setError('Invalid email or password');
+      }
   };
 
   return (
@@ -47,7 +56,7 @@ export default function SignIn() {
       <TouchableOpacity style={styles.button} onPress={handleSignIn}>
         <Text style={styles.buttonText}>Continue</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => goToSignup}>
+      <TouchableOpacity onPress={goToSignup}>
         <Text style={styles.link}>Don't have an account? Sign Up</Text>
       </TouchableOpacity>
     </View>

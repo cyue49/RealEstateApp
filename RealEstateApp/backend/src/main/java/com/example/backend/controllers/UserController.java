@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.backend.services.FirebaseAuthService;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
+import com.example.backend.entity.User;
 
 @RestController
 @RequestMapping("/user")
@@ -43,6 +45,18 @@ public class UserController {
             return ResponseEntity.ok(userRecord);
         } catch (FirebaseAuthException e) {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/signin")
+    public ResponseEntity<?> signIn(@RequestBody User user) {
+        try {
+            
+            UserRecord userRecord = firebaseAuthService.getUserByEmail(user.getEmail());
+            return ResponseEntity.ok(userRecord);
+
+        } catch (FirebaseAuthException e) {
+            return ResponseEntity.badRequest().body("Invalid email or password.");
         }
     }
 }
