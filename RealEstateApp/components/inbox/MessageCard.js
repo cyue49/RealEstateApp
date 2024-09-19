@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { Colors } from '../../constants/Colors'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
-export default MessageCard = ({ inboxItem, onPress }) => {
+export default MessageCard = ({ item, onPress }) => {
     return (
         <TouchableOpacity
             onPress={onPress}>
@@ -17,10 +17,10 @@ export default MessageCard = ({ inboxItem, onPress }) => {
 
                 <View style={{ flex: 1, flexDirection: 'column' }}>
                     <View style={styles.titleRow}>
-                        <Text style={styles.username}>{inboxItem.username}</Text>
-                        <Text style={styles.messageTime}>{inboxItem.latestMessageTime}</Text>
+                        <Text numberOfLines={1} style={styles.chatName}>{item.chatName}</Text>
+                        <Text style={styles.messageTime}>{item.lastActive}</Text>
                     </View>
-                    <Text numberOfLines={1} style={styles.previewMessage}>{inboxItem.previewMessage}</Text>
+                    <Text numberOfLines={1} style={styles.previewMessage}>{item.lastMessage}</Text>
                 </View>
 
                 <FontAwesome name="angle-right" size={24} color={Colors.appBlueDark} />
@@ -57,11 +57,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
-    username: {
+    chatName: {
         alignSelf: 'flex-start',
         fontSize: 15,
         fontWeight: 'bold',
-        color: Colors.appBlueDark
+        color: Colors.appBlueDark,
+        maxWidth: 200
     },
     messageTime: {
         alignSelf: 'flex-start',
