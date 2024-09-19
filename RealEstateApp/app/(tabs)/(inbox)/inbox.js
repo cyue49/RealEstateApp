@@ -65,7 +65,6 @@ export default function Inbox() {
                     }
                 }}
                 keyExtractor={item => item.id}
-
             />
         </SafeAreaView>
     );
