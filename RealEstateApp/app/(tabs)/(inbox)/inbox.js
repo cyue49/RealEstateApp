@@ -34,7 +34,7 @@ export default function Inbox() {
 
     // get all chats for this user
     useEffect(() => {
-        fetch(`http://localhost:8080/api/chats/forUser/${tempUserId}`)
+        fetch(`http://192.168.2.88:8080/api/chats/forUser/${tempUserId}`)
             .then((res) => res.json())
             .then((data) => {
                 setChats(data)

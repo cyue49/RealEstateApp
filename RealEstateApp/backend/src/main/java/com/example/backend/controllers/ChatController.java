@@ -11,16 +11,15 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("/api/chats")
 public class ChatController {
+    // sample data for testing
+    Chat chat1 = new Chat("1", "2", "Chat with Alice", "Hello, I am interested in your property!", LocalDateTime.of(2024, 8, 4, 13, 21, 2));
+    Chat chat2 = new Chat("1", "3", "Chat with Bob", "Hello! I saw your posting about a property in Montreal. I am interested in your property!", LocalDateTime.of(2024, 9, 3, 12, 7, 34));
+    Chat chat3 = new Chat("2", "1", "Chat with Chen", "Hello, I am interested in your property!", LocalDateTime.of(2024, 8, 4, 13, 21, 2));
 
     // get all chats for user with id {id}
     // example: http://localhost:8080/api/chats/forUser/1
     @GetMapping("/forUser/{id}")
     public List<Chat> getAllChats(@PathVariable String id) {
-        // sample data for testing
-        Chat chat1 = new Chat("1", "2", "Chat with Alice", "Hello, I am interested in your property!", LocalDateTime.of(2024, 8, 4, 13, 21, 2));
-        Chat chat2 = new Chat("1", "3", "Chat with Bob", "Hello! I saw your posting about a property in Montreal. I am interested in your property!", LocalDateTime.of(2024, 9, 3, 12, 7, 34));
-        Chat chat3 = new Chat("2", "1", "Chat with Chen", "Hello, I am interested in your property!", LocalDateTime.of(2024, 8, 4, 13, 21, 2));
-
         List<Chat> allChats = new ArrayList<>();
         if (chat1.getForUserId().equals(id))    allChats.add(chat1);
         if (chat2.getForUserId().equals(id))    allChats.add(chat2);
@@ -32,15 +31,6 @@ public class ChatController {
     // get all chats with id {id}
     @GetMapping("/id/{id}")
     public Chat getChat(@PathVariable String id) {
-        // sample data for testing
-        Chat chat1 = new Chat("1", "2", "Chat with Alice", "Hello, I am interested in your property!", LocalDateTime.of(2024, 8, 4, 13, 21, 2));
-        Chat chat2 = new Chat("1", "3", "Chat with Bob", "Hello! I saw your posting about a property in Montreal. I am interested in your property!", LocalDateTime.of(2024, 9, 3, 12, 7, 34));
-        Chat chat3 = new Chat("2", "1", "Chat with Chen", "Hello, I am interested in your property!", LocalDateTime.of(2024, 8, 4, 13, 21, 2));
-
-        chat1.setId("1");
-        chat2.setId("2");
-        chat3.setId("3");
-
         List<Chat> allChats = new ArrayList<>();
         allChats.add(chat1);
         allChats.add(chat2);

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View } from 'react-native';
-import { styles } from '../../../../constants/commonStyles'
+import { Text, SafeAreaView, StyleSheet } from 'react-native';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
+import { Colors } from '../../../../constants/Colors'
 
 export default function Message() {
     const navigation = useNavigation();
@@ -11,7 +11,7 @@ export default function Message() {
     // fetch and set chatName from db
     useEffect(() => {
         // fetch chat title by id then set it
-        fetch(`http://localhost:8080/api/chats/id/${id}`)
+        fetch(`http://192.168.2.88:8080/api/chats/id/${id}`)
             .then((res) => res.json())
             .then((data) => {
                 navigation.setOptions({
@@ -24,9 +24,16 @@ export default function Message() {
     },[])
 
     return (
-        <View style={[styles.containerCenter, styles.tabPageStyles]}>
+        <SafeAreaView style={styles.container}>
             <Text>Message page for id : {id}</Text>
             <StatusBar style="auto" />
-        </View>
+        </SafeAreaView>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: Colors.appLight
+    }
+});
