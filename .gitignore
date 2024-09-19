@@ -35,5 +35,4 @@ yarn-error.*
 *.tsbuildinfo
 
 # Ignore Firebase credentials
-src/main/resources/config/serviceAccountKey.json
-
+RealEstateApp/backend/src/main/resources/config/serviceAccountKey.json
