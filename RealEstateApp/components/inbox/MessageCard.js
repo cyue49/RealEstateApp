@@ -1,9 +1,28 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { Colors } from '../../constants/Colors'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export default MessageCard = ({ item, onPress }) => {
+    const [displayTime, setDisplayTime] = useState('')
+
+    useEffect(() => {
+        // get current date
+        let date = new Date();
+        const curDate = date.toISOString().split('T')[0];
+
+        // split last active date and time
+        const lastActiveDate = item.lastActive.split('T')[0];
+        const lastActiveTime = item.lastActive.split('T')[1];
+
+        // if last message in the same day, display the time
+        if (curDate === lastActiveDate) {
+            setDisplayTime(lastActiveTime)
+        } else { // else display the date
+            setDisplayTime(lastActiveDate)
+        }
+    }, [item.lastActive])
+
     return (
         <TouchableOpacity
             onPress={onPress}>
@@ -18,7 +37,7 @@ export default MessageCard = ({ item, onPress }) => {
                 <View style={{ flex: 1, flexDirection: 'column' }}>
                     <View style={styles.titleRow}>
                         <Text numberOfLines={1} style={styles.chatName}>{item.chatName}</Text>
-                        <Text style={styles.messageTime}>{item.lastActive}</Text>
+                        <Text style={styles.messageTime}>{displayTime}</Text>
                     </View>
                     <Text numberOfLines={1} style={styles.previewMessage}>{item.lastMessage}</Text>
                 </View>

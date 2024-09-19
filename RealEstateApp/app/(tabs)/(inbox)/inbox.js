@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, SafeAreaView, View, TextInput, FlatList, Text } from 'react-native';
+import { StyleSheet, SafeAreaView, View, TextInput, FlatList } from 'react-native';
 import { router } from 'expo-router'
 import { Colors } from '../../../constants/Colors'
 import MessageCard from '../../../components/inbox/MessageCard'
@@ -19,7 +19,7 @@ export default function Inbox() {
             id: '2',
             chatName: 'Chat with Bob',
             lastMessage: 'Hello! I saw your posting about a property in Montreal. I am interested in your property!',
-            lastActive: '2024-09-03T12:07:34'
+            lastActive: '2024-09-19T12:07:34'
         }
     ]
 
