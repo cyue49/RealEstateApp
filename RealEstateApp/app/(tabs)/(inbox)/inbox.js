@@ -53,7 +53,7 @@ export default function Inbox() {
                     style={styles.searchBox}
                     onChangeText={setQuery}
                     value={query}
-                    placeholder='Search users'
+                    placeholder='Search chats'
                 />
             </View>
 
