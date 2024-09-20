@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
         gap: 15,
         alignItems: 'center',
         justifyContent: 'flex-start',
-        paddingBottom: 15,
+        paddingVertical: 7,
         marginRight: 100
     },
     messageRight: {
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         gap: 15,
         alignItems: 'center',
         justifyContent: 'flex-end',
-        paddingBottom: 15, 
+        paddingVertical: 7, 
         marginLeft: 100
     },
     imageContainer: {
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     messageBox: {
         borderRadius: 20,
         backgroundColor: Colors.appBlueLight,
-        padding: 15,
+        padding: 10,
     },
     message: {
         //

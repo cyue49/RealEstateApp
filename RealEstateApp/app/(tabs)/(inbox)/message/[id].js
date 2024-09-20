@@ -9,18 +9,25 @@ export default function Message() {
     // temp data
     const tempData = [
         {
-            id: '1',
-            fromUserId: '1',
-            toUserId: '2',
-            message: 'Hello! I saw your posting about a property in Montreal. I am interested in your property!',
-            timestamp: '2024-08-04T13:21:02'
+            id: '3',
+            fromUserId: '2',
+            toUserId: '1',
+            message: 'Would you like to set up a meeting so we can discuss more about it?',
+            timestamp: '2024-08-05T13:22:02'
         },
         {
             id: '2',
             fromUserId: '2',
             toUserId: '1',
-            message: 'Hi!',
-            timestamp: '2024-08-06T13:21:02'
+            message: 'Hello! Which property are you interested in?',
+            timestamp: '2024-08-05T13:21:02'
+        },
+        {
+            id: '1',
+            fromUserId: '1',
+            toUserId: '2',
+            message: 'Hello! I saw your posting about a property in Montreal. I am interested in your property!',
+            timestamp: '2024-08-04T13:21:02'
         }
     ]
 
@@ -57,11 +64,14 @@ export default function Message() {
             <FlatList
                 style={styles.flatList}
                 data={tempData}
+                inverted={true}
                 renderItem={({ item }) =>
                     <ChatMessageItem messageItem={item} />
                 }
                 keyExtractor={item => item.id}
             />
+
+            <View style={{ height: 1, backgroundColor: Colors.appGray }}></View>
 
             <View style={styles.messageBoxContainer}>
                 <FontAwesome name="send" size={16} color={Colors.appGray} />
@@ -85,10 +95,8 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.appLight
     },
     flatList: {
-        padding: 10,
+        paddingHorizontal: 10,
         backgroundColor: Colors.appLight,
-        borderBottomWidth: 1,
-        borderBottomColor: Colors.appGray
     },
     messageBoxContainer: {
         flexDirection: 'row',
