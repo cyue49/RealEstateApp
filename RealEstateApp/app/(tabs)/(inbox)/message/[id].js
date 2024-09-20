@@ -8,55 +8,13 @@ import DateDivider from '../../../../components/inbox/DateDivider'
 
 export default function Message() {
     // temp data
-    const tempData = [
+    const testMessages = [
         {
-            id: '1',
-            fromUserId: '1',
-            toUserId: '2',
-            message: 'Hello! I saw your posting about a property in Montreal. I am interested in your property!',
-            timestamp: '2024-08-04T13:21:02'
-        },
-        {
-            id: '2',
+            id: '9',
             fromUserId: '2',
             toUserId: '1',
-            message: 'Hello! Which property are you interested in?',
-            timestamp: '2024-08-05T13:21:02'
-        },
-        {
-            id: '3',
-            fromUserId: '2',
-            toUserId: '1',
-            message: 'Would you like to set up a meeting so we can discuss more about it?',
-            timestamp: '2024-08-05T13:22:02'
-        },
-        {
-            id: '4',
-            fromUserId: '1',
-            toUserId: '2',
-            message: 'Yes! I\'m available next week on Friday at 4pm.',
-            timestamp: '2024-08-06T13:22:02'
-        },
-        {
-            id: '5',
-            fromUserId: '2',
-            toUserId: '1',
-            message: 'That works for me! Let\'s meet at the property then.',
-            timestamp: '2024-08-06T14:00:00'
-        },
-        {
-            id: '6',
-            fromUserId: '1',
-            toUserId: '2',
-            message: 'Great! Could you send me the address again?',
-            timestamp: '2024-08-06T14:05:45'
-        },
-        {
-            id: '7',
-            fromUserId: '2',
-            toUserId: '1',
-            message: 'Sure! The property is located at 123 Main Street, Montreal.',
-            timestamp: '2024-08-06T14:10:30'
+            message: 'Looking forward to it!',
+            timestamp: '2024-08-07T10:18:50'
         },
         {
             id: '8',
@@ -66,14 +24,55 @@ export default function Message() {
             timestamp: '2024-08-07T10:15:22'
         },
         {
-            id: '9',
+            id: '7',
             fromUserId: '2',
             toUserId: '1',
-            message: 'Looking forward to it!',
-            timestamp: '2024-08-07T10:18:50'
+            message: 'Sure! The property is located at 123 Main Street, Montreal.',
+            timestamp: '2024-08-06T14:10:30'
+        },
+        {
+            id: '6',
+            fromUserId: '1',
+            toUserId: '2',
+            message: 'Great! Could you send me the address again?',
+            timestamp: '2024-08-06T14:05:45'
+        },
+        {
+            id: '5',
+            fromUserId: '2',
+            toUserId: '1',
+            message: 'That works for me! Let’s meet at the property then.',
+            timestamp: '2024-08-06T14:00:00'
+        },
+        {
+            id: '4',
+            fromUserId: '1',
+            toUserId: '2',
+            message: 'Yes! I\'m available next week on Friday at 4pm.',
+            timestamp: '2024-08-06T13:22:02'
+        },
+        {
+            id: '3',
+            fromUserId: '2',
+            toUserId: '1',
+            message: 'Would you like to set up a meeting so we can discuss more about it?',
+            timestamp: '2024-08-05T13:22:02'
+        },
+        {
+            id: '2',
+            fromUserId: '2',
+            toUserId: '1',
+            message: 'Hello! Which property are you interested in?',
+            timestamp: '2024-08-05T13:21:02'
+        },
+        {
+            id: '1',
+            fromUserId: '1',
+            toUserId: '2',
+            message: 'Hello! I saw your posting about a property in Montreal. I am interested in your property!',
+            timestamp: '2024-08-04T13:21:02'
         }
     ];
-
 
     const navigation = useNavigation();
 
@@ -103,28 +102,32 @@ export default function Message() {
         // todo
     }
 
-    var latestDate = ''
+    // keep track of the previous date to know when to display date dividers
+    var previousDate = ''
+    useEffect(() => {
+        previousDate = testMessages[0].timestamp.split('T')[0]
+    }, [testMessages])
 
     return (
         <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={100} style={styles.container}>
             <FlatList
                 style={styles.flatList}
-                data={tempData}
-                // inverted={true}
+                data={testMessages}
+                inverted={true}
                 renderItem={({ item }) => {
-                    if (latestDate === item.timestamp.split('T')[0]) {
-                        latestDate = item.timestamp.split('T')[0]
+                    if (previousDate === item.timestamp.split('T')[0]) {
+                        previousDate = item.timestamp.split('T')[0]
                         return <ChatMessageItem messageItem={item} />
                     } else {
-                        latestDate = item.timestamp.split('T')[0]
+                        const displayDate = previousDate
+                        previousDate = item.timestamp.split('T')[0]
                         return <View>
-                            <DateDivider date={item.timestamp} />
                             <ChatMessageItem messageItem={item} />
+                            <DateDivider date={displayDate} />
                         </View>
                     }
                 }}
-                ListHeaderComponent={() => <Text></Text>}
-                ListFooterComponent={() => <Text></Text>}
+                ListFooterComponent={() => <DateDivider date={previousDate} />}
                 keyExtractor={item => item.id}
             />
 
