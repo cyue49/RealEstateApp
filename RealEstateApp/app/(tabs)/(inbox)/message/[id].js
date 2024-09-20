@@ -3,6 +3,7 @@ import { Text, View, TextInput, StyleSheet, FlatList, KeyboardAvoidingView, Touc
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { Colors } from '../../../../constants/Colors'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import ChatMessageItem from '../../../../components/inbox/ChatMessageItem'
 
 export default function Message() {
     // temp data
@@ -11,14 +12,14 @@ export default function Message() {
             id: '1',
             fromUserId: '1',
             toUserId: '2',
-            message: 'Hello!',
+            message: 'Hello! I saw your posting about a property in Montreal. I am interested in your property!',
             timestamp: '2024-08-04T13:21:02'
         },
         {
             id: '2',
             fromUserId: '2',
             toUserId: '1',
-            message: 'Hello',
+            message: 'Hi!',
             timestamp: '2024-08-06T13:21:02'
         }
     ]
@@ -57,7 +58,7 @@ export default function Message() {
                 style={styles.flatList}
                 data={tempData}
                 renderItem={({ item }) =>
-                    <Text>{item.message}</Text>
+                    <ChatMessageItem messageItem={item} />
                 }
                 keyExtractor={item => item.id}
             />
