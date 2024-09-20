@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Image } from 'react-native';
 import { Colors } from '../../constants/Colors'
+
 export default ChatMessageItem = ({ messageItem }) => {
     // temporary data
     const tempUserId = '1'
