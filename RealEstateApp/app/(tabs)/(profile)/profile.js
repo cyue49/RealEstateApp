@@ -23,7 +23,7 @@ export default function Profile() {
             <View style={localstyles.blueBar}>
                 <View style ={localstyles.profileText}>
                 <TouchableOpacity onPress={goBack} style={localstyles.backButton}>
-                    <Icon name="arrow-left" size={20} color="#fff" />
+                    <Icon name="chevron-left" size={20} color="#fff" />
                 </TouchableOpacity>
                 <Text style={localstyles.profileText}>Profile</Text>
                 </View>
