@@ -73,7 +73,7 @@ export default function Profile() {
 
 const localstyles = StyleSheet.create({
     blueBar: {
-        backgroundColor: "appBlue",
+        backgroundColor: '#2976D4',
         paddingVertical: 30,
         paddingHorizontal: 20,
         width: '100%',
@@ -130,7 +130,7 @@ const localstyles = StyleSheet.create({
     },
 
     greyBar: {
-        backgroundColor: 'appGrey',
+        backgroundColor: '#E5E4E2',
         paddingVertical: 10,
         paddingHorizontal: 20,
         flexDirection: 'row', // Align the icon and text in a row
