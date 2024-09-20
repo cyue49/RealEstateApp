@@ -30,7 +30,7 @@ export default MessageCard = ({ item, onPress }) => {
                 <View style={styles.imageContainer}>
                     <Image
                         style={styles.profileImage}
-                        source={require('../../assets/favicon.png')} // temporary image
+                        source={require('../../assets/default-profile.png')} // temporary image
                     />
                 </View>
 
@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
         borderBottomColor: Colors.appBlueLight
     },
     imageContainer: {
-        borderWidth: 1,
         borderRadius: 50,
         borderColor: Colors.appBlueDark,
         overflow: 'hidden'

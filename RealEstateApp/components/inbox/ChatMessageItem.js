@@ -17,7 +17,7 @@ export default ChatMessageItem = ({ messageItem }) => {
             <View style={styles.imageContainer}>
                 <Image
                     style={styles.profileImage}
-                    source={require('../../assets/favicon.png')} // temporary image
+                    source={require('../../assets/default-profile.png')} // temporary image
                 />
             </View>
 
@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
         marginLeft: 100
     },
     imageContainer: {
-        borderWidth: 1,
         borderRadius: 50,
         borderColor: Colors.appBlueDark,
         overflow: 'hidden'
