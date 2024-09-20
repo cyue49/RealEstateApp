@@ -10,8 +10,11 @@ export default ChatMessageItem = ({ messageItem }) => {
         <View style={messageItem.fromUserId === tempUserId ? styles.messageRight : styles.messageLeft}>
             {
                 messageItem.fromUserId === tempUserId ?
-                    <View style={styles.messageBox}>
-                        <Text style={styles.message}>{messageItem.message}</Text>
+                    <View>
+                        <Text style={{ alignSelf: 'flex-end', paddingHorizontal: 10, paddingBottom: 5, fontSize: 12, color: Colors.appBlue }}>{messageItem.timestamp.split('T')[1]}</Text>
+                        <View style={styles.messageBox}>
+                            <Text style={styles.message}>{messageItem.message}</Text>
+                        </View>
                     </View> : null
             }
 
@@ -24,9 +27,13 @@ export default ChatMessageItem = ({ messageItem }) => {
 
             {
                 messageItem.fromUserId === tempUserId ? null :
-                    <View style={styles.messageBox}>
-                        <Text style={styles.message}>{messageItem.message}</Text>
+                    <View>
+                        <Text style={{ paddingHorizontal: 10, paddingBottom: 5, fontSize: 12, color: Colors.appBlue }}>{messageItem.timestamp.split('T')[1]}</Text>
+                        <View style={styles.messageBox}>
+                            <Text style={styles.message}>{messageItem.message}</Text>
+                        </View>
                     </View>
+
             }
         </View>
     )
@@ -48,7 +55,7 @@ const styles = StyleSheet.create({
         gap: 15,
         alignItems: 'center',
         justifyContent: 'flex-end',
-        paddingVertical: 7, 
+        paddingVertical: 7,
         marginLeft: 100
     },
     imageContainer: {

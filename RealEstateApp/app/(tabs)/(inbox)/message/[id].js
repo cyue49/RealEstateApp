@@ -102,9 +102,12 @@ export default function Message() {
         // todo
     }
 
-    // keep track of the previous date to know when to display date dividers
+    // fetch messages from db and keep track of the previous date to know when to display date dividers
     var previousDate = ''
     useEffect(() => {
+        // todo: fetch messages
+
+        // set initial previous date to the date of the first message
         previousDate = testMessages[0].timestamp.split('T')[0]
     }, [testMessages])
 
