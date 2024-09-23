@@ -8,8 +8,6 @@ public class Chat {
     private String forUserId;
     private String withUserId;
     private String chatName;
-    private String lastMessage;
-    private LocalDateTime lastActive;
 
     public Chat() {
     }
@@ -19,8 +17,6 @@ public class Chat {
         this.forUserId = forUserId;
         this.withUserId = withUserId;
         this.chatName = chatName;
-        this.lastMessage = lastMessage;
-        this.lastActive = lastActive;
     }
 
     public String getId() {
@@ -39,14 +35,6 @@ public class Chat {
         return chatName;
     }
 
-    public String getLastMessage() {
-        return lastMessage;
-    }
-
-    public LocalDateTime getLastActive() {
-        return lastActive;
-    }
-
     public void setId(String id) {
         this.id = id;
     }
@@ -61,13 +49,5 @@ public class Chat {
 
     public void setChatName(String chatName) {
         this.chatName = chatName;
-    }
-
-    public void setLastMessage(String lastMessage) {
-        this.lastMessage = lastMessage;
-    }
-
-    public void setLastActive(LocalDateTime lastActive) {
-        this.lastActive = lastActive;
     }
 }
