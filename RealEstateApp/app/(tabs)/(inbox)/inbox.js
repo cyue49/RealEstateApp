@@ -6,22 +6,8 @@ import MessageCard from '../../../components/inbox/MessageCard'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export default function Inbox() {
-    // temporary data
+    // temporary user id
     const tempUserId = '1'
-    const tempData = [
-        {
-            id: '1',
-            chatName: 'Chat with Alice',
-            lastMessage: 'Hello, I am interested in your property!',
-            lastActive: '2024-08-04T13:21:02'
-        },
-        {
-            id: '2',
-            chatName: 'Chat with Bob',
-            lastMessage: 'Hello! I saw your posting about a property in Montreal. I am interested in your property!',
-            lastActive: '2024-09-19T12:07:34'
-        }
-    ]
 
     // states
     const [query, setQuery] = useState('')
@@ -58,7 +44,7 @@ export default function Inbox() {
             </View>
 
             <FlatList
-                data={chats.length === 0 ? tempData : chats}
+                data={chats}
                 renderItem={({ item }) => {
                     if (item.chatName.toLowerCase().includes(query.toLowerCase())) {
                         return <MessageCard item={item} onPress={() => navigateToMessage(item.id)} />
