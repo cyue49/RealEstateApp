@@ -25,22 +25,18 @@ public class ChatController {
             List<Chat> chats = chatsService.getChatsForUser(id);
             return ResponseEntity.ok(chats);
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.badRequest().body(null);
         }
     }
 
-//    // get all chats with id {id}
-//    @GetMapping("/id/{id}")
-//    public Chat getChat(@PathVariable String id) {
-//        List<Chat> allChats = new ArrayList<>();
-//        allChats.add(chat1);
-//        allChats.add(chat2);
-//        allChats.add(chat3);
-//
-//        for (Chat chat : allChats){
-//            if (chat.getId().equals(id))    return chat;
-//        }
-//        return chat1;
-//    }
+    // get chat with id {id}
+    @GetMapping("/id/{id}")
+    public ResponseEntity<Chat> getChat(@PathVariable String id) {
+        try {
+            Chat chat = chatsService.getChat(id);
+            return ResponseEntity.ok(chat);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 }

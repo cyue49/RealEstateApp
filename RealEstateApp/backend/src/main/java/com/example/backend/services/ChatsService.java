@@ -25,4 +25,13 @@ public class ChatsService {
 
         return list.stream().map((doc) -> doc.toObject(Chat.class)).collect(Collectors.toList());
     }
+
+    // get chat with id chatId
+    public Chat getChat(String chatId) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+        CollectionReference col = db.collection("chats");
+        DocumentReference docRef = db.collection("chats").document(chatId);
+
+        return docRef.get().get().toObject(Chat.class);
+    }
 }
