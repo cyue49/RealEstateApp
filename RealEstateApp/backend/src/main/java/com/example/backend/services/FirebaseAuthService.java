@@ -11,11 +11,12 @@ import com.google.firebase.auth.UserRecord;
 @Service
 public class FirebaseAuthService {
 
-    private final FirebaseApp firebaseApp;
+    
+    private final FirebaseAuth firebaseAuth;
 
     @Autowired
     public FirebaseAuthService(FirebaseApp firebaseApp) {
-        this.firebaseApp = firebaseApp;
+        this.firebaseAuth = FirebaseAuth.getInstance(firebaseApp);
     }
 
     public UserRecord createUser(String email, String password) throws FirebaseAuthException{
@@ -24,16 +25,16 @@ public class FirebaseAuthService {
         .setEmail(email)
         .setPassword(password);
 
-        return FirebaseAuth.getInstance(firebaseApp).createUser(request);
+        return firebaseAuth.createUser(request);
     }
 
     public UserRecord getUserById(String userID) throws FirebaseAuthException {
-            return FirebaseAuth.getInstance(firebaseApp).getUser(userID);
+            return firebaseAuth.getUser(userID);
     }
 
     public UserRecord getUserByEmail(String email) throws FirebaseAuthException {
         System.out.println("In User Get Email ...");
-        return FirebaseAuth.getInstance(firebaseApp).getUserByEmail(email);
+        return firebaseAuth.getUserByEmail(email);
     }
 
 }

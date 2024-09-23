@@ -28,7 +28,7 @@ public class UserController {
     public ResponseEntity<UserRecord> createUser(@RequestParam String email, @RequestParam String password){
         UserRecord userRecord;
         try {
-            userRecord = firebaseAuthService.createUser("kawtharmashkour@yahoo.com","123456789");
+            userRecord = firebaseAuthService.createUser(email,password);
             return ResponseEntity.ok(userRecord);
         } catch (FirebaseAuthException e) {
             e.printStackTrace();
