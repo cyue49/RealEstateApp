@@ -36,3 +36,4 @@ yarn-error.*
 
 # Ignore Firebase credentials
 RealEstateApp/backend/src/main/resources/config/serviceAccountKey.json
+/.idea

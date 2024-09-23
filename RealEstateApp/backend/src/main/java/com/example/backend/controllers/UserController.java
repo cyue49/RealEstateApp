@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.backend.services.FirebaseAuthService;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 import com.example.backend.entity.User;
@@ -51,7 +50,7 @@ public class UserController {
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(@RequestBody User user) {
         try {
-            
+            System.out.println("In Sign In C0ntroller ...");
             UserRecord userRecord = firebaseAuthService.getUserByEmail(user.getEmail());
             return ResponseEntity.ok(userRecord);
 

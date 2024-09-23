@@ -22,13 +22,13 @@ export default function SignIn() {
   const handleSignIn = async () => {
     try {
         // Replace with your backend URL
-        const response = await axios.post('http://192.168.2.25:8081/user/signin', {
+        const response = await axios.post('http://192.168.2.25:8080/user/signin', {
           email,
           password,
         });
         
         // Handle successful sign-in (e.g., navigate to home screen)
-        console.log('Sign-in successful:');//, response.data);
+        console.log('Sign-in successful:', response.data);
         goToHome();
       } catch (error) {
         console.log("Error:", error)
@@ -54,26 +54,13 @@ export default function SignIn() {
       />
       {error ? <Text style={styles.error}>{error}</Text> : null}
       <TouchableOpacity style={styles.button} onPress={handleSignIn}>
-        <Text style={styles.buttonText}>Continue</Text>
+        <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={goToSignup}>
         <Text style={styles.link}>Don't have an account? Sign Up</Text>
       </TouchableOpacity>
     </View>
-    // <View style={styles.containerCenter}>
-    //     <Text>Sign In Page</Text>
-    //     <Button
-    //         onPress={signin}
-    //         title='Sign In'
-    //         accessibilityLabel='Sign in button'
-    //     />
-    //     <Button
-    //         onPress={goToSignup}
-    //         title='Sign Up Instead'
-    //         accessibilityLabel='Go to sign up page button'
-    //     />
-    //     <StatusBar style="auto" />
-    // </View>
+    
   );
 }
 
