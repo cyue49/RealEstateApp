@@ -1,4 +1,4 @@
-package com.example.backend.models;
+package com.example.backend.entity;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -11,7 +11,10 @@ public class Chat {
     private String lastMessage;
     private LocalDateTime lastActive;
 
-    public Chat(String forUserId, String withUserId, String chatName, String lastMessage, LocalDateTime lastActive) {
+    public Chat() {
+    }
+
+    public Chat(String forUserId, String withUserId, String chatName) {
         this.id = UUID.randomUUID().toString().replace("-", "");
         this.forUserId = forUserId;
         this.withUserId = withUserId;

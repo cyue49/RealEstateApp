@@ -22,7 +22,7 @@ export default function SignIn() {
   const handleSignIn = async () => {
     try {
         // Replace with your backend URL
-        const response = await axios.post('http://192.168.2.25:8080/user/signin', {
+        const response = await axios.post('http://192.168.2.88:8080/user/signin', {
           email,
           password,
         });
