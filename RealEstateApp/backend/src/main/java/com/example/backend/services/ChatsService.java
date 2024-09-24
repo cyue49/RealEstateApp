@@ -49,4 +49,19 @@ public class ChatsService {
 
         return docRef.get().get().toObject(Chat.class);
     }
+
+    // rename a chat
+    public Chat renameChat(String id, String chatName) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+
+        // get chat with id and rename it
+        Chat chat = getChat(id);
+        chat.setChatName(chatName);
+
+        // save chat to firestore
+        WriteResult writeResult = db.collection("chats").document(chat.getId()).set(chat).get();
+        System.out.println("Chat name updated at: " + writeResult.getUpdateTime());
+
+        return chat;
+    }
 }

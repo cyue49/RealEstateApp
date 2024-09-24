@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -43,6 +44,17 @@ public class ChatController {
     public ResponseEntity<Chat> getChat(@PathVariable String id) {
         try {
             Chat chat = chatsService.getChat(id);
+            return ResponseEntity.ok(chat);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    // rename a chat
+    @PutMapping("id/{id}/rename")
+    public ResponseEntity<Chat> renameChat(@PathVariable String id, @RequestBody Map<String, Object> requestBody) {
+        try {
+            Chat chat = chatsService.renameChat(id, (String) requestBody.get("chatName"));
             return ResponseEntity.ok(chat);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(null);
