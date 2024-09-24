@@ -1,21 +1,20 @@
 package com.example.backend.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public class Chat {
     private String id;
-    private String forUserId;
-    private String withUserId;
+    private List<String> users;
     private String chatName;
 
     public Chat() {
     }
 
-    public Chat(String forUserId, String withUserId, String chatName) {
+    public Chat(List<String> users, String chatName) {
         this.id = UUID.randomUUID().toString().replace("-", "");
-        this.forUserId = forUserId;
-        this.withUserId = withUserId;
+        this.users = users;
         this.chatName = chatName;
     }
 
@@ -23,12 +22,8 @@ public class Chat {
         return id;
     }
 
-    public String getForUserId() {
-        return forUserId;
-    }
-
-    public String getWithUserId() {
-        return withUserId;
+    public List<String> getUsers() {
+        return users;
     }
 
     public String getChatName() {
@@ -39,12 +34,8 @@ public class Chat {
         this.id = id;
     }
 
-    public void setForUserId(String forUserId) {
-        this.forUserId = forUserId;
-    }
-
-    public void setWithUserId(String withUserId) {
-        this.withUserId = withUserId;
+    public void setUsers(List<String> users) {
+        this.users = users;
     }
 
     public void setChatName(String chatName) {

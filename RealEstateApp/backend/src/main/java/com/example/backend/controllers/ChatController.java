@@ -16,6 +16,17 @@ public class ChatController {
     @Autowired
     private ChatsService chatsService;
 
+    // create a new chat
+    @PostMapping("/create")
+    public ResponseEntity<Chat> createChat(@RequestBody Chat chat) {
+        try {
+            Chat newChat = chatsService.createChat(chat);
+            return ResponseEntity.ok(newChat);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
     // get all chats for user with id {id}
     @GetMapping("/forUser/{id}")
     public ResponseEntity<List<Chat>> getAllChats(@PathVariable String id) {
