@@ -17,7 +17,7 @@ public class ChatsService {
     public Chat createChat(Chat chat) throws ExecutionException, InterruptedException {
         Firestore db = FirestoreClient.getFirestore();
 
-        // create new chat with auto generated id
+        // create new chat with auto generated id and creation time
         Chat newChat = new Chat(chat.getUsers(), chat.getChatName());
 
         // save chat to firestore
