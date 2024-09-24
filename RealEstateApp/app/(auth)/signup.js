@@ -9,34 +9,50 @@ export default function SignUp() {
    // const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [userName, setUserName] = useState('');  
+  const [phoneNumber, setPhoneNumber] = useState('');  
+  const [address, setAddress] = useState(''); 
   const [error, setError] = useState('');
 
   const goToHome = () => {
     router.replace("/listings");
   };
 
-  const goToSignup = () => {
+  const goToSignin = () => {
     router.replace("/signin");
   };
 
-  const handleSignIn = async () => {
+  const handleSignUp = async () => {
     try {
-        // Replace with your backend URL
-        const response = await axios.post('http://192.168.2.88:8080/user/create',null, {
-            params: {
-                email: email,
-                password: password,
-            }
-        });
-        
-        // Handle successful sign-up ( navigate to home screen)
+        const user = {
+          email: email.trim(),
+          password: password.trim(),
+          userName: userName.trim(),
+          phoneNumber: phoneNumber.trim(),
+          address: address.trim()
+        };
+    
+        const response = await axios.post(
+          'http://192.168.2.88:8080/user/create',
+          user 
+        );
+    
+        // Handle successful sign-up (navigate to home screen)
         console.log('Sign-Up successful:', response.data);
-        goToHome();
+        goToHome(); 
+    
       } catch (error) {
-        console.log("Error:", error)
-        setError('Error in Sign Up');
+        console.error('Error:', error);
+    
+        if (error.response) {
+          setError(error.response.data || 'Sign-up failed');
+        } else if (error.request) {
+          setError('No response from server. Check your network.');
+        } else {
+          setError('Error in Sign-up request.');
+        }
       }
-  };
+    };
 
   return (
     <View style={styles.container}>
@@ -54,11 +70,31 @@ export default function SignUp() {
         onChangeText={(text) => setPassword(text)}
         secureTextEntry
       />
+      <TextInput
+        style={styles.input}
+        placeholder="Username"
+        value={userName}
+        onChangeText={(text) => setUserName(text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Phone Number"
+        value={phoneNumber}
+        onChangeText={(text) => setPhoneNumber(text)}
+        keyboardType="phone-pad"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Address"
+        value={address}
+        onChangeText={(text) => setAddress(text)}
+      />
+    
       {error ? <Text style={styles.error}>{error}</Text> : null}
-      <TouchableOpacity style={styles.button} onPress={handleSignIn}>
+      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
         <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={goToSignup}>
+      <TouchableOpacity onPress={goToSignin}>
         <Text style={styles.link}>Already have an account? Sign in</Text>
       </TouchableOpacity>
     </View>
