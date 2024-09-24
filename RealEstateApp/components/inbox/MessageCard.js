@@ -12,12 +12,8 @@ export default MessageCard = ({ item, onPress }) => {
         const curDate = date.toISOString().split('T')[0];
 
         // split last active date and time
-        // const lastActiveDate = item.lastActive.split('T')[0];
-        // const lastActiveTime = item.lastActive.split('T')[1];
-
-        // temporary data
-        const lastActiveDate = '2024-09-12';
-        const lastActiveTime = '12:01:03';
+        const lastActiveDate = item.lastActive.split('T')[0];
+        const lastActiveTime = item.lastActive.split('T')[1].split('.')[0];
 
         // if last message in the same day, display the time
         if (curDate === lastActiveDate) {
@@ -43,7 +39,7 @@ export default MessageCard = ({ item, onPress }) => {
                         <Text numberOfLines={1} style={styles.chatName}>{item.chatName}</Text>
                         <Text style={styles.messageTime}>{displayTime}</Text>
                     </View>
-                    <Text numberOfLines={1} style={styles.previewMessage}>Temporary message</Text>
+                    <Text numberOfLines={1} style={styles.previewMessage}>{item.latestMessage === "" ? "No messages yet" : item.latestMessage}</Text>
                 </View>
 
                 <FontAwesome name="angle-right" size={24} color={Colors.appBlueDark} />
