@@ -60,4 +60,15 @@ public class ChatController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
+    // delete a chat
+    @DeleteMapping("id/{id}/delete")
+    public ResponseEntity<?> deleteChat(@PathVariable String id) {
+        try {
+            chatsService.deleteChat(id);
+            return ResponseEntity.ok("success");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("error");
+        }
+    }
 }

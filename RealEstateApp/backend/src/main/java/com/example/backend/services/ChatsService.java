@@ -64,4 +64,12 @@ public class ChatsService {
 
         return chat;
     }
+
+    // delete a chat
+    public void deleteChat(String id) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+
+        WriteResult writeResult = db.collection("chats").document(id).delete().get();
+        System.out.println("Chat deleted at: " + writeResult.getUpdateTime());
+    }
 }
