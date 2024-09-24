@@ -4,51 +4,43 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.backend.entity.User;
-import com.google.cloud.firestore.DocumentReference;
+//import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.WriteResult;
+//import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
-import java.util.concurrent.ExecutionException;
-import java.lang.InterruptedException;
+//import java.util.concurrent.ExecutionException;
+//import java.lang.InterruptedException;
 
 @Service
 public class FirebaseAuthService {
 
     
     private final FirebaseAuth firebaseAuth;
-    private final Firestore firestore;
+    //private final Firestore firestore;
 
     @Autowired
     public FirebaseAuthService(FirebaseApp firebaseApp, Firestore firestore) {
         this.firebaseAuth = FirebaseAuth.getInstance(firebaseApp);
-        this.firestore = firestore;
+       // this.firestore = firestore;
     }
 
-    public UserRecord createUser(String email, String password) throws FirebaseAuthException{
-    
+    public User createUser(User user) throws FirebaseAuthException{
+
+        // Create a new user in Firebase
         UserRecord.CreateRequest request = new UserRecord.CreateRequest()
-        .setEmail(email)
-        .setPassword(password);
+        .setEmail(user.getEmail())
+        .setPassword(user.getPassword());
 
-        UserRecord userRecord = firebaseAuth.createUser(request);
+        UserRecord userRecord = FirebaseAuth.getInstance().createUser(request);
 
-        //save to firebase
-        User user = new User(email, password);
-        // Reference to the 'user' collection with the document ID as the user UID
-        DocumentReference userDocRef = firestore.collection("user").document(userRecord.getUid());
+        // Set additional fields from the user object
+        user.setuID(userRecord.getUid());
+        
 
-        try {
-            // Write data to Firestore
-            WriteResult writeResult = userDocRef.set(user).get();
-            System.out.println("User saved to Firestore at: " + writeResult.getUpdateTime());
-        } catch (InterruptedException | ExecutionException e) {
-            System.err.println("Error saving user to Firestore: " + e.getMessage());
-        }
-
-        return userRecord;
+        return user;
     }
 
     public UserRecord getUserById(String userID) throws FirebaseAuthException {
