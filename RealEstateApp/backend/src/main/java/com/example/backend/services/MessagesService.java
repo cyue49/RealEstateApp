@@ -7,6 +7,7 @@ import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -51,5 +52,23 @@ public class MessagesService {
 
         // return list of messages
         return list.stream().map((doc) -> doc.toObject(Message.class)).collect(Collectors.toList());
+    }
+
+    // delete a message
+    public void deleteMessage(String id, String chatId) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+
+        // delete the message
+        WriteResult writeResult = db.collection("messages").document(id).delete().get();
+        System.out.println("Message deleted at: " + writeResult.getUpdateTime());
+
+        // update chat last active and latest message
+        Chat chat = db.collection("chats").document(chatId).get().get().toObject(Chat.class);
+        if (chat != null) {
+            chat.setLatestMessage("message deleted");
+            chat.setLastActive(writeResult.getUpdateTime().toDate());
+
+            db.collection("chats").document(chatId).set(chat);
+        }
     }
 }

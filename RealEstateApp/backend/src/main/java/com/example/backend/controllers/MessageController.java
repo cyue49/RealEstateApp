@@ -37,4 +37,14 @@ public class MessageController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
+    @DeleteMapping("/id/{id}/delete/from/{chatId}")
+    public ResponseEntity<?> deleteMessage(@PathVariable String id, @PathVariable String chatId) {
+        try {
+            messagesService.deleteMessage(id, chatId);
+            return ResponseEntity.ok("success");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("error");
+        }
+    }
 }
