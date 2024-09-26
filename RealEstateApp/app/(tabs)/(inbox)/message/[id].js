@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, TextInput, StyleSheet, FlatList, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { Colors } from '../../../../constants/Colors'
+import { baseURL } from '../../../../constants/baseURL'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import ChatMessageItem from '../../../../components/inbox/ChatMessageItem'
 import DateDivider from '../../../../components/inbox/DateDivider'
@@ -9,7 +10,7 @@ import DateDivider from '../../../../components/inbox/DateDivider'
 export default function Message() {
     const navigation = useNavigation();
 
-    // chat message id
+    // chat id
     const { id } = useLocalSearchParams();
 
     // states
@@ -19,7 +20,7 @@ export default function Message() {
     // fetch and set chatName from db
     useEffect(() => {
         // fetch chat title by id then set it
-        fetch(`http://192.168.2.88:8080/api/chats/id/${id}`)
+        fetch(`${baseURL}/api/chats/id/${id}`)
             .then((res) => res.json())
             .then((data) => {
                 navigation.setOptions({
@@ -40,7 +41,7 @@ export default function Message() {
     var previousDate = ''
     useEffect(() => {
         // fetch messages
-        fetch(`http://192.168.2.88:8080/api/messages/forChat/${id}`)
+        fetch(`${baseURL}/api/messages/forChat/${id}`)
             .then((res) => res.json())
             .then((data) => {
                 setchatMessages(data)

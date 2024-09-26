@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, SafeAreaView, View, TextInput, FlatList } from 'react-native';
 import { router } from 'expo-router'
 import { Colors } from '../../../constants/Colors'
+import { baseURL } from '../../../constants/baseURL'
 import MessageCard from '../../../components/inbox/MessageCard'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
@@ -20,7 +21,7 @@ export default function Inbox() {
 
     // get all chats for this user
     useEffect(() => {
-        fetch(`http://192.168.2.88:8080/api/chats/forUser/${tempUserId}`)
+        fetch(`${baseURL}/api/chats/forUser/${tempUserId}`)
             .then((res) => res.json())
             .then((data) => {
                 setChats(data)
