@@ -32,8 +32,8 @@ public class MessagesService {
         Firestore db = FirestoreClient.getFirestore();
         CollectionReference col = db.collection("messages");
 
-        // query all messages where chatId equals
-        Query query = col.whereEqualTo("chatId", chatId);
+        // query all messages where chatId equals chatId, sorted by latest timestamp
+        Query query = col.whereEqualTo("chatId", chatId).orderBy("timestamp", Query.Direction.DESCENDING);
 
         ApiFuture<QuerySnapshot> apiFuture = query.get();
         List<QueryDocumentSnapshot> list = apiFuture.get().getDocuments();
