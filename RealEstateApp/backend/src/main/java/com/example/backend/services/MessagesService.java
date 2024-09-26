@@ -1,5 +1,6 @@
 package com.example.backend.services;
 
+import com.example.backend.entity.Chat;
 import com.example.backend.entity.Message;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
@@ -23,6 +24,16 @@ public class MessagesService {
         // save message to firestore
         WriteResult writeResult = db.collection("messages").document(newMessage.getId()).set(newMessage).get();
         System.out.println("New message created at: " + writeResult.getUpdateTime());
+
+        // update last active and latest message for chat
+        String chatId = newMessage.getChatId();
+        Chat chat = db.collection("chats").document(chatId).get().get().toObject(Chat.class);
+        if (chat != null) {
+            chat.setLatestMessage(newMessage.getMessage());
+            chat.setLastActive(newMessage.getTimestamp());
+
+            db.collection("chats").document(chatId).set(chat);
+        }
 
         return newMessage;
     }
