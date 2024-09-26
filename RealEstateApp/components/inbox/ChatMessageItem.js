@@ -12,7 +12,7 @@ export default ChatMessageItem = ({ messageItem }) => {
                 messageItem.fromUser === tempUserId ?
                     <View>
                         <Text style={{ alignSelf: 'flex-end', paddingHorizontal: 10, paddingBottom: 5, fontSize: 12, color: Colors.appBlue }}>{messageItem.timestamp.split('T')[1].split('.')[0]}</Text>
-                        <View style={styles.messageBox}>
+                        <View style={styles.messageBoxLeft}>
                             <Text style={styles.message}>{messageItem.message}</Text>
                         </View>
                     </View> : null
@@ -29,7 +29,7 @@ export default ChatMessageItem = ({ messageItem }) => {
                 messageItem.fromUser === tempUserId ? null :
                     <View>
                         <Text style={{ paddingHorizontal: 10, paddingBottom: 5, fontSize: 12, color: Colors.appBlue }}>{messageItem.timestamp.split('T')[1].split('.')[0]}</Text>
-                        <View style={styles.messageBox}>
+                        <View style={styles.messageBoxRight}>
                             <Text style={styles.message}>{messageItem.message}</Text>
                         </View>
                     </View>
@@ -67,12 +67,14 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40
     },
-    messageBox: {
+    messageBoxLeft: {
+        borderRadius: 20,
+        backgroundColor: Colors.appGrayLight,
+        padding: 10,
+    },
+    messageBoxRight: {
         borderRadius: 20,
         backgroundColor: Colors.appBlueLight,
         padding: 10,
     },
-    message: {
-        //
-    }
 });
