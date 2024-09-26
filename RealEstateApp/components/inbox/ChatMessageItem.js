@@ -7,11 +7,11 @@ export default ChatMessageItem = ({ messageItem }) => {
     const tempUserId = '1'
 
     return (
-        <View style={messageItem.fromUserId === tempUserId ? styles.messageRight : styles.messageLeft}>
+        <View style={messageItem.fromUser === tempUserId ? styles.messageRight : styles.messageLeft}>
             {
-                messageItem.fromUserId === tempUserId ?
+                messageItem.fromUser === tempUserId ?
                     <View>
-                        <Text style={{ alignSelf: 'flex-end', paddingHorizontal: 10, paddingBottom: 5, fontSize: 12, color: Colors.appBlue }}>{messageItem.timestamp.split('T')[1]}</Text>
+                        <Text style={{ alignSelf: 'flex-end', paddingHorizontal: 10, paddingBottom: 5, fontSize: 12, color: Colors.appBlue }}>{messageItem.timestamp.split('T')[1].split('.')[0]}</Text>
                         <View style={styles.messageBox}>
                             <Text style={styles.message}>{messageItem.message}</Text>
                         </View>
@@ -26,9 +26,9 @@ export default ChatMessageItem = ({ messageItem }) => {
             </View>
 
             {
-                messageItem.fromUserId === tempUserId ? null :
+                messageItem.fromUser === tempUserId ? null :
                     <View>
-                        <Text style={{ paddingHorizontal: 10, paddingBottom: 5, fontSize: 12, color: Colors.appBlue }}>{messageItem.timestamp.split('T')[1]}</Text>
+                        <Text style={{ paddingHorizontal: 10, paddingBottom: 5, fontSize: 12, color: Colors.appBlue }}>{messageItem.timestamp.split('T')[1].split('.')[0]}</Text>
                         <View style={styles.messageBox}>
                             <Text style={styles.message}>{messageItem.message}</Text>
                         </View>
