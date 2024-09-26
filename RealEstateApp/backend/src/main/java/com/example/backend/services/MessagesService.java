@@ -1,12 +1,14 @@
 package com.example.backend.services;
 
 import com.example.backend.entity.Message;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.WriteResult;
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Service
 public class MessagesService {
@@ -23,5 +25,20 @@ public class MessagesService {
         System.out.println("New message created at: " + writeResult.getUpdateTime());
 
         return newMessage;
+    }
+
+    // get all messages of a chat
+    public List<Message> getChatMessages(String chatId) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+        CollectionReference col = db.collection("messages");
+
+        // query all messages where chatId equals
+        Query query = col.whereEqualTo("chatId", chatId);
+
+        ApiFuture<QuerySnapshot> apiFuture = query.get();
+        List<QueryDocumentSnapshot> list = apiFuture.get().getDocuments();
+
+        // return list of messages
+        return list.stream().map((doc) -> doc.toObject(Message.class)).collect(Collectors.toList());
     }
 }
