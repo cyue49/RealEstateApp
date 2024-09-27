@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +35,13 @@ public class ChatController {
     public ResponseEntity<List<Chat>> getAllChats(@PathVariable String id) {
         try {
             List<Chat> chats = chatsService.getChatsForUser(id);
+            // sort chats by last active
+            chats.sort(new Comparator<Chat>() {
+                @Override
+                public int compare(Chat o1, Chat o2) {
+                    return -o1.getLastActive().compareTo(o2.getLastActive());
+                }
+            });
             return ResponseEntity.ok(chats);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(null);
