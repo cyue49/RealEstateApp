@@ -3,6 +3,7 @@ import { Text, View, Button, StyleSheet, TextInput, TouchableOpacity } from "rea
 import { router } from "expo-router";
 import { useState } from "react"; 
 import axios from 'axios';
+import { baseURL } from '../../constants/baseURL'
 //import { styles } from "../../constants/commonStyles";
 
 export default function SignIn() {
@@ -22,7 +23,7 @@ export default function SignIn() {
   const handleSignIn = async () => {
     try {
         // Replace with your backend URL
-        const response = await axios.post('http://192.168.2.25:8080/user/signin', {
+        const response = await axios.post(`${baseURL}/user/signin`, {
           email,
           password,
         });
