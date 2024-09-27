@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Modal, Button } from 'react-native';
 import { Colors } from '../../constants/Colors'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default ChatMessageItem = ({ messageItem }) => {
-    // temporary data
-    const tempUserId = '1'
-
     // states
     const [modalVisible, setModalVisible] = useState(false);
+    const [userId, setUserId] = useState('')
+
+    // get user id from storage
+    useEffect(() => {
+        const fetchUserId = async () => {
+            const id = await AsyncStorage.getItem('userId');
+            setUserId(id);
+        }
+        fetchUserId();
+    }, [])
 
     // handle long press a message
     const handleLongPress = () => {
@@ -25,9 +33,9 @@ export default ChatMessageItem = ({ messageItem }) => {
     }
 
     return (
-        <View style={messageItem.fromUser === tempUserId ? styles.messageRight : styles.messageLeft}>
+        <View style={messageItem.fromUser === userId ? styles.messageRight : styles.messageLeft}>
             {
-                messageItem.fromUser === tempUserId ?
+                messageItem.fromUser === userId ?
                     <View>
                         <Text style={{ alignSelf: 'flex-end', paddingHorizontal: 10, paddingBottom: 5, fontSize: 12, color: Colors.appBlue }}>{messageItem.timestamp.split('T')[1].split('.')[0]}</Text>
                         <TouchableOpacity
@@ -48,7 +56,7 @@ export default ChatMessageItem = ({ messageItem }) => {
             </View>
 
             {
-                messageItem.fromUser === tempUserId ? null :
+                messageItem.fromUser === userId ? null :
                     <View>
                         <Text style={{ paddingHorizontal: 10, paddingBottom: 5, fontSize: 12, color: Colors.appBlue }}>{messageItem.timestamp.split('T')[1].split('.')[0]}</Text>
                         <TouchableOpacity

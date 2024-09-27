@@ -1,35 +1,45 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, SafeAreaView, View, TextInput, FlatList } from 'react-native';
+import { StyleSheet, SafeAreaView, View, TextInput, FlatList, Text } from 'react-native';
 import { router } from 'expo-router'
 import { Colors } from '../../../constants/Colors'
 import { baseURL } from '../../../constants/baseURL'
 import MessageCard from '../../../components/inbox/MessageCard'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Inbox() {
-    // temporary user id
-    const tempUserId = '1'
-
     // states
     const [query, setQuery] = useState('')
     const [chats, setChats] = useState([])
+    const [userId, setUserId] = useState('')
 
     // navigate to single message chat page
     const navigateToMessage = (id) => {
         router.push(`./message/${id}`)
     }
 
+    // get user id from storage
+    useEffect(() => {
+        const fetchUserId = async () => {
+            const id = await AsyncStorage.getItem('userId');
+            setUserId(id);
+        }
+        fetchUserId();
+    }, [])
+
     // get all chats for this user
     useEffect(() => {
-        fetch(`${baseURL}/api/chats/forUser/${tempUserId}`)
-            .then((res) => res.json())
-            .then((data) => {
-                setChats(data)
-            })
-            .catch((e) => {
-                console.log(e)
-            })
-    }, [])
+        if (userId !== "") {
+            fetch(`${baseURL}/api/chats/forUser/${userId}`)
+                .then((res) => res.json())
+                .then((data) => {
+                    setChats(data)
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+        }
+    }, [userId])
 
     return (
         <SafeAreaView style={styles.container}>
@@ -44,15 +54,28 @@ export default function Inbox() {
                 />
             </View>
 
-            <FlatList
-                data={chats}
-                renderItem={({ item }) => {
-                    if (item.chatName.toLowerCase().includes(query.toLowerCase())) {
-                        return <MessageCard item={item} onPress={() => navigateToMessage(item.id)} />
-                    }
-                }}
-                keyExtractor={item => item.id}
-            />
+            {(() => {
+                if (userId === "") {
+                    return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                        <Text>Please sign in to view your inbox</Text>
+                    </View>
+                } else if (chats.length === 0) {
+                    return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                        <Text>You don't have any messages yet.</Text>
+                    </View>
+                } else {
+                    return <FlatList
+                        data={chats}
+                        renderItem={({ item }) => {
+                            if (item.chatName.toLowerCase().includes(query.toLowerCase())) {
+                                return <MessageCard item={item} onPress={() => navigateToMessage(item.id)} />
+                            }
+                        }}
+                        keyExtractor={item => item.id}
+                    />
+                }
+            })()}
+
         </SafeAreaView>
     );
 }
