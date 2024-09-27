@@ -36,7 +36,8 @@ export default function SignIn() {
         console.log('Sign-in successful:', response.data);
 
               // Store the user ID in AsyncStorage
-      await AsyncStorage.setItem('userId', userId);
+      await AsyncStorage.setItem('userId', response.data.uid);
+      console.log(response.data.uid)
 
         goToHome();
       } catch (error) {

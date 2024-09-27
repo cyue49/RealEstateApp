@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import {useRouter} from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
+import { baseURL } from '../../../constants/baseURL'
 
 
 
@@ -23,10 +24,10 @@ export default profile = ()  => {
 
        const  fetchUserProfile = async() => {
         try {
-            // const storedUserId = await AsyncStorage.getItem('userId'); // Fetch userId from AsyncStorage
-            if (userId) {
+             const storedUserId = await AsyncStorage.getItem('userId'); // Fetch userId from AsyncStorage
+            if (storedUserId) {
                 // console.log(`Fetching user profile for ID: ${userId}`);
-                const response = await axios.get(`http://127.0.0.1:8080/user/profile/${userId}`);
+                const response = await axios.get(`${baseURL}/user/profile/${storedUserId}`);
                 setUser(response.data);
             } else {
                 console.error('No user ID found in storage');
