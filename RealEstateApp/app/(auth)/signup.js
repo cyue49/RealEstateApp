@@ -3,8 +3,10 @@ import { Text, View, Button, StyleSheet, TextInput, TouchableOpacity } from "rea
 import { router } from "expo-router";
 import { useState } from "react"; 
 import axios from 'axios';
+
 import { baseURL } from '../../constants/baseURL'
 //import { styles } from "../../constants/commonStyles";
+
 
 export default function SignUp() {
    // const navigation = useNavigation();
@@ -25,6 +27,7 @@ export default function SignUp() {
 
   const handleSignUp = async () => {
     try {
+
         const user = {
           email: email.trim(),
           password: password.trim(),
@@ -34,11 +37,14 @@ export default function SignUp() {
         };
     
         const response = await axios.post(
+
           `${baseURL}/user/create`,
+
           user 
         );
     
         // Handle successful sign-up (navigate to home screen)
+
         console.log('Sign-Up successful:', response.data);
         goToHome(); 
     
