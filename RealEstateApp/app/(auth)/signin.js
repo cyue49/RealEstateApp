@@ -3,6 +3,7 @@ import { Text, View, Button, StyleSheet, TextInput, TouchableOpacity } from "rea
 import { router } from "expo-router";
 import { useState } from "react"; 
 import axios from 'axios';
+import { baseURL } from '../../constants/baseURL'
 //import { styles } from "../../constants/commonStyles";
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 
@@ -24,7 +25,9 @@ export default function SignIn() {
   const handleSignIn = async () => {
     try {
         // Replace with your backend URL
-        const response = await axios.post('http://127.0.0.1:8081/user/signin', {
+
+        const response = await axios.post(`${baseURL}/user/signin`, {
+
           email,
           password,
         });
