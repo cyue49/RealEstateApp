@@ -4,6 +4,8 @@ import { router } from "expo-router";
 import { useState } from "react"; 
 import axios from 'axios';
 //import { styles } from "../../constants/commonStyles";
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
+
 
 export default function SignIn() {
    // const navigation = useNavigation();
@@ -22,17 +24,21 @@ export default function SignIn() {
   const handleSignIn = async () => {
     try {
         // Replace with your backend URL
-        const response = await axios.post('http://192.168.2.25:8080/user/signin', {
+        const response = await axios.post('http://127.0.0.1:8081/user/signin', {
           email,
           password,
         });
         
         // Handle successful sign-in (e.g., navigate to home screen)
         console.log('Sign-in successful:', response.data);
+
+              // Store the user ID in AsyncStorage
+      await AsyncStorage.setItem('userId', userId);
+
         goToHome();
       } catch (error) {
         console.log("Error:", error)
-        setError('Invalid email or password');
+        setError('Invalid email or password' + error);
       }
   };
 
