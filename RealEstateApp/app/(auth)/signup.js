@@ -46,7 +46,7 @@ export default function SignUp() {
         // Handle successful sign-up (navigate to home screen)
 
         console.log('Sign-Up successful:', response.data);
-        goToHome(); 
+        goToSignin(); 
     
       } catch (error) {
         console.error('Error:', error);
