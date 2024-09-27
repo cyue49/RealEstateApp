@@ -1,10 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Image } from 'react-native';
+import { Text, View, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Modal, Button } from 'react-native';
 import { Colors } from '../../constants/Colors'
 
 export default ChatMessageItem = ({ messageItem }) => {
     // temporary data
     const tempUserId = '1'
+
+    // states
+    const [modalVisible, setModalVisible] = useState(false);
+
+    // handle long press a message
+    const handleLongPress = () => {
+        setModalVisible(!modalVisible)
+    }
+
+    // handle cancel delete message
+    const handleCancel = () => {
+        setModalVisible(false)
+    }
+
+    // handle delete message
+    const handleDelete = () => {
+        setModalVisible(false)
+    }
 
     return (
         <View style={messageItem.fromUser === tempUserId ? styles.messageRight : styles.messageLeft}>
@@ -12,9 +30,13 @@ export default ChatMessageItem = ({ messageItem }) => {
                 messageItem.fromUser === tempUserId ?
                     <View>
                         <Text style={{ alignSelf: 'flex-end', paddingHorizontal: 10, paddingBottom: 5, fontSize: 12, color: Colors.appBlue }}>{messageItem.timestamp.split('T')[1].split('.')[0]}</Text>
-                        <View style={styles.messageBoxLeft}>
-                            <Text style={styles.message}>{messageItem.message}</Text>
-                        </View>
+                        <TouchableOpacity
+                            onLongPress={handleLongPress}
+                            underlayColor={Colors.appLight}
+                        ><View style={styles.messageBoxLeft}>
+                                <Text style={styles.message}>{messageItem.message}</Text>
+                            </View></TouchableOpacity>
+
                     </View> : null
             }
 
@@ -29,12 +51,43 @@ export default ChatMessageItem = ({ messageItem }) => {
                 messageItem.fromUser === tempUserId ? null :
                     <View>
                         <Text style={{ paddingHorizontal: 10, paddingBottom: 5, fontSize: 12, color: Colors.appBlue }}>{messageItem.timestamp.split('T')[1].split('.')[0]}</Text>
-                        <View style={styles.messageBoxRight}>
-                            <Text style={styles.message}>{messageItem.message}</Text>
-                        </View>
-                    </View>
+                        <TouchableOpacity
+                            onLongPress={handleLongPress}
+                            underlayColor={Colors.appLight}
+                        ><View style={styles.messageBoxRight}>
+                                <Text style={styles.message}>{messageItem.message}</Text>
+                            </View></TouchableOpacity>
 
+                    </View>
             }
+
+            <Modal
+                animationType='fade'
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalBoxContainer}>
+                        <Text style={{ fontWeight: 'bold', fontSize: 16, textAlign: 'center' }}>Do you want to delete this message?</Text>
+                        <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-around' }}>
+                            <Button
+                                title='Cancel'
+                                onPress={handleCancel}
+                                accessibilityLabel='Cancel deleting message'
+                                style={styles.modalButton}
+                            />
+                            <Button
+                                title='Confirm'
+                                onPress={handleDelete}
+                                accessibilityLabel='Confirm deleting message'
+                                style={styles.modalButton}
+                            />
+                        </View>
+
+                    </View>
+                </View>
+            </Modal>
         </View>
     )
 }
@@ -77,4 +130,22 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.appBlueLight,
         padding: 10,
     },
+    modalContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(64, 64, 64, 0.5)'
+    },
+    modalBoxContainer: {
+        height: '20%',
+        width: '80%',
+        borderRadius: 20,
+        backgroundColor: Colors.appLight,
+        padding: 15,
+        alignItems: 'center',
+        justifyContent: 'space-around',
+    },
+    modalButton: {
+        flex: 1
+    }
 });
