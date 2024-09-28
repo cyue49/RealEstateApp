@@ -1,8 +1,8 @@
 import React from 'react';
-import { Text, View, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Modal, Button } from 'react-native';
+import { Text, View, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Modal, TextInput } from 'react-native';
 import { Colors } from '../../constants/Colors'
 
-export default PopupModal = ({ isVisible, setisVisible, handleCancel, handleConfirm, message }) => {
+export default PopupModal = ({ isVisible, setisVisible, handleCancel, handleConfirm, message, input, setInput }) => {
     return (
         <Modal
             animationType='fade'
@@ -13,11 +13,21 @@ export default PopupModal = ({ isVisible, setisVisible, handleCancel, handleConf
             <View style={styles.modalContainer}>
                 <View style={styles.modalBoxContainer}>
                     <Text style={{ fontWeight: 'bold', fontSize: 16, textAlign: 'center', color: Colors.appBlueDark }}>{message}</Text>
+
+                    {
+                        input === null ? null :
+                            <TextInput
+                                style={styles.messageBox}
+                                onChangeText={setInput}
+                                value={input}
+                            />
+                    }
+
                     <View style={styles.buttonsContainer}>
                         <TouchableOpacity
                             onPress={handleCancel}
-                            style={[styles.modalButton, { borderColor: Colors.appRed }]}>
-                            <Text style={{ color: Colors.appRed }}>Cancel</Text>
+                            style={[styles.modalButton, { borderColor: Colors.appGrayDark }]}>
+                            <Text style={{ color: Colors.appGrayDark }}>Cancel</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             onPress={handleConfirm}
@@ -61,5 +71,13 @@ const styles = StyleSheet.create({
         borderColor: Colors.appDark,
         borderRadius: 50,
         padding: 10
-    }
+    },
+    messageBox: {
+        borderWidth: 1,
+        borderColor: Colors.appBlue,
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        borderRadius: 50,
+        width: '100%'
+    },
 });

@@ -2,9 +2,16 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { Colors } from '../../constants/Colors'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import PopupModal from '../../components/inbox/PopupModal'
+import SlideUpModal from '../../components/inbox/SlideUpModal'
 
 export default MessageCard = ({ item, onPress }) => {
     const [displayTime, setDisplayTime] = useState('')
+    const [optionsModalVisible, setOptionsModalVisible] = useState(false);
+    const [deletePopupVisible, setDeletePopupVisible] = useState(false);
+    const [renamePopupVisible, setRenamePopupVisible] = useState(false);
+    const [input, setInput] = useState('') // input for popup modal
+
 
     useEffect(() => {
         // get current date
@@ -21,30 +28,80 @@ export default MessageCard = ({ item, onPress }) => {
         } else { // else display the date
             setDisplayTime(lastActiveDate)
         }
+
+        // set current app name in input
+        setInput(item.chatName)
     }, [item.lastActive])
 
+    // on long press of a chat
+    const handleLongPress = () => {
+        setOptionsModalVisible(!optionsModalVisible)
+    }
+
+    // when choosing rename option
+    const onChooseRename = () => {
+        setOptionsModalVisible(false)
+        setRenamePopupVisible(true)
+    }
+
+    // when choosing delete option
+    const onChooseDelete = () => {
+        setOptionsModalVisible(false)
+        setDeletePopupVisible(true)
+    }
+
+    // handle cancel for modals
+    const handleCancel = () => {
+        setOptionsModalVisible(false)
+        setRenamePopupVisible(false)
+        setDeletePopupVisible(false)
+        setInput(item.chatName)
+    }
+
+    // handle delete for delete pop up modal
+    const handleDelete = () => {
+        console.log('deleted')
+        setDeletePopupVisible(false)
+    }
+
+    // handle rename for rename pop up modal
+    const handleRename = () => {
+        console.log('renamed')
+        setRenamePopupVisible(false)
+    }
+
     return (
-        <TouchableOpacity
-            onPress={onPress}>
-            <View style={styles.messageCard}>
-                <View style={styles.imageContainer}>
-                    <Image
-                        style={styles.profileImage}
-                        source={require('../../assets/default-profile.png')} // temporary image
-                    />
-                </View>
-
-                <View style={{ flex: 1, flexDirection: 'column' }}>
-                    <View style={styles.titleRow}>
-                        <Text numberOfLines={1} style={styles.chatName}>{item.chatName}</Text>
-                        <Text style={styles.messageTime}>{displayTime}</Text>
+        <View>
+            <TouchableOpacity
+                onPress={onPress}
+                onLongPress={handleLongPress}>
+                <View style={styles.messageCard}>
+                    <View style={styles.imageContainer}>
+                        <Image
+                            style={styles.profileImage}
+                            source={require('../../assets/default-profile.png')} // setOptionsModalVisibleorary image
+                        />
                     </View>
-                    <Text numberOfLines={1} style={styles.previewMessage}>{item.latestMessage === "" ? "No messages yet" : item.latestMessage}</Text>
-                </View>
 
-                <FontAwesome name="angle-right" size={24} color={Colors.appBlueDark} />
-            </View>
-        </TouchableOpacity>
+                    <View style={{ flex: 1, flexDirection: 'column' }}>
+                        <View style={styles.titleRow}>
+                            <Text numberOfLines={1} style={styles.chatName}>{item.chatName}</Text>
+                            <Text style={styles.messageTime}>{displayTime}</Text>
+                        </View>
+                        <Text numberOfLines={1} style={styles.previewMessage}>{item.latestMessage === "" ? "No messages yet" : item.latestMessage}</Text>
+                    </View>
+
+                    <FontAwesome name="angle-right" size={24} color={Colors.appBlueDark} />
+                </View>
+            </TouchableOpacity>
+
+            <SlideUpModal isVisible={optionsModalVisible} setisVisible={setOptionsModalVisible} handleCancel={handleCancel} message="Please choose an option:" options={["Rename Chat", "Delete Chat"]} handleOptions={[onChooseRename, onChooseDelete]} />
+
+            <PopupModal isVisible={deletePopupVisible} setisVisible={setDeletePopupVisible} handleCancel={handleCancel} handleConfirm={handleDelete} message="Do you want to delete this chat?" input={null} />
+
+            <PopupModal isVisible={renamePopupVisible} setisVisible={setRenamePopupVisible} handleCancel={handleCancel} handleConfirm={handleRename} message="Please enter a new name:" input={input} setInput={setInput} />
+        </View>
+
     )
 }
 
