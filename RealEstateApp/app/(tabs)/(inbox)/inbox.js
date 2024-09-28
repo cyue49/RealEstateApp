@@ -6,6 +6,7 @@ import { baseURL } from '../../../constants/baseURL'
 import MessageCard from '../../../components/inbox/MessageCard'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 export default function Inbox() {
     // states
@@ -30,10 +31,9 @@ export default function Inbox() {
     // get all chats for this user
     useEffect(() => {
         if (userId !== "") {
-            fetch(`${baseURL}/api/chats/forUser/${userId}`)
-                .then((res) => res.json())
-                .then((data) => {
-                    setChats(data)
+            axios.get(`${baseURL}/api/chats/forUser/${userId}`)
+                .then((res) => {
+                    setChats(res.data)
                 })
                 .catch((e) => {
                     console.log(e)

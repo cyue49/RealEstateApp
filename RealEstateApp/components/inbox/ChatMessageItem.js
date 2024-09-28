@@ -4,6 +4,7 @@ import { Colors } from '../../constants/Colors'
 import { baseURL } from '../../constants/baseURL'
 import PopupModal from '../../components/inbox/PopupModal'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 export default ChatMessageItem = ({ messageItem }) => {
     // states
@@ -32,7 +33,7 @@ export default ChatMessageItem = ({ messageItem }) => {
 
     // handle delete message
     const handleDelete = () => {
-        fetch(`${baseURL}/api/messages/id/${messageItem.id}/delete/from/${messageItem.chatId}`, { method: 'DELETE' })
+        axios.delete(`${baseURL}/api/messages/id/${messageItem.id}/delete/from/${messageItem.chatId}`)
             .then(() => {
                 setDeleted(true)
             })
@@ -80,7 +81,7 @@ export default ChatMessageItem = ({ messageItem }) => {
                     </View>
             }
 
-            <PopupModal isVisible={modalVisible} setisVisible={setModalVisible} handleCancel={handleCancel} handleConfirm={handleDelete} message="Do you want to delete this message?" />
+            <PopupModal isVisible={modalVisible} setisVisible={setModalVisible} handleCancel={handleCancel} handleConfirm={handleDelete} message="Do you want to delete this message?" input={null} />
         </View>
     )
 }

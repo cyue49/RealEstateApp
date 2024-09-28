@@ -6,6 +6,7 @@ import { baseURL } from '../../../../constants/baseURL'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import ChatMessageItem from '../../../../components/inbox/ChatMessageItem'
 import DateDivider from '../../../../components/inbox/DateDivider'
+import axios from 'axios';
 
 export default function Message() {
     const navigation = useNavigation();
@@ -20,11 +21,10 @@ export default function Message() {
     // fetch and set chatName from db
     useEffect(() => {
         // fetch chat title by id then set it
-        fetch(`${baseURL}/api/chats/id/${id}`)
-            .then((res) => res.json())
-            .then((data) => {
+        axios.get(`${baseURL}/api/chats/id/${id}`)
+            .then((res) => {
                 navigation.setOptions({
-                    headerTitle: data.chatName
+                    headerTitle: res.data.chatName
                 })
             })
             .catch((e) => {
@@ -41,12 +41,11 @@ export default function Message() {
     var previousDate = ''
     useEffect(() => {
         // fetch messages
-        fetch(`${baseURL}/api/messages/forChat/${id}`)
-            .then((res) => res.json())
-            .then((data) => {
-                setchatMessages(data)
+        axios.get(`${baseURL}/api/messages/forChat/${id}`)
+            .then((res) => {
+                setchatMessages(res.data)
                 // set initial previous date to the date of the first message
-                previousDate = data[0].timestamp.split('T')[0]
+                previousDate = res.data[0].timestamp.split('T')[0]
             })
             .catch((e) => {
                 console.log(e)
