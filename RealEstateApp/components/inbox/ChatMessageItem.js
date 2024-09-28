@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Modal, Button } from 'react-native';
 import { Colors } from '../../constants/Colors'
+import { baseURL } from '../../constants/baseURL'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default ChatMessageItem = ({ messageItem }) => {
     // states
     const [modalVisible, setModalVisible] = useState(false);
     const [userId, setUserId] = useState('')
+    const [deleted, setDeleted] = useState(false)
 
     // get user id from storage
     useEffect(() => {
@@ -29,45 +31,55 @@ export default ChatMessageItem = ({ messageItem }) => {
 
     // handle delete message
     const handleDelete = () => {
+        fetch(`${baseURL}/api/messages/id/${messageItem.id}/delete/from/${messageItem.chatId}`, { method: 'DELETE' })
+            .then(() => {
+                setDeleted(true)
+            })
+            .catch((e) => {
+                console.log(e)
+            })
         setModalVisible(false)
     }
 
     return (
-        <View style={messageItem.fromUser === userId ? styles.messageRight : styles.messageLeft}>
+        <View >
             {
-                messageItem.fromUser === userId ?
-                    <View>
-                        <Text style={{ alignSelf: 'flex-end', paddingHorizontal: 10, paddingBottom: 5, fontSize: 12, color: Colors.appBlue }}>{messageItem.timestamp.split('T')[1].split('.')[0]}</Text>
-                        <TouchableOpacity
-                            onLongPress={handleLongPress}
-                            underlayColor={Colors.appLight}
-                        ><View style={styles.messageBoxLeft}>
-                                <Text style={styles.message}>{messageItem.message}</Text>
-                            </View></TouchableOpacity>
+                deleted ? <Text style={{ alignSelf: 'flex-end', fontStyle: 'italic', color: Colors.appRed }}>Message deleted</Text> :
+                    <View style={messageItem.fromUser === userId ? styles.messageRight : styles.messageLeft}>
+                        {
+                            messageItem.fromUser === userId ?
+                                <View>
+                                    <Text style={{ alignSelf: 'flex-end', paddingHorizontal: 10, paddingBottom: 5, fontSize: 12, color: Colors.appBlue }}>{messageItem.timestamp.split('T')[1].split('.')[0]}</Text>
+                                    <TouchableOpacity
+                                        onLongPress={handleLongPress}
+                                        underlayColor={Colors.appLight}
+                                    ><View style={styles.messageBoxLeft}>
+                                            <Text>{messageItem.message}</Text>
+                                        </View></TouchableOpacity>
 
-                    </View> : null
-            }
+                                </View> : null
+                        }
 
-            <View style={styles.imageContainer}>
-                <Image
-                    style={styles.profileImage}
-                    source={require('../../assets/default-profile.png')} // temporary image
-                />
-            </View>
+                        <View style={styles.imageContainer}>
+                            <Image
+                                style={styles.profileImage}
+                                source={require('../../assets/default-profile.png')} // temporary image
+                            />
+                        </View>
 
-            {
-                messageItem.fromUser === userId ? null :
-                    <View>
-                        <Text style={{ paddingHorizontal: 10, paddingBottom: 5, fontSize: 12, color: Colors.appBlue }}>{messageItem.timestamp.split('T')[1].split('.')[0]}</Text>
-                        <TouchableOpacity
-                            onLongPress={handleLongPress}
-                            underlayColor={Colors.appLight}
-                        ><View style={styles.messageBoxRight}>
-                                <Text style={styles.message}>{messageItem.message}</Text>
-                            </View></TouchableOpacity>
-
+                        {
+                            messageItem.fromUser === userId ? null :
+                                <View>
+                                    <Text style={{ paddingHorizontal: 10, paddingBottom: 5, fontSize: 12, color: Colors.appBlue }}>{messageItem.timestamp.split('T')[1].split('.')[0]}</Text>
+                                    <View style={styles.messageBoxRight}>
+                                        <Text>{messageItem.message}</Text>
+                                    </View>
+                                </View>
+                        }
                     </View>
             }
+
+
 
             <Modal
                 animationType='fade'

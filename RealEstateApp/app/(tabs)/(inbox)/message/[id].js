@@ -55,12 +55,13 @@ export default function Message() {
 
     return (
         <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={100} style={styles.container}>
-            {chatMessages.length === 0 ? <Text style = {{flex: 1, alignSelf: "center", margin: 10}}>No messages yet</Text> :
+            {chatMessages.length === 0 ? <Text style={{ flex: 1, alignSelf: "center", margin: 10 }}>No messages yet</Text> :
                 <FlatList
                     style={styles.flatList}
                     data={chatMessages}
                     inverted={true}
-                    renderItem={({ item }) => {
+                    renderItem={({ item, index }) => {
+                        if (index === 0) previousDate = ''
                         if (previousDate === item.timestamp.split('T')[0]) {
                             previousDate = item.timestamp.split('T')[0]
                             return <ChatMessageItem messageItem={item} />
