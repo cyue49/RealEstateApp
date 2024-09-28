@@ -4,15 +4,18 @@ import { Colors } from '../../constants/Colors'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import PopupModal from '../../components/inbox/PopupModal'
 import SlideUpModal from '../../components/inbox/SlideUpModal'
+import { baseURL } from '../../constants/baseURL'
+import axios from 'axios';
 
 export default MessageCard = ({ item, onPress }) => {
     const [displayTime, setDisplayTime] = useState('')
+    const [displayName, setDisplayName] = useState(item.chatName)
     const [optionsModalVisible, setOptionsModalVisible] = useState(false);
     const [deletePopupVisible, setDeletePopupVisible] = useState(false);
     const [renamePopupVisible, setRenamePopupVisible] = useState(false);
     const [input, setInput] = useState('') // input for popup modal
 
-
+    // set date, input, chat name
     useEffect(() => {
         // get current date
         let date = new Date();
@@ -66,7 +69,17 @@ export default MessageCard = ({ item, onPress }) => {
 
     // handle rename for rename pop up modal
     const handleRename = () => {
-        console.log('renamed')
+        const data = {
+            chatName: input.trim()
+        }
+
+        axios.put(`${baseURL}/api/chats/id/${item.id}/rename`, data)
+            .then(() => {
+                setDisplayName(input.trim())
+            })
+            .catch((e) => {
+                console.log(e)
+            })
         setRenamePopupVisible(false)
     }
 
@@ -85,7 +98,7 @@ export default MessageCard = ({ item, onPress }) => {
 
                     <View style={{ flex: 1, flexDirection: 'column' }}>
                         <View style={styles.titleRow}>
-                            <Text numberOfLines={1} style={styles.chatName}>{item.chatName}</Text>
+                            <Text numberOfLines={1} style={styles.chatName}>{displayName}</Text>
                             <Text style={styles.messageTime}>{displayTime}</Text>
                         </View>
                         <Text numberOfLines={1} style={styles.previewMessage}>{item.latestMessage === "" ? "No messages yet" : item.latestMessage}</Text>
