@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Modal, Button } from 'react-native';
 import { Colors } from '../../constants/Colors'
 import { baseURL } from '../../constants/baseURL'
+import PopupModal from '../../components/inbox/PopupModal'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default ChatMessageItem = ({ messageItem }) => {
@@ -79,35 +80,7 @@ export default ChatMessageItem = ({ messageItem }) => {
                     </View>
             }
 
-
-
-            <Modal
-                animationType='fade'
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}
-            >
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalBoxContainer}>
-                        <Text style={{ fontWeight: 'bold', fontSize: 16, textAlign: 'center' }}>Do you want to delete this message?</Text>
-                        <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-around' }}>
-                            <Button
-                                title='Cancel'
-                                onPress={handleCancel}
-                                accessibilityLabel='Cancel deleting message'
-                                style={styles.modalButton}
-                            />
-                            <Button
-                                title='Confirm'
-                                onPress={handleDelete}
-                                accessibilityLabel='Confirm deleting message'
-                                style={styles.modalButton}
-                            />
-                        </View>
-
-                    </View>
-                </View>
-            </Modal>
+            <PopupModal isVisible={modalVisible} setisVisible={setModalVisible} handleCancel={handleCancel} handleConfirm={handleDelete} message="Do you want to delete this message?" cancelMessage="Cancel deleting message" confirmMessage="Confirm deleting message" />
         </View>
     )
 }
@@ -149,23 +122,5 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         backgroundColor: Colors.appBlueLight,
         padding: 10,
-    },
-    modalContainer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'rgba(64, 64, 64, 0.5)'
-    },
-    modalBoxContainer: {
-        height: '20%',
-        width: '80%',
-        borderRadius: 20,
-        backgroundColor: Colors.appLight,
-        padding: 15,
-        alignItems: 'center',
-        justifyContent: 'space-around',
-    },
-    modalButton: {
-        flex: 1
     }
 });
