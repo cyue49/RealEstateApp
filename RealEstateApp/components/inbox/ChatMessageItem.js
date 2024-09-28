@@ -80,7 +80,7 @@ export default ChatMessageItem = ({ messageItem }) => {
                     </View>
             }
 
-            <PopupModal isVisible={modalVisible} setisVisible={setModalVisible} handleCancel={handleCancel} handleConfirm={handleDelete} message="Do you want to delete this message?" cancelMessage="Cancel deleting message" confirmMessage="Confirm deleting message" />
+            <PopupModal isVisible={modalVisible} setisVisible={setModalVisible} handleCancel={handleCancel} handleConfirm={handleDelete} message="Do you want to delete this message?" />
         </View>
     )
 }
