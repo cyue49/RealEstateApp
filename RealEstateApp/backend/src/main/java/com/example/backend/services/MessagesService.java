@@ -20,7 +20,7 @@ public class MessagesService {
         Firestore db = FirestoreClient.getFirestore();
 
         // create new message with auto generated id and timestamp
-        Message newMessage = new Message(message.getChatId(), message.getFromUser(), message.getToUser(), message.getMessage());
+        Message newMessage = new Message(message.getChatId(), message.getFromUser(), message.getMessage());
 
         // save message to firestore
         WriteResult writeResult = db.collection("messages").document(newMessage.getId()).set(newMessage).get();

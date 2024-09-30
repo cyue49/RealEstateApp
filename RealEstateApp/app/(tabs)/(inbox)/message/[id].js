@@ -7,6 +7,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import ChatMessageItem from '../../../../components/inbox/ChatMessageItem'
 import DateDivider from '../../../../components/inbox/DateDivider'
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Message() {
     const navigation = useNavigation();
@@ -17,6 +18,16 @@ export default function Message() {
     // states
     const [message, setMessage] = useState('') // message user is currently typing
     const [chatMessages, setchatMessages] = useState([]) // list of all messages for the chat
+    const [userId, setUserId] = useState('')
+
+    // get user id from storage
+    useEffect(() => {
+        const fetchUserId = async () => {
+            const id = await AsyncStorage.getItem('userId');
+            setUserId(id);
+        }
+        fetchUserId();
+    }, [])
 
     // fetch and set chatName from db
     useEffect(() => {
@@ -34,13 +45,29 @@ export default function Message() {
 
     // handle send message 
     const handleSend = () => {
-        // todo
+        const data = {
+            chatId: id,
+            fromUser: userId,
+            message: message
+        }
+
+        // save message in db
+        axios.post(`${baseURL}/api/messages/create`, data)
+            .then((res) => {
+                if (res.status === 200) {
+                    setMessage('')
+                    updateChat()
+                }
+            })
+            .catch((e) => {
+                console.log(e)
+            })
     }
 
     // fetch messages from db and keep track of the previous date to know when to display date dividers
     var previousDate = ''
-    useEffect(() => {
-        // fetch messages
+
+    const updateChat = () => {
         axios.get(`${baseURL}/api/messages/forChat/${id}`)
             .then((res) => {
                 setchatMessages(res.data)
@@ -50,6 +77,11 @@ export default function Message() {
             .catch((e) => {
                 console.log(e)
             })
+    }
+
+    useEffect(() => {
+        // fetch messages
+        updateChat()
     }, [])
 
     return (
