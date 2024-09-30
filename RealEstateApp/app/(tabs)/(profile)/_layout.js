@@ -7,10 +7,12 @@ export default function Layout() {
             screenOptions={headerOptions}>
             <Stack.Screen name="profile" options={{
                 title: 'Profile',
-                headerShown: false
+                headerShown: true
             }} />
             <Stack.Screen name="editprofile" options={{
-                title: 'Edit Profile'
+                title: 'Edit Profile',
+                headerShown: true
+                
             }} />
         </Stack>
     );
