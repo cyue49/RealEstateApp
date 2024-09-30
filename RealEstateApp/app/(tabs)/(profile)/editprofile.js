@@ -22,6 +22,9 @@ export default function EditProfile() {
     const[loading,setLoading] = useState(true);
     const[error,setError] = useState(null);
 
+    const [originalUserData, setOriginalUserData] = useState(null);
+
+
     useEffect(() =>{
         const fetchUserProfile = async () =>{
             try{
@@ -29,6 +32,8 @@ export default function EditProfile() {
                 if (storedUserId) {
                     const response = await axios.get(`${baseURL}/user/profile/${storedUserId}`);
                     setUser(response.data);
+                    setOriginalUserData(response.data); // Store original user data when fetched
+
                 }
             } catch (err) {
                 setError('Failed to fetch user data');
@@ -43,6 +48,12 @@ export default function EditProfile() {
 
       // Handle form submission to update user profile
       const handleUpdateProfile = async () => {
+
+        if (JSON.stringify(user) === JSON.stringify(originalUserData)) {
+            Alert.alert('No data changed');
+            return;  // Exit the function if no changes were made
+        }
+
         try{
             const storedUserId = await AsyncStorage.getItem('userId');
             if (storedUserId) {
@@ -180,8 +191,6 @@ export default function EditProfile() {
                 </View>
             </View>
 
-        {/* <Button title="Update Profile" onPress={handleUpdateProfile} />
-        <Button title="Delete Profile" onPress={handleDeleteProfile} /> */}
 
         <StatusBar style="auto" />
       </SafeAreaView>
