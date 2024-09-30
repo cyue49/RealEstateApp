@@ -76,6 +76,10 @@ export default profile = ()  => {
         router.back(); // Use this if you're using a navigation system that supports back
     };
 
+    const navigateToRegisterProperty = () => {
+        router.push('/registerProperty');
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={localstyles.blueBar}>
@@ -117,7 +121,7 @@ export default profile = ()  => {
             {/* Action Buttons */}
             <View style={localstyles.actions}>
             <View style={localstyles.greyBar}>
-                <TouchableOpacity style={localstyles.iconButton} onPress={navigateToEditPage}>
+                <TouchableOpacity style={localstyles.iconButton} onPress={navigateToRegisterProperty}>
                     <Icon name="home" size={30} color="appBlue" />
                     <Text style = {localstyles.text}>Register My Property</Text>
                 </TouchableOpacity>
