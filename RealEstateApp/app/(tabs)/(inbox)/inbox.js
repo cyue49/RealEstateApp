@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { StyleSheet, SafeAreaView, View, TextInput, FlatList, Text } from 'react-native';
-import { router } from 'expo-router'
+import { router, useFocusEffect } from 'expo-router'
 import { Colors } from '../../../constants/Colors'
 import { baseURL } from '../../../constants/baseURL'
 import MessageCard from '../../../components/inbox/MessageCard'
@@ -29,7 +29,7 @@ export default function Inbox() {
     }, [])
 
     // get all chats for this user
-    useEffect(() => {
+    const getChats = useCallback(() => {
         if (userId !== "") {
             axios.get(`${baseURL}/api/chats/forUser/${userId}`)
                 .then((res) => {
@@ -40,6 +40,10 @@ export default function Inbox() {
                 })
         }
     }, [userId])
+
+    useFocusEffect(() => {
+        getChats()
+    })
 
     return (
         <SafeAreaView style={styles.container}>
