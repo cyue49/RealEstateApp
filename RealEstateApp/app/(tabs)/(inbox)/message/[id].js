@@ -8,6 +8,10 @@ import ChatMessageItem from '../../../../components/inbox/ChatMessageItem'
 import DateDivider from '../../../../components/inbox/DateDivider'
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import SockJS from 'sockjs-client';
+import { Stomp } from '@stomp/stompjs';
+import { TextEncoder } from 'text-encoding';
+global.TextEncoder = TextEncoder;
 
 export default function Message() {
     const navigation = useNavigation();
@@ -19,6 +23,7 @@ export default function Message() {
     const [message, setMessage] = useState('') // message user is currently typing
     const [chatMessages, setchatMessages] = useState([]) // list of all messages for the chat
     const [userId, setUserId] = useState('')
+    const [stompClient, setStompClient] = useState(null);
 
     // get user id from storage
     useEffect(() => {
@@ -48,25 +53,28 @@ export default function Message() {
         const data = {
             chatId: id,
             fromUser: userId,
-            message: message
+            message: message.trim()
         }
 
-        // save message in db
-        axios.post(`${baseURL}/api/messages/create`, data)
-            .then((res) => {
-                if (res.status === 200) {
-                    setMessage('')
-                    updateChat()
-                }
-            })
-            .catch((e) => {
-                console.log(e)
-            })
+        if (message.trim() !== '') {
+            // save message in db
+            axios.post(`${baseURL}/api/messages/create`, data)
+                .then((res) => {
+                    if (res.status === 200) {
+                        setMessage('')
+
+                        // send message on websocket
+                        sendMessage(res.data)
+                    }
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+        }
     }
 
     // fetch messages from db and keep track of the previous date to know when to display date dividers
     var previousDate = ''
-
     const updateChat = () => {
         axios.get(`${baseURL}/api/messages/forChat/${id}`)
             .then((res) => {
@@ -79,10 +87,44 @@ export default function Message() {
             })
     }
 
+    // fetch all chat messages on page load
     useEffect(() => {
-        // fetch messages
         updateChat()
     }, [])
+
+    // connect to websocket
+    useEffect(() => {
+        const socket = () => new SockJS(`${baseURL}/ws`);
+        client = Stomp.over(socket);
+
+        // set state
+        setStompClient(client);
+
+        // subscribe to websocket to listen for messages
+        client.connect({}, () => {
+            client.subscribe(`/user/${id}/reply`, (receivedMessage) => {
+                console.log('Received message:' + receivedMessage.body)
+                // update chat messages
+                updateChat()
+            });
+        });
+
+        // close connection
+        return () => {
+            if (stompClient) {
+                stompClient.disconnect(() => {
+                    console.log('Disconnected from websocket')
+                })
+            }
+        }
+    }, [])
+
+    // sending a message over the websocket
+    const sendMessage = (data) => {
+        if (stompClient) {
+            stompClient.send(`/app/message`, {}, JSON.stringify(data));
+        }
+    }
 
     return (
         <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={100} style={styles.container}>
@@ -106,7 +148,7 @@ export default function Message() {
                         }
                     }}
                     ListFooterComponent={() => <DateDivider date={previousDate} />}
-                    keyExtractor={item => item.id}
+                    keyExtractor={(item, index) => index.toString()}
                 />}
 
             <View style={{ height: 1, backgroundColor: Colors.appGray }}></View>
