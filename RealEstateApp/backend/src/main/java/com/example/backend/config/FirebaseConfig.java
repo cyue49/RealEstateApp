@@ -37,9 +37,12 @@ public class FirebaseConfig {
         
     }
 
+    
+
     @Bean
     public Firestore firestore() {
         return FirestoreClient.getFirestore();
     }
+
 
 }

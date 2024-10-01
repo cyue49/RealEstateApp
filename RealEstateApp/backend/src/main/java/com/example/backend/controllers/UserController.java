@@ -2,6 +2,7 @@ package com.example.backend.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,11 +22,15 @@ import com.google.firebase.auth.UserRecord;
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
+
     private FirebaseAuthService firebaseAuthService;
+    private FirestoreService firestoreService;
 
     @Autowired
-    private FirestoreService firestoreService;
+    public UserController(FirebaseAuthService firebaseAuthService, FirestoreService firestoreService) {
+        this.firebaseAuthService = firebaseAuthService;
+        this.firestoreService = firestoreService;
+    }
 
     //Endpoints
 
@@ -95,5 +100,20 @@ public class UserController {
         }
     }
 
-    
-}
+    // Delete user endpoint
+    @DeleteMapping("/profile/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable String userId) {
+        try {
+            User user = new User();
+            user.setuID(userId);
+            firestoreService.deleteUserFromFirestore(user);
+            firebaseAuthService.deleteUser(userId);
+
+         return ResponseEntity.ok("User deleted successfully from Firestore and Firebase Auth");
+       } catch (FirebaseAuthException e) {
+        return ResponseEntity.status(500).body("Failed to delete user from Firebase Auth: " + e.getMessage());
+     } catch (Exception e) {
+        return ResponseEntity.status(500).body("Failed to delete user from Firestore: " + e.getMessage());
+     }
+    }
+}  
