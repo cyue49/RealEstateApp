@@ -17,10 +17,6 @@ export default function SignUp() {
   const [address, setAddress] = useState(''); 
   const [error, setError] = useState('');
 
-  const goToHome = () => {
-    router.replace("/listings");
-  };
-
   const goToSignin = () => {
     router.replace("/signin");
   };
