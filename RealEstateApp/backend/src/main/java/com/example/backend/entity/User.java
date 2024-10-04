@@ -1,8 +1,8 @@
 package com.example.backend.entity;
 
-import jakarta.validation.constraints.Pattern; // Use jakarta if using jakarta.validation-api
-import jakarta.validation.constraints.Email; // For email validation
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Email; // Use jakarta if using jakarta.validation-api
+import jakarta.validation.constraints.NotBlank; // For email validation
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size; // For size validation
 
 
@@ -29,6 +29,8 @@ public class User {
     public User(String email, String password) {
         this.email = email;
         this.password = password;
+    }
+    public User() {
     }
 
 

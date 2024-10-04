@@ -4,8 +4,54 @@ import { router } from 'expo-router';
 import { styles } from '../../../constants/commonStyles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import {useRouter} from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage'; 
+import { baseURL } from '../../../constants/baseURL'
 
-export default function Profile() {
+
+
+
+export default profile = ()  => {
+    const router = useRouter();
+    const [user, setUser] = useState(null);  // State to store user data
+    const [loading, setLoading] = useState(true);  // State to manage loading
+    const [error, setError] = useState(null);  // State to manage errors
+    // const userId =  "3adHg3fWqnP5rq41EPbdoGUAF082";
+
+    useEffect(()=> {
+
+       const  fetchUserProfile = async() => {
+        try {
+             const storedUserId = await AsyncStorage.getItem('userId'); // Fetch userId from AsyncStorage
+            if (storedUserId) {
+                // console.log(`Fetching user profile for ID: ${userId}`);
+                const response = await axios.get(`${baseURL}/user/profile/${storedUserId}`);
+                setUser(response.data);
+            } else {
+                console.error('No user ID found in storage');
+            }
+        } catch (err) {
+            console.error('Error fetching user profile:', err);
+            if (err.response) {
+                console.error('Response data:', err.response.data); // Log response data
+                console.error('Response status:', err.response.status); // Log response status
+            }
+            setError(err.response ? err.response.data : err.message);
+        }
+         finally {
+            setLoading(false);
+        }
+
+     };
+
+     fetchUserProfile();
+    }, []);
+   
+    if (error) {console.log(error)}
+
+
     const navigateToEditPage = () => {
         router.push('./editprofile');
     };
@@ -14,30 +60,46 @@ export default function Profile() {
         router.replace('/signin');
     };
 
+    const navigateToListing = () => {
+        router.push('/listings');
+    };
+
+ 
+   
+
     const goBack = () => {
         router.back(); // Use this if you're using a navigation system that supports back
     };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <View style={localstyles.blueBar}>
-                <View style ={localstyles.profileText}>
-                <TouchableOpacity onPress={goBack} style={localstyles.backButton}>
-                    <Icon name="chevron-left" size={20} color="#fff" />
-                </TouchableOpacity>
-                <Text style={localstyles.profileText}>Profile</Text>
-                </View>
-
+              
                 {/* New nested view for image and info */}
                 <View style={localstyles.profileRow}>
                     <View style={localstyles.imagePlaceholder}>
                         {/* Image will be added here later */}
                     </View>
                     <View style={localstyles.profileInfo}>
-                        <Text style={localstyles.email}>email: user@example.com</Text>
-                        <Text style={localstyles.id}>ID : 123456</Text>
+                        <Text style={localstyles.email}>
+                        Email: {user?.email || "Loading..."}
+                            </Text>
                     </View>
                 </View>
+            </View>
+            <View style={localstyles.greyBar}>
+            <View style={localstyles.profileInfo}>
+                        <Text style={localstyles.Titledetails}> User Name:</Text> 
+                        <Text style={localstyles.details}>{user?.userName || "Loading..."}</Text>
+                         
+                        <Text style={localstyles.Titledetails}>Address:</Text>
+                         <Text style={localstyles.details}>{user?.address || "Loading..."}</Text>
+                        
+                        <Text style={localstyles.Titledetails}>Phone Number: </Text>
+                        <Text style={localstyles.details}>{user?.phoneNumber || "Loading..."}</Text>
+
+             </View>
+
             </View>
 
             {/* Action Buttons */}
@@ -45,50 +107,43 @@ export default function Profile() {
             <View style={localstyles.greyBar}>
                 <TouchableOpacity style={localstyles.iconButton} onPress={navigateToEditPage}>
                     <Icon name="home" size={30} color="appBlue" />
-                    <Text style = {localstyles.text}>Register My Property</Text>
+                    <Text style = {localstyles.text}>edit profile</Text>
                 </TouchableOpacity>
                 </View>
                 <View style={localstyles.greyBar}>
-                <TouchableOpacity style={localstyles.iconButton} onPress={navigateToSignIn}>
+                <TouchableOpacity style={localstyles.iconButton} onPress={navigateToListing}>
                     <Icon name="list" size={30} color="#appBlue" />
                     <Text style = {localstyles.text}>View My List</Text>
                 </TouchableOpacity>
                 </View>
             </View>
 
-            <Button
-                onPress={navigateToEditPage}
-                title='Go to edit profile page'
-                accessibilityLabel='Navigation button'
-            />
+        
             <Button
                 onPress={navigateToSignIn}
                 title='Go to sign in page'
                 accessibilityLabel='Navigation button'
             />
             <StatusBar style="auto" />
-        </SafeAreaView>
+        </View>
     );
 }
 
 const localstyles = StyleSheet.create({
     blueBar: {
-        backgroundColor: "appBlue",
-        paddingVertical: 30,
-        paddingHorizontal: 20,
+        backgroundColor: '#2976D4',
+        paddingVertical: 15,
+        paddingHorizontal:20,
         width: '100%',
+        marginBottom: 20,
+        
     },
 
     backButton: {
         marginRight: 10,
     },
 
-    profileText: {
-        color: '#fff',
-        fontSize: 16,
-        flexDirection : 'row',
-       
-    },
+
 
     profileRow: {
         flexDirection: 'row',
@@ -116,27 +171,29 @@ const localstyles = StyleSheet.create({
         fontSize: 16,
         marginBottom: 5,
     },
-    id: {
-        color: '#fff',
+    details: {
+        padding: 10,
         fontSize: 14,
+        marginBottom: 10,
+ 
     },
     
     actions: {
         flexDirection: 'column',
         justifyContent: 'space-around',
         marginTop: 20,
-        marginBottom: 90,
+        marginBottom: 70,
        
     },
 
     greyBar: {
-        backgroundColor: 'appGrey',
-        paddingVertical: 10,
+        backgroundColor: '#E5E4E2',
+        paddingVertical: 15,
         paddingHorizontal: 20,
         flexDirection: 'row', // Align the icon and text in a row
         alignItems: 'center', // Center the contents vertically
         marginHorizontal: 30, 
-        marginVertical: 20,
+        marginVertical: 10,
        
        
     },
@@ -144,13 +201,19 @@ const localstyles = StyleSheet.create({
     iconButton: {
         flexDirection: 'row', // Ensure icon and text are in the same row
         alignItems: 'center',
-        paddingVertical: 20,
+        paddingVertical: 15,
      
-       
+    
     },
 
     text: {
         marginLeft : 50,
          fontSize : 16,
-    }
+    },
+
+    Titledetails: {
+        color: '#2976D4',
+        fontWeight: 'bold',
+      
+     },
 });
