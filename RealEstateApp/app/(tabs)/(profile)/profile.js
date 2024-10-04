@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image,Text, View, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import { styles } from '../../../constants/commonStyles';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -79,6 +79,15 @@ export default profile = ()  => {
                 <View style={localstyles.profileRow}>
                     <View style={localstyles.imagePlaceholder}>
                         {/* Image will be added here later */}
+                        {user?.photoUrl ? (
+                            <Image 
+                            source={user.photoUrl}
+                            style = {localstyles.profileImage}
+                            />
+                        ) : (
+                            <Text style={{ color: '#bbb' }}>No image available</Text> // Placeholder text
+                        )}
+
                     </View>
                     <View style={localstyles.profileInfo}>
                         <Text style={localstyles.email}>
@@ -106,13 +115,13 @@ export default profile = ()  => {
             <View style={localstyles.actions}>
             <View style={localstyles.greyBar}>
                 <TouchableOpacity style={localstyles.iconButton} onPress={navigateToEditPage}>
-                    <Icon name="home" size={30} color="appBlue" />
+                    <Icon name="edit" size={30} color="#2976D4" />
                     <Text style = {localstyles.text}>edit profile</Text>
                 </TouchableOpacity>
                 </View>
                 <View style={localstyles.greyBar}>
                 <TouchableOpacity style={localstyles.iconButton} onPress={navigateToListing}>
-                    <Icon name="list" size={30} color="#appBlue" />
+                    <Icon name="list" size={30} color="#2976D4" />
                     <Text style = {localstyles.text}>View My List</Text>
                 </TouchableOpacity>
                 </View>
@@ -216,4 +225,10 @@ const localstyles = StyleSheet.create({
         fontWeight: 'bold',
       
      },
+
+     profileImage: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 40, // Ensure the image is circular
+    },
 });
