@@ -7,7 +7,7 @@ import SlideUpModal from '../../components/inbox/SlideUpModal'
 import { baseURL } from '../../constants/baseURL'
 import axios from 'axios';
 
-export default MessageCard = ({ item, onPress }) => {
+export default ChatCard = ({ item, onPress }) => {
     const [displayTime, setDisplayTime] = useState('')
     const [displayName, setDisplayName] = useState(item.chatName)
     const [optionsModalVisible, setOptionsModalVisible] = useState(false);
@@ -99,7 +99,7 @@ export default MessageCard = ({ item, onPress }) => {
                 <TouchableOpacity
                     onPress={onPress}
                     onLongPress={handleLongPress}>
-                    <View style={styles.messageCard}>
+                    <View style={styles.chatCard}>
                         <View style={styles.imageContainer}>
                             <Image
                                 style={styles.profileImage}
@@ -132,7 +132,7 @@ export default MessageCard = ({ item, onPress }) => {
 }
 
 const styles = StyleSheet.create({
-    messageCard: {
+    chatCard: {
         flex: 1,
         flexDirection: 'row',
         gap: 15,
