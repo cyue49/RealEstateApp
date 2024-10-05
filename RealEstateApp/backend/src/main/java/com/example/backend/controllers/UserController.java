@@ -18,6 +18,8 @@ import com.google.cloud.firestore.FirestoreException;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -115,5 +117,27 @@ public class UserController {
      } catch (Exception e) {
         return ResponseEntity.status(500).body("Failed to delete user from Firestore: " + e.getMessage());
      }
+    }
+
+    // get user by email
+    @GetMapping("/email/{email}")
+    public ResponseEntity<List<User>> getUserByEmail(@PathVariable String email) {
+        try {
+            List<User> users = firestoreService.getUserByEmail(email);
+            return ResponseEntity.ok(users);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    // get user by username
+    @GetMapping("username/{username}")
+    public ResponseEntity<List<User>> getUserByUsername(@PathVariable String username) {
+        try {
+            List<User> users = firestoreService.getUserByUsername(username);
+            return ResponseEntity.ok(users);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 }  
