@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.backend.entity.User;
-//import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
-//import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
@@ -50,6 +48,12 @@ public class FirebaseAuthService {
     public UserRecord getUserByEmail(String email) throws FirebaseAuthException {
         System.out.println("In User Get Email ...");
         return firebaseAuth.getUserByEmail(email);
+    }
+
+    public void deleteUser(String userId) throws FirebaseAuthException {
+     firebaseAuth.deleteUser(userId);
+     System.out.println("User deleted from Firebase Auth with userID: " + userId);
+
     }
 
 }

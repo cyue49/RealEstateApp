@@ -6,16 +6,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.backend.entity.User;
+import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
+
+
+
 
 @Service
 public class FirestoreService {
 
     @Autowired
     private Firestore firestore;
+  
 
     // Method to save user data to Firestore
     public void saveUserToFirestore(User user) {
@@ -50,5 +55,22 @@ public class FirestoreService {
             return null;
         }
     }
+
+     // Method to delet user from database by user ID
+  public void deleteUserFromFirestore(User user){
+
+    // Get reference to Firestore document and delete
+        DocumentReference userDocRef = firestore.collection("user").document(user.getuID());
+       
+        ApiFuture<WriteResult> writeResult= userDocRef.delete();
+        System.out.println("User delet from Firestore with userID: " + user.getuID());
+     
+        writeResult.addListener(() -> {
+            System.out.println("User deleted from Firestore with userID: " + user.getuID());
+        }, Runnable::run);
+        
+    }
+
+
 }
 

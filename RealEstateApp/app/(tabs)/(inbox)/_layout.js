@@ -6,7 +6,8 @@ export default function Layout() {
         <Stack
             screenOptions={headerOptions}>
             <Stack.Screen name="inbox" options={{
-                title: 'Inbox'
+                title: 'Inbox',
+                headerLeft: () => {}
             }} />
             <Stack.Screen name="message/[id]" options={{
                 title: 'Message'

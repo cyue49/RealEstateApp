@@ -7,5 +7,6 @@ export const Colors = {
     appBlue: '#2976D4',
     appBlueLight: '#E7F0FA',
     appBlueDark: '#1A4E8E',
-    appGrey: "#E5E4E2"
+    appGrey: "#E5E4E2",
+    appRed: '#a83832'
 }
