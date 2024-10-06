@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, TextInput, FlatList, Text, TouchableOpacity, Modal } from 'react-native';
 import { Colors } from '../../constants/Colors'
+import { router } from 'expo-router'
 import axios from 'axios';
 import { baseURL } from '../../constants/baseURL'
 
@@ -15,7 +16,7 @@ export default NewChatModal = ({ isVisible, setisVisible, userId }) => {
 
     // handle continue
     const handleContinue = async () => {
-        if (input === '' && !selectedUser) {
+        if (input.trim() === '' && !selectedUser) {
             setErrorMessage('Please enter an email or a username.')
         } else {
             setErrorMessage('')
@@ -41,7 +42,7 @@ export default NewChatModal = ({ isVisible, setisVisible, userId }) => {
                 .catch((e) => {
                     console.log(e)
                 })
-            
+
             if ([...tempList].length === 0) {
                 setErrorMessage('No user of this email or username exists.')
             } else {
@@ -60,13 +61,25 @@ export default NewChatModal = ({ isVisible, setisVisible, userId }) => {
 
     // handle create new chat
     const handleCreate = () => {
-        if (chatname === '') {
+        if (chatname.trim() === '') {
             setErrorMessage('Please enter a chatname.')
         } else {
-            setErrorMessage('')
-            console.log('creating new chat')
-            // TODO: create new chat in backend
-            // then set modal visible false and navigate to new chat
+            const data = {
+                users: [selectedUser.uID, userId],
+                chatName: chatname.trim()
+            }
+
+            // create new chat in db
+            axios.post(`${baseURL}/api/chats/create`, data)
+                .then((res) => {
+                    if (res.status === 200) {
+                        handleCancel();
+                        navigateToMessage(res.data.id)
+                    }
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
         }
 
     }
@@ -79,6 +92,11 @@ export default NewChatModal = ({ isVisible, setisVisible, userId }) => {
         setUsers([])
         setUserSelected(false)
         setisVisible(false)
+    }
+
+    // navigate to message chat page
+    const navigateToMessage = (id) => {
+        router.push(`./message/${id}`)
     }
 
     return (
