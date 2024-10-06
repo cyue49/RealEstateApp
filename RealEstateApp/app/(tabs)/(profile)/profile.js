@@ -71,6 +71,10 @@ export default profile = ()  => {
         router.back(); // Use this if you're using a navigation system that supports back
     };
 
+    const navigateToRegisterProperty = () => {
+        router.push('/registerProperty');
+    };
+
     return (
         <View style={styles.container}>
             <View style={localstyles.blueBar}>
