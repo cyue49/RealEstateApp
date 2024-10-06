@@ -23,7 +23,7 @@ export default NewChatModal = ({ isVisible, setisVisible, userId }) => {
             setUsers([])
             // fetch all chats where email equals or username equals
             const tempList = new Set();
-            await axios.get(`${baseURL}/user/email/${input}`)
+            await axios.get(`${baseURL}/user/email/${input.trim()}`)
                 .then((res) => {
                     if (res.data.length !== 0) {
                         res.data.forEach(item => tempList.add(item));
@@ -33,7 +33,7 @@ export default NewChatModal = ({ isVisible, setisVisible, userId }) => {
                     console.log(e)
                 })
 
-            await axios.get(`${baseURL}/user/username/${input}`)
+            await axios.get(`${baseURL}/user/username/${input.trim()}`)
                 .then((res) => {
                     if (res.data.length !== 0) {
                         res.data.forEach(item => tempList.add(item));
@@ -55,7 +55,13 @@ export default NewChatModal = ({ isVisible, setisVisible, userId }) => {
     // once a user has been selected
     useEffect(() => {
         if (selectedUser !== null) {
-            setUserSelected(true)
+            if (selectedUser.uID === userId) {
+                setErrorMessage('You cannot send a message to yourself.')
+                setSelectedUser(null)
+            } else {
+                setErrorMessage('')
+                setUserSelected(true)
+            }
         }
     }, [selectedUser])
 
