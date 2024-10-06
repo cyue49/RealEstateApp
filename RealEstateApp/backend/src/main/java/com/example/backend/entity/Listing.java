@@ -1,52 +1,64 @@
 package com.example.backend.entity;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Max;
+import java.util.Date;
 
 public class Listing {
-
     private String listingID;
 
     @NotBlank(message = "Address is mandatory")
     private String address;
 
-    @NotNull(message = "Price is mandatory")
-    private Double price;
+    @Min(value = 1, message = "Price must be a positive value")
+    private double price;
 
-    @NotNull(message = "Number of bedrooms is mandatory")
-    private Integer bedrooms;
+    @Min(value = 1, message = "There should be at least 1 bedroom")
+    @Max(value = 10, message = "Bedrooms cannot exceed 10")
+    private int bedrooms;
 
-    @NotNull(message = "Number of bathrooms is mandatory")
-    private Integer bathrooms;
-
-    private String description;
-
-    private String photoUrl;
+    @Min(value = 1, message = "There should be at least 1 bathroom")
+    @Max(value = 10, message = "Bathrooms cannot exceed 10")
+    private int bathrooms;
 
     @NotBlank(message = "City is mandatory")
     private String city;
 
-    @NotBlank(message = "Province is mandatory")
-    private String province;
+    @NotBlank(message = "State is mandatory")
+    private String state;
 
-    private String zipCode;
+    private Date availableDate;
 
-    private String propertyType; // E.g., apartment, house, condo, etc.
+    @Min(value = 1, message = "Lease term must be at least 1 month")
+    @Max(value = 12, message = "Lease term cannot exceed 12 months")
+    private int leaseTerm;
 
+    private String description;
+
+    private String userId;
+
+    // Default constructor
     public Listing() {
     }
 
-    public Listing(String address, Double price, Integer bedrooms, Integer bathrooms, String city, String province) {
+    // Parameterized constructor
+    public Listing(String address, double price, int bedrooms, int bathrooms, String city, String state,
+            Date availableDate, int leaseTerm, String description, String userId) {
         this.address = address;
         this.price = price;
         this.bedrooms = bedrooms;
         this.bathrooms = bathrooms;
         this.city = city;
-        this.province = province;
+        this.state = state;
+        this.availableDate = availableDate;
+        this.leaseTerm = leaseTerm;
+        this.description = description;
+        this.userId = userId;
     }
 
     // Getters and Setters
+
     public String getListingID() {
         return listingID;
     }
@@ -63,44 +75,28 @@ public class Listing {
         this.address = address;
     }
 
-    public Double getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public Integer getBedrooms() {
+    public int getBedrooms() {
         return bedrooms;
     }
 
-    public void setBedrooms(Integer bedrooms) {
+    public void setBedrooms(int bedrooms) {
         this.bedrooms = bedrooms;
     }
 
-    public Integer getBathrooms() {
+    public int getBathrooms() {
         return bathrooms;
     }
 
-    public void setBathrooms(Integer bathrooms) {
+    public void setBathrooms(int bathrooms) {
         this.bathrooms = bathrooms;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getPhotoUrl() {
-        return photoUrl;
-    }
-
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
     }
 
     public String getCity() {
@@ -111,27 +107,43 @@ public class Listing {
         this.city = city;
     }
 
-    public String getProvince() {
-        return province;
+    public String getState() {
+        return state;
     }
 
-    public void setProvince(String state) {
-        this.province = province;
+    public void setState(String state) {
+        this.state = state;
     }
 
-    public String getZipCode() {
-        return zipCode;
+    public Date getAvailableDate() {
+        return availableDate;
     }
 
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
+    public void setAvailableDate(Date availableDate) {
+        this.availableDate = availableDate;
     }
 
-    public String getPropertyType() {
-        return propertyType;
+    public int getLeaseTerm() {
+        return leaseTerm;
     }
 
-    public void setPropertyType(String propertyType) {
-        this.propertyType = propertyType;
+    public void setLeaseTerm(int leaseTerm) {
+        this.leaseTerm = leaseTerm;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

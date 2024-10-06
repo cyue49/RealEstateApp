@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Platform,ScrollView  } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNPickerSelect from 'react-native-picker-select';
+import axios from 'axios';
+import { baseURL } from '../../../constants/baseURL'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RegisterProperty = () => {
   const [address, setAddress] = useState('');
@@ -11,55 +14,92 @@ const RegisterProperty = () => {
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [description, setDescription] = useState('');
-
+  const [userId, setUserId] = useState(null); // State to store user ID
 
   // Date picker state
   const [availableDate, setAvailableDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);  // To show/hide date picker
 
   // Lease term state
   const [leaseTerm, setLeaseTerm] = useState('');
 
+  // Fetch user ID from AsyncStorage
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const storedUserId = await AsyncStorage.getItem('userId');
+        if (storedUserId) {
+          setUserId(storedUserId); // Set the user ID in state
+        } else {
+          console.error('No user ID found in storage');
+        }
+      } catch (error) {
+        console.error('Error retrieving user ID from storage:', error);
+      }
+    };
+
+    fetchUserId();
+  }, []);
 
   const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || availableDate;
-    setShowDatePicker(Platform.OS === 'ios'); // Keep date picker open for iOS, close for Android
     setAvailableDate(currentDate);
   };
 
-  const handleSubmit = () => {
-    // Log form data for now
-    console.log('Property Details Submitted:');
-    console.log('Address:', address);
-    console.log('Price:', price);
-    console.log('Bedrooms:', bedrooms);
-    console.log('Bathrooms:', bathrooms);
-    console.log('City:', city);
-    console.log('State:', state);
-    console.log('Available Date:', availableDate.toLocaleDateString());
-    console.log('Lease Term:', leaseTerm);
-    console.log('Description:', description);
-
-    // Validate the fields
+  const handleSubmit = async () => {
     if (!address || !price || !bedrooms || !bathrooms || !city || !state || !leaseTerm) {
-        Alert.alert('Error', 'Please fill in all fields');
-      } else {
-        Alert.alert('Success', 'Property details captured successfully!');
-        setAddress('');
-        setPrice('');
-        setBedrooms('');
-        setBathrooms('');
-        setCity('');
-        setState('');
-        setLeaseTerm('');
-        setDescription('');
-        setAvailableDate(new Date());
-      }
-    };
-  
+      Alert.alert('Error', 'Please fill in all fields');
+      return;
+    }
+
+    if (!userId) {
+      Alert.alert('Error', 'User is not signed in');
+      return;
+    }
+
+    // Prepare the listing data
+        const listingData = {
+          address: address.trim(),
+          price: parseFloat(price),
+          bedrooms: parseInt(bedrooms),
+          bathrooms: parseInt(bathrooms),
+          city: city.trim(),
+          state: state.trim(),
+          availableDate: availableDate.toISOString(),
+          leaseTerm: parseInt(leaseTerm),
+          description: description.trim(),
+          userId: userId,
+        };
+        
+        try {
+          const response = await axios.post(`${baseURL}/listing/create`, listingData, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+    
+          // Handle successful response
+          Alert.alert('Success', 'Property registered successfully!');
+          console.log('Response from backend:', response.data);
+    
+          // Reset form fields
+          setAddress('');
+          setPrice('');
+          setBedrooms('');
+          setBathrooms('');
+          setCity('');
+          setState('');
+          setLeaseTerm('');
+          setDescription('');
+          setAvailableDate(new Date());
+    
+        } catch (error) {
+          console.error('Error:', error);
+          Alert.alert('Error', 'Failed to register property. Please try again.');
+        }
+      };
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
+    <ScrollView>
     <View style={styles.container}>
       <Text style={styles.label}>Address</Text>
       <TextInput
