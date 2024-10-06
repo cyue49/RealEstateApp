@@ -33,7 +33,7 @@
     "react-native-vector-icons": "^10.2.0",
     "react-native-web": "~0.19.12",
     "sockjs-client": "^1.6.1",
-    "text-encoding": "^0.7.0"
+    "text-encoding": "^0.7.0",
     "@react-native-community/datetimepicker": "8.0.1"
   },
   "devDependencies": {
