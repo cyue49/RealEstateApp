@@ -31,21 +31,20 @@ export default function Inbox() {
     }, [])
 
     // get all chats for this user
-    const getChats = useCallback(() => {
-        if (userId !== "") {
-            axios.get(`${baseURL}/api/chats/forUser/${userId}`)
-                .then((res) => {
-                    setChats(res.data)
-                })
-                .catch((e) => {
-                    console.log(e)
-                })
+    useEffect(() => {
+        const getChats = () => {
+            if (userId !== "") {
+                axios.get(`${baseURL}/api/chats/forUser/${userId}`)
+                    .then((res) => {
+                        setChats(res.data)
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                    })
+            }
         }
-    }, [userId])
-
-    useFocusEffect(() => {
         getChats()
-    })
+    }, [userId])
 
     // new chat button
     const onNewChat = () => {
@@ -93,7 +92,7 @@ export default function Inbox() {
                 }
             })()}
 
-            <NewChatModal isVisible={newChatModalVisible} setisVisible={setNewChatModalVisible} />
+            <NewChatModal isVisible={newChatModalVisible} setisVisible={setNewChatModalVisible} userId={userId} />
 
         </SafeAreaView>
     );
