@@ -1,18 +1,16 @@
 package com.example.backend.services;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
+import com.example.backend.entity.Chat;
+import com.google.cloud.firestore.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.backend.entity.User;
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.WriteResult;
-
-
 
 
 @Service
@@ -71,6 +69,28 @@ public class FirestoreService {
         
     }
 
+    // get user by email
+    public List<User> getUserByEmail(String email) throws ExecutionException, InterruptedException {
+        CollectionReference col = firestore.collection("user");
 
+        Query query = col.whereEqualTo("email", email);
+        ApiFuture<QuerySnapshot> apiFuture = query.get();
+        List<QueryDocumentSnapshot> list = apiFuture.get().getDocuments();
+
+        // return list of Chats
+        return list.stream().map((doc) -> doc.toObject(User.class)).collect(Collectors.toList());
+    }
+
+    // get user by username
+    public List<User> getUserByUsername(String username) throws ExecutionException, InterruptedException {
+        CollectionReference col = firestore.collection("user");
+
+        Query query = col.whereEqualTo("userName", username);
+        ApiFuture<QuerySnapshot> apiFuture = query.get();
+        List<QueryDocumentSnapshot> list = apiFuture.get().getDocuments();
+
+        // return list of Chats
+        return list.stream().map((doc) -> doc.toObject(User.class)).collect(Collectors.toList());
+    }
 }
 

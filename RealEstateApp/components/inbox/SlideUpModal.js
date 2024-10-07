@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Modal, Button } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import { Colors } from '../../constants/Colors'
 
 export default SlideUpModal = ({ isVisible, setisVisible, handleCancel, message, options, handleOptions }) => {
