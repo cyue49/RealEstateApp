@@ -6,15 +6,28 @@ import PopupModal from '../../components/inbox/PopupModal'
 import SlideUpModal from '../../components/inbox/SlideUpModal'
 import { baseURL } from '../../constants/baseURL'
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default ChatCard = ({ item, onPress }) => {
     const [displayTime, setDisplayTime] = useState('')
+    const [userId, setUserId] = useState('')
     const [displayName, setDisplayName] = useState(item.chatName)
+    const [chatUsers, setChatUsers] = useState([])
+    const [chatProfile, setChatProfile] = useState(null)
     const [optionsModalVisible, setOptionsModalVisible] = useState(false);
     const [deletePopupVisible, setDeletePopupVisible] = useState(false);
     const [renamePopupVisible, setRenamePopupVisible] = useState(false);
     const [input, setInput] = useState('') // input for popup modal
     const [deleted, setDeleted] = useState(false) // whether this chat has been deleted
+
+    // get user id from storage
+    useEffect(() => {
+        const fetchUserId = async () => {
+            const id = await AsyncStorage.getItem('userId');
+            setUserId(id);
+        }
+        fetchUserId();
+    }, [])
 
     // set date, input, chat name
     useEffect(() => {
@@ -36,6 +49,26 @@ export default ChatCard = ({ item, onPress }) => {
         // set current app name in input
         setInput(item.chatName)
     }, [item.lastActive])
+
+    // set usernames & profile picture for chat
+    useEffect(() => {
+        if (userId !== '' && userId !== undefined && userId !== null) {
+            item.users.forEach(uID => { // for each users of this chat
+                if (uID !== userId) { // if not current user
+                    axios.get(`${baseURL}/user/profile/${uID}`) // get username
+                        .then((res) => {
+                            if (!chatUsers.includes(res.data.userName)) {
+                                setChatUsers(currentUsers => [...currentUsers, res.data.userName])
+                                setChatProfile(res.data.photoUrl)
+                            }
+                        })
+                        .catch((e) => {
+                            console.log(e)
+                        })
+                }
+            });
+        }
+    }, [userId])
 
     // on long press of a chat
     const handleLongPress = () => {
@@ -101,10 +134,18 @@ export default ChatCard = ({ item, onPress }) => {
                     onLongPress={handleLongPress}>
                     <View style={styles.chatCard}>
                         <View style={styles.imageContainer}>
-                            <Image
-                                style={styles.profileImage}
-                                source={require('../../assets/default-profile.png')} // setOptionsModalVisibleorary image
-                            />
+                            {
+                                chatProfile === null ?
+                                    <Image
+                                        style={styles.profileImage}
+                                        source={require('../../assets/default-profile.png')}
+                                    /> :
+                                    <Image
+                                        style={styles.profileImage}
+                                        source={chatProfile}
+                                    />
+                            }
+
                         </View>
 
                         <View style={{ flex: 1, flexDirection: 'column' }}>
@@ -112,6 +153,19 @@ export default ChatCard = ({ item, onPress }) => {
                                 <Text numberOfLines={1} style={styles.chatName}>{displayName}</Text>
                                 <Text style={styles.messageTime}>{displayTime}</Text>
                             </View>
+
+                            <View style={{ flexDirection: 'row', gap: 3 }}>
+                                <FontAwesome name="user" size={14} color={Colors.appGray} />
+                                <Text style={styles.chatUsers}>:</Text>
+                                {
+                                    chatUsers.map((user, index) => {
+                                        return (
+                                            <Text key={index} style={styles.chatUsers}>{user}</Text>
+                                        )
+                                    })
+                                }
+                            </View>
+
                             <Text numberOfLines={1} style={styles.previewMessage}>{item.latestMessage === "" ? "No messages yet" : item.latestMessage}</Text>
                         </View>
 
@@ -148,8 +202,8 @@ const styles = StyleSheet.create({
         overflow: 'hidden'
     },
     profileImage: {
-        width: 40,
-        height: 40
+        width: 45,
+        height: 45
     },
     titleRow: {
         flex: 1,
@@ -163,6 +217,11 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: Colors.appBlueDark,
         maxWidth: 200
+    },
+    chatUsers: {
+        fontSize: 12,
+        fontWeight: 'bold',
+        color: Colors.appGray,
     },
     messageTime: {
         alignSelf: 'flex-start',
