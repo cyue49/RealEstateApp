@@ -12,6 +12,7 @@ public class Chat {
     private Date creationTime;
     private Date lastActive;
     private String latestMessage;
+    private List<String> hasUnreadMessage;
 
     public Chat() {
     }
@@ -23,6 +24,7 @@ public class Chat {
         this.latestMessage = "";
         this.users = users;
         this.chatName = chatName;
+        this.hasUnreadMessage = users;
     }
 
     public String getId() {
@@ -49,6 +51,10 @@ public class Chat {
         return latestMessage;
     }
 
+    public List<String> getHasUnreadMessage() {
+        return hasUnreadMessage;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -71,5 +77,9 @@ public class Chat {
 
     public void setLatestMessage(String latestMessage) {
         this.latestMessage = latestMessage;
+    }
+
+    public void setHasUnreadMessage(List<String> hasUnreadMessage) {
+        this.hasUnreadMessage = hasUnreadMessage;
     }
 }
