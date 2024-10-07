@@ -1,22 +1,13 @@
+
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, Button } from 'react-native';
-import { router } from 'expo-router'
+import { Text, View, Button, FlatList, TouchableOpacity, Image } from 'react-native';
 import { styles } from '../../../constants/commonStyles'
 
 export default function Listings() {
-    const tempId = 1;
-    const navigateToDetails = () => {
-        router.push(`./listingdetails/${tempId}`)
-    }
 
     return (
         <View style={[styles.containerCenter, styles.tabPageStyles]}>
-            <Text>Listings page</Text>
-            <Button
-                onPress={navigateToDetails}
-                title='Go to single listing page'
-                accessibilityLabel='Navigation button'
-            />
+         <Text>Listings</Text>
             <StatusBar style="auto" />
         </View>
     );
