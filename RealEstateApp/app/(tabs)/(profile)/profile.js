@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { Image,Text, View, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image,Text, View, Button, StyleSheet, TouchableOpacity,ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import { styles } from '../../../constants/commonStyles';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -76,6 +76,7 @@ export default profile = ()  => {
     };
 
     return (
+        <ScrollView>
         <View style={styles.container}>
             <View style={localstyles.blueBar}>
               
@@ -129,6 +130,12 @@ export default profile = ()  => {
                     <Text style = {localstyles.text}>View My List</Text>
                 </TouchableOpacity>
                 </View>
+                <View style={localstyles.greyBar}>
+                <TouchableOpacity style={localstyles.iconButton} onPress={navigateToRegisterProperty}>
+                    <Icon name="registered" size={30} color="#2976D4" />
+                    <Text style = {localstyles.text}>Register My Property</Text>
+                </TouchableOpacity>
+                </View>
             </View>
 
         
@@ -139,6 +146,7 @@ export default profile = ()  => {
             />
             <StatusBar style="auto" />
         </View>
+        </ScrollView>
     );
 }
 

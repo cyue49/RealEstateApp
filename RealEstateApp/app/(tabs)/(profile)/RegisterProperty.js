@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Platform,ScrollView  } from 'react-native';
+import React, { useState,useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image,ScrollView  } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNPickerSelect from 'react-native-picker-select';
+import axios from 'axios';
+import { baseURL } from '../../../constants/baseURL'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as ImagePicker from 'expo-image-picker';
+import { MaterialIcons } from '@expo/vector-icons';
+
 
 const RegisterProperty = () => {
   const [address, setAddress] = useState('');
@@ -11,55 +17,152 @@ const RegisterProperty = () => {
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [description, setDescription] = useState('');
-
+  const [userId, setUserId] = useState(null); // State to store user ID
+  const [selectedImages, setSelectedImages] = useState([]); // State to store selected photos
 
   // Date picker state
   const [availableDate, setAvailableDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);  // To show/hide date picker
 
   // Lease term state
   const [leaseTerm, setLeaseTerm] = useState('');
 
+  // Fetch user ID from AsyncStorage
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const storedUserId = await AsyncStorage.getItem('userId');
+        if (storedUserId) {
+          setUserId(storedUserId); // Set the user ID in state
+        } else {
+          console.error('No user ID found in storage');
+        }
+      } catch (error) {
+        console.error('Error retrieving user ID from storage:', error);
+      }
+    };
+
+    fetchUserId();
+  }, []);
 
   const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || availableDate;
-    setShowDatePicker(Platform.OS === 'ios'); // Keep date picker open for iOS, close for Android
     setAvailableDate(currentDate);
   };
 
-  const handleSubmit = () => {
-    // Log form data for now
-    console.log('Property Details Submitted:');
-    console.log('Address:', address);
-    console.log('Price:', price);
-    console.log('Bedrooms:', bedrooms);
-    console.log('Bathrooms:', bathrooms);
-    console.log('City:', city);
-    console.log('State:', state);
-    console.log('Available Date:', availableDate.toLocaleDateString());
-    console.log('Lease Term:', leaseTerm);
-    console.log('Description:', description);
-
-    // Validate the fields
-    if (!address || !price || !bedrooms || !bathrooms || !city || !state || !leaseTerm) {
-        Alert.alert('Error', 'Please fill in all fields');
-      } else {
-        Alert.alert('Success', 'Property details captured successfully!');
-        setAddress('');
-        setPrice('');
-        setBedrooms('');
-        setBathrooms('');
-        setCity('');
-        setState('');
-        setLeaseTerm('');
-        setDescription('');
-        setAvailableDate(new Date());
-      }
-    };
+// Function to select photos
+  const handlePhotoUpload = async () => {
+    // Request permissions to access camera roll
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permission denied', 'We need access to your photo library');
+      return;
+    }
   
+    // Launch the image library to pick a photo
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsMultipleSelection: true, // Allow multiple selections
+      quality: 1,
+    });
+  
+    if (!result.canceled) {
+      setSelectedImages((prevImages) => [...prevImages, ...result.assets]); // Append selected images to the state
+    }
+  };
+
+    // Function to remove a photo
+    const removePhoto = (index) => {
+      const updatedImages = [...selectedImages];
+      updatedImages.splice(index, 1); // Remove the image at the given index
+      setSelectedImages(updatedImages); // Update the state
+    };
+
+    const handleSubmit = async () => {
+      console.log("Submitting property details...");
+      
+      if (!address || !price || !bedrooms || !bathrooms || !city || !state || !leaseTerm) {
+          Alert.alert('Error', 'Please fill in all fields');
+          return;
+      }
+  
+      if (!userId) {
+          Alert.alert('Error', 'User is not signed in');
+          return;
+      }
+      
+      console.log("Validation successful");
+  
+      // Prepare the listing data as a JSON object
+      const listingData = {
+          address: address.trim(),
+          price: parseFloat(price),
+          bedrooms: parseInt(bedrooms),
+          bathrooms: parseInt(bathrooms),
+          city: city.trim(),
+          state: state.trim(),
+          availableDate: availableDate.toISOString(),
+          leaseTerm: parseInt(leaseTerm),
+          description: description.trim(),
+          userId: userId,
+          photoUrls: [] // Note the change from "photos" to "photoUrls"
+      };
+    
+      console.log("Uploading photos...");
+  
+      // Create FormData
+      const formData = new FormData();
+      formData.append('listing', JSON.stringify(listingData)); // Send listing as a JSON part
+  
+      // Upload photos
+      selectedImages.forEach((image, index) => {
+          const uri = image.uri;
+          const fileName = uri.split('/').pop();
+          const type = image.type || 'image/jpeg';
+  
+          // Add each image as a FormData entry
+          formData.append('photos', {
+              uri,
+              name: fileName,
+              type, // Ensure you specify the correct mime-type
+          });
+      });
+  
+      console.log("Photos added to FormData");
+  
+      try {
+          const response = await axios.post(`${baseURL}/listing/create`, formData, {
+              headers: {
+                  'Content-Type': 'multipart/form-data',
+              },
+          });
+      
+          // Handle successful response
+          Alert.alert('Success', 'Property registered successfully!');
+          console.log('Response from backend:', response.data);
+    
+          // Reset form fields
+          setAddress('');
+          setPrice('');
+          setBedrooms('');
+          setBathrooms('');
+          setCity('');
+          setState('');
+          setLeaseTerm('');
+          setDescription('');
+          setAvailableDate(new Date());
+          setSelectedImages([]);
+  
+      } catch (error) {
+          console.error('Error:', error);
+          if (error.response) {
+              console.error('Backend Response:', error.response.data);
+          }
+          Alert.alert('Error', 'Failed to register property. Please try again.');
+      }
+  };
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
+    <ScrollView>
     <View style={styles.container}>
       <Text style={styles.label}>Address</Text>
       <TextInput
@@ -157,6 +260,25 @@ const RegisterProperty = () => {
         numberOfLines={4}
       />
 
+  {/* Display selected images */}
+  <View style={styles.imageRowContainer}>
+    {selectedImages.map((image, index) => (
+    <View key={index} style={styles.imageWrapper}>
+      <Image source={{ uri: image.uri }} style={styles.image} />
+      <TouchableOpacity style={styles.deleteIcon} onPress={() => removePhoto(index)}>
+        <MaterialIcons name="delete-outline" size={24} color="#EDEDED" />
+      </TouchableOpacity>
+    </View>
+  ))}
+
+  {/* Button to Upload Photos */}
+  <View style={styles.photoUploadSquareContainer}>
+    <TouchableOpacity style={styles.photoUploadSquare} onPress={handlePhotoUpload}>
+      <MaterialIcons name="add" size={50} color="#A3A3A3" />
+    </TouchableOpacity>
+  </View>
+</View>
+
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
         <Text style={styles.submitButtonText}>Register My Property</Text>
       </TouchableOpacity>
@@ -190,6 +312,45 @@ const styles = StyleSheet.create({
     alignItems: 'center',  // Vertically center items
     justifyContent: 'space-between',  
     marginBottom: 15,  // Add space at the bottom
+  },
+  imageRowContainer: {
+    flexDirection: 'row',        // Align items in a row
+    flexWrap: 'wrap',            // Wrap the row if it exceeds screen width
+    justifyContent: 'flex-start',// Align the items to the left
+  },
+  imageWrapper: {
+    position: 'relative',        // For positioning the delete icon
+    margin: 10,                  // Margin around each image
+    width: '26%',                // Set width to 30% for 3 items per row
+    aspectRatio: 1,              // Maintain square ratio for the images
+  },
+  image: {
+    width: '100%',               // Take full width of the wrapper
+    height: '100%',              // Take full height of the wrapper
+    borderRadius: 10,
+  },
+  deleteIcon: {
+    position: 'absolute',        // Positioning the delete icon on top-right
+    top: -8,
+    right: -8,
+    backgroundColor: '#5C5C5C', // Light background for visibility
+    borderRadius: 12,
+  },
+  photoUploadSquareContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 10,
+    width: '30%',                // Match the width of the imageWrapper for alignment
+    aspectRatio: 1,              // Keep the square ratio
+  },
+  photoUploadSquare: {
+    width: '100%',               // Full width of the container
+    height: '100%',              // Full height of the container
+    borderWidth: 2,
+    borderColor: '#A3A3A3',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   submitButton: {
     backgroundColor: '#007AFF', 
