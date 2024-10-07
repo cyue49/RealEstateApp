@@ -120,7 +120,6 @@ export default ChatCard = ({ item, onPress }) => {
                 </TouchableOpacity>
             }
 
-
             <SlideUpModal isVisible={optionsModalVisible} setisVisible={setOptionsModalVisible} handleCancel={handleCancel} message="Please choose an option:" options={["Rename Chat", "Delete Chat"]} handleOptions={[onChooseRename, onChooseDelete]} />
 
             <PopupModal isVisible={deletePopupVisible} setisVisible={setDeletePopupVisible} handleCancel={handleCancel} handleConfirm={handleDelete} message="Do you want to delete this chat?" input={null} />

@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, SafeAreaView, View, TextInput, FlatList, Text, TouchableOpacity } from 'react-native';
-import { router, useFocusEffect } from 'expo-router'
+import { router } from 'expo-router'
 import { Colors } from '../../../constants/Colors'
 import { baseURL } from '../../../constants/baseURL'
 import ChatCard from '../../../components/inbox/ChatCard'
@@ -46,10 +46,8 @@ export default function Inbox() {
 
     // get updated chats every 10 seconds
     useEffect(() => {
-        console.log('outside interval')
         getChats()
         const myInterval = setInterval(() => {
-            console.log('inside interval')
             getChats()
         }, 10000)
 

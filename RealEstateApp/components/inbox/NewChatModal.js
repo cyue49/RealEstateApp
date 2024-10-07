@@ -49,7 +49,6 @@ export default NewChatModal = ({ isVisible, setisVisible, userId, setChats }) =>
                 setUsers([...tempList])
             }
         }
-
     }
 
     // once a user has been selected
