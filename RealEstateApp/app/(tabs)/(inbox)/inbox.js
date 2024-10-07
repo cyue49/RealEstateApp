@@ -44,19 +44,17 @@ export default function Inbox() {
         }
     }
 
-    // update chats when userId updated
-    useEffect(() => {
-        getChats()
-    }, [userId])
-
     // get updated chats every 10 seconds
     useEffect(() => {
+        console.log('outside interval')
+        getChats()
         const myInterval = setInterval(() => {
+            console.log('inside interval')
             getChats()
         }, 10000)
 
         return () => clearInterval(myInterval);
-    }, [])
+    }, [userId])
 
     // new chat button
     const onNewChat = () => {
