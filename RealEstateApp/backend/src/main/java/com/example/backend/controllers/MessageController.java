@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://127.0.0.1:8081") // or whatever your React Native dev server port is
 @RequestMapping("/api/messages")
 public class MessageController {
 
