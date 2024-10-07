@@ -84,14 +84,9 @@ const signOutUser = async () => {
     };
 
  
-   
-
-    const goBack = () => {
-        router.back(); // Use this if you're using a navigation system that supports back
-    };
 
     const navigateToRegisterProperty = () => {
-        router.push('/registerProperty');
+        router.push('/RegisterProperty');
     };
 
     return (
@@ -140,7 +135,7 @@ const signOutUser = async () => {
             <View style={localstyles.greyBar}>
                 <TouchableOpacity style={localstyles.iconButton} onPress={navigateToEditPage}>
                     <Icon name="edit" size={30} color="#2976D4" />
-                    <Text style = {localstyles.text}>edit profile</Text>
+                    <Text style = {localstyles.text}>Edit Profile</Text>
                 </TouchableOpacity>
                 </View>
                 <View style={localstyles.greyBar}>
@@ -157,6 +152,13 @@ const signOutUser = async () => {
                 </View>
             </View>
 
+          {/* Sign-out Button */}
+          <View style={localstyles.greyBar}>
+        <TouchableOpacity style={localstyles.iconButton} onPress={signOutUser}>
+          <Icon name="sign-out" size={30} color="red" />
+          <Text style={localstyles.text}>Sign Out</Text>
+        </TouchableOpacity>
+     </View>
         
             <Button
                 onPress={navigateToSignIn}
@@ -164,13 +166,7 @@ const signOutUser = async () => {
                 accessibilityLabel='Navigation button'
             />
 
-             {/* Sign-out Button */}
-    <View style={localstyles.greyBar}>
-        <TouchableOpacity style={localstyles.iconButton} onPress={signOutUser}>
-          <Icon name="sign-out" size={30} color="red" />
-          <Text style={localstyles.text}>Sign Out</Text>
-        </TouchableOpacity>
-     </View>
+   
             <StatusBar style="auto" />
         </View>
         </ScrollView>
@@ -187,9 +183,7 @@ const localstyles = StyleSheet.create({
         
     },
 
-    backButton: {
-        marginRight: 10,
-    },
+  
 
 
 
@@ -230,7 +224,7 @@ const localstyles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-around',
         marginTop: 20,
-        marginBottom: 70,
+        marginBottom: 25,
        
     },
 
@@ -240,7 +234,7 @@ const localstyles = StyleSheet.create({
         paddingHorizontal: 20,
         flexDirection: 'row', // Align the icon and text in a row
         alignItems: 'center', // Center the contents vertically
-        marginHorizontal: 30, 
+        marginHorizontal: 10, 
         marginVertical: 5,
        
        
