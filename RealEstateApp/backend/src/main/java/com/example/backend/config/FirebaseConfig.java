@@ -23,6 +23,7 @@ public class FirebaseConfig {
         @SuppressWarnings("deprecation")
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                .setStorageBucket("realestate-64b3d.appspot.com")
                 .setDatabaseUrl("https://realestate-64b3d-default-rtdb.firebaseio.com")
                 .build();
 

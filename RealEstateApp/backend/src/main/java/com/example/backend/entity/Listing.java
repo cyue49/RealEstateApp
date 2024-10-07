@@ -3,7 +3,9 @@ package com.example.backend.entity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Max;
+
 import java.util.Date;
+import java.util.List;
 
 public class Listing {
     private String listingID;
@@ -38,13 +40,16 @@ public class Listing {
 
     private String userId;
 
+    // New field to store URLs of photos
+    private List<String> photoUrls;
+
     // Default constructor
     public Listing() {
     }
 
     // Parameterized constructor
     public Listing(String address, double price, int bedrooms, int bathrooms, String city, String state,
-            Date availableDate, int leaseTerm, String description, String userId) {
+            Date availableDate, int leaseTerm, String description, String userId, List<String> photoUrls) {
         this.address = address;
         this.price = price;
         this.bedrooms = bedrooms;
@@ -55,6 +60,7 @@ public class Listing {
         this.leaseTerm = leaseTerm;
         this.description = description;
         this.userId = userId;
+        this.photoUrls = photoUrls;
     }
 
     // Getters and Setters
@@ -145,5 +151,13 @@ public class Listing {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public List<String> getPhotoUrls() {
+        return photoUrls;
+    }
+
+    public void setPhotoUrls(List<String> photoUrls) {
+        this.photoUrls = photoUrls;
     }
 }
