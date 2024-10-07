@@ -157,7 +157,7 @@ export default function EditProfile() {
       if (error) {console.log(error)}
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
         <View style={localstyles.blueBar}>
         
             {/* New nested view for image and info */}
@@ -256,7 +256,7 @@ export default function EditProfile() {
         </Modal>
 
         <StatusBar style="auto" />
-      </SafeAreaView>
+      </View>
    );
 }
 
@@ -274,10 +274,6 @@ input: {
     marginBottom: 16,
     paddingHorizontal: 8,
   },
-
-backButton: {
-    marginRight: 10,
-},
 
 
 profileRow: {
@@ -321,7 +317,7 @@ details: {
 
 greyBar: {
     backgroundColor: '#E5E4E2',
-    paddingVertical: 20,
+    paddingVertical: 5,
     paddingHorizontal: 20,
     flexDirection: 'row', // Align the icon and text in a row
     alignItems: 'center', // Center the contents vertically
