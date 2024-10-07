@@ -11,6 +11,7 @@ export default ChatMessageItem = ({ messageItem }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [userId, setUserId] = useState('')
     const [deleted, setDeleted] = useState(false)
+    const [profilePicture, setProfilePicture] = useState(null)
 
     // get user id from storage
     useEffect(() => {
@@ -19,6 +20,17 @@ export default ChatMessageItem = ({ messageItem }) => {
             setUserId(id);
         }
         fetchUserId();
+    }, [])
+
+    // get profile picture
+    useEffect(() => {
+        axios.get(`${baseURL}/user/profile/${messageItem.fromUser}`) // get user
+            .then((res) => {
+                setProfilePicture(res.data.photoUrl)
+            })
+            .catch((e) => {
+                console.log(e)
+            })
     }, [])
 
     // handle long press a message
@@ -63,17 +75,24 @@ export default ChatMessageItem = ({ messageItem }) => {
                         }
 
                         <View style={styles.imageContainer}>
-                            <Image
-                                style={styles.profileImage}
-                                source={require('../../assets/default-profile.png')} // temporary image
-                            />
+                            {
+                                profilePicture === null ?
+                                    <Image
+                                        style={styles.profileImage}
+                                        source={require('../../assets/default-profile.png')}
+                                    /> :
+                                    <Image
+                                        style={styles.profileImage}
+                                        source={profilePicture}
+                                    />
+                            }
                         </View>
 
                         {
                             messageItem.fromUser === userId ? null :
                                 <View>
                                     <Text style={{ paddingHorizontal: 10, paddingBottom: 5, fontSize: 12, color: Colors.appBlue }}>{messageItem.timestamp.split('T')[1].split('.')[0]}</Text>
-                                    <View style={[styles.messageBoxRight, messageItem.read ? null : {borderWidth: 2, borderColor: Colors.appBlue}]}>
+                                    <View style={[styles.messageBoxRight, messageItem.read ? null : { borderWidth: 2, borderColor: Colors.appBlue }]}>
                                         <Text>{messageItem.message}</Text>
                                     </View>
                                 </View>

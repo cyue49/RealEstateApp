@@ -55,7 +55,7 @@ export default ChatCard = ({ item, onPress }) => {
         if (userId !== '' && userId !== undefined && userId !== null) {
             item.users.forEach(uID => { // for each users of this chat
                 if (uID !== userId) { // if not current user
-                    axios.get(`${baseURL}/user/profile/${uID}`) // get username
+                    axios.get(`${baseURL}/user/profile/${uID}`) // get user
                         .then((res) => {
                             if (!chatUsers.includes(res.data.userName)) {
                                 setChatUsers(currentUsers => [...currentUsers, res.data.userName])
@@ -145,7 +145,6 @@ export default ChatCard = ({ item, onPress }) => {
                                         source={chatProfile}
                                     />
                             }
-
                         </View>
 
                         <View style={{ flex: 1, flexDirection: 'column' }}>
