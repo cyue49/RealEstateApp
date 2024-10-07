@@ -51,7 +51,26 @@ export default profile = ()  => {
    
     if (error) {console.log(error)}
 
-
+// Function to handle sign-out
+const signOutUser = async () => {
+    try {
+      // First, retrieve the userId from AsyncStorage
+      const storedUserId = await AsyncStorage.getItem('userId');
+      if (storedUserId) {
+        // Perform any necessary actions before signing out, e.g., API call or cleanup
+  
+        // Clear the stored userId from AsyncStorage
+        await AsyncStorage.removeItem('userId');
+  
+        console.log('User signed out successfully');
+        router.replace('/signin');  // Navigate to sign-in page after signing out
+      } else {
+        console.log('No userId found in AsyncStorage');
+      }
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
     const navigateToEditPage = () => {
         router.push('./editprofile');
     };
@@ -144,6 +163,14 @@ export default profile = ()  => {
                 title='Go to sign in page'
                 accessibilityLabel='Navigation button'
             />
+
+             {/* Sign-out Button */}
+    <View style={localstyles.greyBar}>
+        <TouchableOpacity style={localstyles.iconButton} onPress={signOutUser}>
+          <Icon name="sign-out" size={30} color="red" />
+          <Text style={localstyles.text}>Sign Out</Text>
+        </TouchableOpacity>
+     </View>
             <StatusBar style="auto" />
         </View>
         </ScrollView>
@@ -209,12 +236,12 @@ const localstyles = StyleSheet.create({
 
     greyBar: {
         backgroundColor: '#E5E4E2',
-        paddingVertical: 15,
+        paddingVertical: 5,
         paddingHorizontal: 20,
         flexDirection: 'row', // Align the icon and text in a row
         alignItems: 'center', // Center the contents vertically
         marginHorizontal: 30, 
-        marginVertical: 10,
+        marginVertical: 5,
        
        
     },
