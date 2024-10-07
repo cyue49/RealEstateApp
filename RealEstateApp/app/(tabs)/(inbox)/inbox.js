@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, SafeAreaView, View, TextInput, FlatList, Text, TouchableOpacity } from 'react-native';
-import { router } from 'expo-router'
+import { router, useFocusEffect } from 'expo-router'
 import { Colors } from '../../../constants/Colors'
 import { baseURL } from '../../../constants/baseURL'
 import ChatCard from '../../../components/inbox/ChatCard'
@@ -35,7 +35,6 @@ export default function Inbox() {
         if (userId !== "") {
             axios.get(`${baseURL}/api/chats/forUser/${userId}`)
                 .then((res) => {
-                    console.log('getting chat')
                     setChats(res.data)
                 })
                 .catch((e) => {
@@ -44,15 +43,19 @@ export default function Inbox() {
         }
     }
 
-    // get updated chats every 10 seconds
+    // get chats for user
     useEffect(() => {
         getChats()
+    }, [userId])
+
+    // get updated chats every 2 seconds when screen is focused
+    useFocusEffect(() => {
         const myInterval = setInterval(() => {
             getChats()
-        }, 10000)
+        }, 2000)
 
         return () => clearInterval(myInterval);
-    }, [userId])
+    })
 
     // new chat button
     const onNewChat = () => {
