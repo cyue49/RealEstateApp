@@ -5,7 +5,7 @@ import { router } from 'expo-router'
 import axios from 'axios';
 import { baseURL } from '../../constants/baseURL'
 
-export default NewChatModal = ({ isVisible, setisVisible, userId }) => {
+export default NewChatModal = ({ isVisible, setisVisible, userId, setChats }) => {
     // states
     const [input, setInput] = useState('');
     const [users, setUsers] = useState([]);
@@ -79,7 +79,11 @@ export default NewChatModal = ({ isVisible, setisVisible, userId }) => {
             axios.post(`${baseURL}/api/chats/create`, data)
                 .then((res) => {
                     if (res.status === 200) {
+                        // add new chat to list of chats
+                        setChats((currentChats) => ([res.data, ...currentChats]))
+                        // clear states
                         handleCancel();
+                        // go to message chat page
                         navigateToMessage(res.data.id)
                     }
                 })
@@ -87,7 +91,6 @@ export default NewChatModal = ({ isVisible, setisVisible, userId }) => {
                     console.log(e)
                 })
         }
-
     }
 
     // handle cancel

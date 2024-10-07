@@ -31,20 +31,32 @@ export default function Inbox() {
     }, [])
 
     // get all chats for this user
-    useEffect(() => {
-        const getChats = () => {
-            if (userId !== "") {
-                axios.get(`${baseURL}/api/chats/forUser/${userId}`)
-                    .then((res) => {
-                        setChats(res.data)
-                    })
-                    .catch((e) => {
-                        console.log(e)
-                    })
-            }
+    const getChats = () => {
+        if (userId !== "") {
+            axios.get(`${baseURL}/api/chats/forUser/${userId}`)
+                .then((res) => {
+                    console.log('getting chat')
+                    setChats(res.data)
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
         }
+    }
+
+    // update chats when userId updated
+    useEffect(() => {
         getChats()
     }, [userId])
+
+    // get updated chats every 10 seconds
+    useEffect(() => {
+        const myInterval = setInterval(() => {
+            getChats()
+        }, 10000)
+
+        return () => clearInterval(myInterval);
+    }, [])
 
     // new chat button
     const onNewChat = () => {
@@ -92,7 +104,7 @@ export default function Inbox() {
                 }
             })()}
 
-            <NewChatModal isVisible={newChatModalVisible} setisVisible={setNewChatModalVisible} userId={userId} />
+            <NewChatModal isVisible={newChatModalVisible} setisVisible={setNewChatModalVisible} userId={userId} setChats={setChats} />
 
         </SafeAreaView>
     );
