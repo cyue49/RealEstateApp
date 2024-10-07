@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Modal, Button } from 'react-native';
+import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Colors } from '../../constants/Colors'
 import { baseURL } from '../../constants/baseURL'
 import PopupModal from '../../components/inbox/PopupModal'
