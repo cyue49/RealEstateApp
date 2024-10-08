@@ -51,7 +51,26 @@ export default profile = ()  => {
    
     if (error) {console.log(error)}
 
-
+// Function to handle sign-out
+const signOutUser = async () => {
+    try {
+      // First, retrieve the userId from AsyncStorage
+      const storedUserId = await AsyncStorage.getItem('userId');
+      if (storedUserId) {
+        // Perform any necessary actions before signing out, e.g., API call or cleanup
+  
+        // Clear the stored userId from AsyncStorage
+        await AsyncStorage.removeItem('userId');
+  
+        console.log('User signed out successfully');
+        router.replace('/signin');  // Navigate to sign-in page after signing out
+      } else {
+        console.log('No userId found in AsyncStorage');
+      }
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
     const navigateToEditPage = () => {
         router.push('./editprofile');
     };
@@ -65,14 +84,9 @@ export default profile = ()  => {
     };
 
  
-   
-
-    const goBack = () => {
-        router.back(); // Use this if you're using a navigation system that supports back
-    };
 
     const navigateToRegisterProperty = () => {
-        router.push('/registerProperty');
+        router.push('/RegisterProperty');
     };
 
     return (
@@ -121,7 +135,7 @@ export default profile = ()  => {
             <View style={localstyles.greyBar}>
                 <TouchableOpacity style={localstyles.iconButton} onPress={navigateToEditPage}>
                     <Icon name="edit" size={30} color="#2976D4" />
-                    <Text style = {localstyles.text}>edit profile</Text>
+                    <Text style = {localstyles.text}>Edit Profile</Text>
                 </TouchableOpacity>
                 </View>
                 <View style={localstyles.greyBar}>
@@ -138,12 +152,21 @@ export default profile = ()  => {
                 </View>
             </View>
 
+          {/* Sign-out Button */}
+          <View style={localstyles.greyBar}>
+        <TouchableOpacity style={localstyles.iconButton} onPress={signOutUser}>
+          <Icon name="sign-out" size={30} color="red" />
+          <Text style={localstyles.text}>Sign Out</Text>
+        </TouchableOpacity>
+     </View>
         
             <Button
                 onPress={navigateToSignIn}
                 title='Go to sign in page'
                 accessibilityLabel='Navigation button'
             />
+
+   
             <StatusBar style="auto" />
         </View>
         </ScrollView>
@@ -160,9 +183,7 @@ const localstyles = StyleSheet.create({
         
     },
 
-    backButton: {
-        marginRight: 10,
-    },
+  
 
 
 
@@ -203,18 +224,18 @@ const localstyles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-around',
         marginTop: 20,
-        marginBottom: 70,
+        marginBottom: 25,
        
     },
 
     greyBar: {
         backgroundColor: '#E5E4E2',
-        paddingVertical: 15,
+        paddingVertical: 5,
         paddingHorizontal: 20,
         flexDirection: 'row', // Align the icon and text in a row
         alignItems: 'center', // Center the contents vertically
-        marginHorizontal: 30, 
-        marginVertical: 10,
+        marginHorizontal: 10, 
+        marginVertical: 5,
        
        
     },

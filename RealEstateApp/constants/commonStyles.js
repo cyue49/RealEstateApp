@@ -21,14 +21,14 @@ export const headerOptions = {
     headerStyle: {
         backgroundColor: Colors.appBlue
     },
-    headerLeft: () => {
-        const navigation = useNavigation(); // Access navigation here
-        return (
-            <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginLeft: 10 }}>
-                <Icon name="arrow-left" size={25} color="#fff" />
-            </TouchableOpacity>
-        );
-    },
+    // headerLeft: () => {
+    //     const navigation = useNavigation(); // Access navigation here
+    //     return (
+    //         <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginLeft: 10 }}>
+    //             <Icon name="arrow-left" size={25} color="#fff" />
+    //         </TouchableOpacity>
+    //     );
+    // },
 
     headerTintColor: Colors.appLight,
     headerTitleStyle: {
