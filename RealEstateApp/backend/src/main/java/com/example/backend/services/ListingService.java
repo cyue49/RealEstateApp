@@ -3,7 +3,9 @@ package com.example.backend.services;
 import com.example.backend.entity.Listing;
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
@@ -18,6 +20,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import com.google.cloud.storage.Blob;
 
 @Service
 public class ListingService {
@@ -67,5 +71,81 @@ public class ListingService {
         }
 
         return photoUrls;
+    }
+
+    // Method to fetch all listings from Firestore
+    public List<Listing> getAllListings() throws InterruptedException, ExecutionException {
+        Firestore firestore = FirestoreClient.getFirestore();
+
+        // Get all documents in the "listings" collection
+        ApiFuture<QuerySnapshot> future = firestore.collection("listings").get();
+
+        // Convert QuerySnapshot to a List of Listings
+        List<Listing> listings = new ArrayList<>();
+        QuerySnapshot querySnapshot = future.get();
+        if (querySnapshot != null) {
+            listings = querySnapshot.toObjects(Listing.class);
+            for (Listing listing : listings) {
+                // Update photo URLs to be accessible from Firebase Storage
+                updatePhotoUrls(listing);
+            }
+        }
+        System.out.println("Fetched Listings: " + listings); // Add debug log
+        return listings;
+    }
+
+    // Method to update photo URLs to be accessible from Firebase Storage
+    private void updatePhotoUrls(Listing listing) {
+        List<String> updatedPhotoUrls = new ArrayList<>();
+
+        try {
+            // Update with the correct path to your service account JSON key
+            String serviceAccountKeyPath = "src/main/resources/config/serviceAccountKey.json";
+
+            // Use service account credentials to access GCS
+            Storage storage = StorageOptions.newBuilder()
+                    .setCredentials(GoogleCredentials.fromStream(new FileInputStream(serviceAccountKeyPath)))
+                    .build()
+                    .getService();
+
+            for (String photoPath : listing.getPhotoUrls()) {
+                String blobName;
+
+                // Extract the blob name correctly
+                if (photoPath.startsWith("https://storage.googleapis.com/" + BUCKET_NAME + "/")) {
+                    blobName = photoPath.replace("https://storage.googleapis.com/" + BUCKET_NAME + "/", "");
+                } else {
+                    blobName = photoPath; // If it's already in blob form
+                }
+
+                Blob blob = storage.get(BUCKET_NAME, blobName);
+                if (blob != null) {
+                    String photoUrl = "https://storage.googleapis.com/" + blob.getBucket() + "/" + blob.getName();
+                    updatedPhotoUrls.add(photoUrl);
+                } else {
+                    System.out.println("Blob not found for path: " + blobName); // Debug log
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error accessing Google Cloud Storage: " + e.getMessage());
+        }
+
+        listing.setPhotoUrls(updatedPhotoUrls);
+    }
+
+    public Listing getListingById(String id) throws ExecutionException, InterruptedException {
+        Firestore firestore = FirestoreClient.getFirestore();
+
+        // Get the document with the specified ID from the "listings" collection
+        ApiFuture<DocumentSnapshot> future = firestore.collection("listings").document(id).get();
+        DocumentSnapshot document = future.get();
+
+        if (document.exists()) {
+            Listing listing = document.toObject(Listing.class);
+            updatePhotoUrls(listing); // Update photo URLs for Firebase Storage access
+            return listing;
+        } else {
+            return null; // Listing not found
+        }
     }
 }

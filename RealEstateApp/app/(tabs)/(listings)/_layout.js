@@ -7,7 +7,7 @@ export default function Layout() {
             screenOptions={headerOptions}>
             <Stack.Screen name="listings" options={{
                 title: 'Listings',
-                headerShown: false
+                headerLeft: () => {}
             }} />
             <Stack.Screen name="listingdetails/[id]" options={{
                 title: 'Listing Details'
