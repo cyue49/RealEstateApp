@@ -142,6 +142,37 @@ export default function Message() {
         }
     }
 
+    // remove oneself from hasUnreadMessage list when entering a chat
+    useEffect(() => {
+        if (userId !== '' && userId !== undefined && userId !== null) {
+            // fetch chat hasUnreadMessage list
+            axios.get(`${baseURL}/api/chats/id/${id}`)
+                .then((res) => {
+                    // remove oneself from the list
+                    const otherUsers = []
+                    res.data.hasUnreadMessage.forEach(uID => {
+                        if (uID !== userId) otherUsers.push(uID)
+                    });
+                    const data = {
+                        "hasUnreadMessage": otherUsers
+                    }
+
+                    // update the list in db
+                    axios.put(`${baseURL}/api/chats/id/${id}/updateUsersUnread`, data)
+                        // .then((res) => {
+                        //     console.log("removed oneself from hasUnreadMessage list")
+                        // })
+                        .catch((e) => {
+                            console.log(e)
+                        })
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+        }
+
+    }, [userId, chatMessages])
+
     return (
         <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={100} style={styles.container}>
             {chatMessages.length === 0 ? <Text style={{ flex: 1, alignSelf: "center", margin: 10 }}>No messages yet</Text> :
