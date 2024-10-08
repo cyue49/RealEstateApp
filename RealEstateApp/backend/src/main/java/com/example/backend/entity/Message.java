@@ -9,6 +9,7 @@ public class Message {
     private String fromUser;
     private String message;
     private Date timestamp;
+    private boolean read;
 
     public Message() {
     }
@@ -16,6 +17,7 @@ public class Message {
     public Message(String chatId, String fromUser, String message) {
         this.id = UUID.randomUUID().toString().replace("-", "");
         this.timestamp = new Date();
+        this.read = false;
         this.chatId = chatId;
         this.fromUser = fromUser;
         this.message = message;
@@ -41,6 +43,10 @@ public class Message {
         return timestamp;
     }
 
+    public boolean isRead() {
+        return read;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -59,5 +65,9 @@ public class Message {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
     }
 }

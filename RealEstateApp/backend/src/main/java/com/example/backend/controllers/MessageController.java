@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -38,6 +39,7 @@ public class MessageController {
         }
     }
 
+    // delete a message from chat
     @DeleteMapping("/id/{id}/delete/from/{chatId}")
     public ResponseEntity<?> deleteMessage(@PathVariable String id, @PathVariable String chatId) {
         try {
@@ -45,6 +47,17 @@ public class MessageController {
             return ResponseEntity.ok("success");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("error");
+        }
+    }
+
+    // set the read status of a message to true
+    @PutMapping("id/{id}/setRead")
+    public ResponseEntity<Message> readMessage(@PathVariable String id, @RequestBody Map<String, Object> requestBody) {
+        try {
+            Message message = messagesService.updateRead(id, (boolean) requestBody.get("readStatus"));
+            return ResponseEntity.ok(message);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
         }
     }
 }

@@ -48,11 +48,11 @@ export default function Inbox() {
         getChats()
     }, [userId])
 
-    // get updated chats every 2 seconds when screen is focused
+    // get updated chats every second when screen is focused
     useFocusEffect(() => {
         const myInterval = setInterval(() => {
             getChats()
-        }, 2000)
+        }, 1000)
 
         return () => clearInterval(myInterval);
     })

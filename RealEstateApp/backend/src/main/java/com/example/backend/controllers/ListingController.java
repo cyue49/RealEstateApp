@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/listing")
@@ -39,6 +40,32 @@ public class ListingController {
             return ResponseEntity.ok("Listing created successfully");
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error creating listing: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<Listing>> getAllListings() {
+        try {
+            List<Listing> listings = listingService.getAllListings();
+            return ResponseEntity.ok(listings);
+        } catch (Exception e) {
+            System.err.println("Error retrieving listings: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Listing> getListingById(@PathVariable String id) {
+        try {
+            Listing listing = listingService.getListingById(id);
+            if (listing != null) {
+                return ResponseEntity.ok(listing);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            return ResponseEntity.status(500).body(null);
         }
     }
 }
