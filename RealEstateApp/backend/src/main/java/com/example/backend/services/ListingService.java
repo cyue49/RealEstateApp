@@ -10,10 +10,12 @@ import com.google.cloud.firestore.WriteResult;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.Storage.SignUrlOption;
 import com.google.cloud.storage.StorageOptions;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import java.net.URL;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -21,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+
 import com.google.cloud.storage.Blob;
 
 @Service
@@ -109,19 +113,14 @@ public class ListingService {
                     .getService();
 
             for (String photoPath : listing.getPhotoUrls()) {
-                String blobName;
-
-                // Extract the blob name correctly
-                if (photoPath.startsWith("https://storage.googleapis.com/" + BUCKET_NAME + "/")) {
-                    blobName = photoPath.replace("https://storage.googleapis.com/" + BUCKET_NAME + "/", "");
-                } else {
-                    blobName = photoPath; // If it's already in blob form
-                }
+                // Extract the path within the bucket
+                String blobName = photoPath.replace("https://storage.googleapis.com/" + BUCKET_NAME + "/", "");
 
                 Blob blob = storage.get(BUCKET_NAME, blobName);
                 if (blob != null) {
-                    String photoUrl = "https://storage.googleapis.com/" + blob.getBucket() + "/" + blob.getName();
-                    updatedPhotoUrls.add(photoUrl);
+                    // Generate signed URL valid for 7 days (you can modify the duration)
+                    URL signedUrl = blob.signUrl(7, TimeUnit.DAYS, SignUrlOption.withV4Signature());
+                    updatedPhotoUrls.add(signedUrl.toString());
                 } else {
                     System.out.println("Blob not found for path: " + blobName); // Debug log
                 }
