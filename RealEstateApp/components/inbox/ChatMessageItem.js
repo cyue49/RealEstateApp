@@ -26,12 +26,31 @@ export default ChatMessageItem = ({ messageItem }) => {
     useEffect(() => {
         axios.get(`${baseURL}/user/profile/${messageItem.fromUser}`) // get user
             .then((res) => {
+                // console.log('getting picture')
                 setProfilePicture(res.data.photoUrl)
             })
             .catch((e) => {
                 console.log(e)
             })
-    }, [])
+    }, [messageItem.fromUser])
+
+    // set current chat messages to read on view
+    useEffect(() => {
+        // if has userId and not current user's own message
+        if (userId !== '' && userId !== undefined && userId !== null && userId !== messageItem.fromUser) {
+            const data = {
+                "readStatus": true
+            }
+            // set read status to true
+            axios.put(`${baseURL}/api/messages/id/${messageItem.id}/setRead`, data)
+                // .then((res) => {
+                //     console.log('message read')
+                // })
+                .catch((e) => {
+                    console.log(e)
+                })
+        }
+    }, [userId, messageItem.id])
 
     // handle long press a message
     const handleLongPress = () => {
@@ -92,7 +111,7 @@ export default ChatMessageItem = ({ messageItem }) => {
                             messageItem.fromUser === userId ? null :
                                 <View>
                                     <Text style={{ paddingHorizontal: 10, paddingBottom: 5, fontSize: 12, color: Colors.appBlue }}>{messageItem.timestamp.split('T')[1].split('.')[0]}</Text>
-                                    <View style={[styles.messageBoxRight, messageItem.read ? null : { borderWidth: 2, borderColor: Colors.appBlue }]}>
+                                    <View style={styles.messageBoxRight}>
                                         <Text>{messageItem.message}</Text>
                                     </View>
                                 </View>
