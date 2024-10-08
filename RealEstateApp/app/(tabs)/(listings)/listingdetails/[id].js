@@ -53,12 +53,17 @@ export default function ListingDetails() {
 
     return (
         <ScrollView style={styles.container}>
-        {/* Cover Image */}
+        {/* Scrollable Image Gallery */}
         {listing.photoUrls && listing.photoUrls.length > 0 ? (
-            <Image source={{ uri: listing.photoUrls[0] }} style={styles.coverImage} />
-        ) : (
-            <Image source={require('../../../../assets/listing/listingPlaceholder.jpg')} style={styles.coverImage} />
-        )}
+                <ScrollView horizontal style={styles.imageGallery}>
+                    {listing.photoUrls.map((photoUrl, index) => (
+                        <Image key={index} source={{ uri: photoUrl }} style={styles.galleryImage} />
+                    ))}
+                </ScrollView>
+            ) : (
+                <Image source={require('../../../../assets/listing/listingPlaceholder.jpg')} style={styles.coverImage} />
+            )}
+
 
         {/* Listing Info */}
         <View style={styles.infoContainer}>
@@ -85,6 +90,15 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFF',
+    },
+    imageGallery: {
+        marginVertical: 16,
+    },
+    galleryImage: {
+        width: 300,
+        height: 200,
+        marginRight: 10,
+        borderRadius: 8,
     },
     coverImage: {
         width: '100%',

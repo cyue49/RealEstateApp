@@ -89,6 +89,12 @@ const RegisterProperty = () => {
           Alert.alert('Error', 'User is not signed in');
           return;
       }
+
+          // Validate that at least one image is selected
+    if (selectedImages.length === 0) {
+      Alert.alert('Error', 'Please upload at least one image');
+      return;
+  }
       
       console.log("Validation successful");
   

@@ -49,9 +49,9 @@ public class ListingService {
         System.out.println("Update time: " + result.getUpdateTime());
     }
 
-    // Method to upload photos to Firebase Storage and return URLs
+    // Method to upload photos to Firebase Storage and return relative paths
     public List<String> uploadPhotosAndGetUrls(List<MultipartFile> photos) throws IOException {
-        List<String> photoUrls = new ArrayList<>();
+        List<String> photoPaths = new ArrayList<>();
 
         // Access Firebase Storage
         GoogleCredentials credentials = GoogleCredentials.fromStream(
@@ -69,12 +69,12 @@ public class ListingService {
             // Upload the file to Firebase Storage
             storage.create(blobInfo, photo.getBytes());
 
-            // Get the public URL of the uploaded file
-            String photoUrl = String.format("https://storage.googleapis.com/%s/listings/%s", BUCKET_NAME, fileName);
-            photoUrls.add(photoUrl);
+            // Save the relative path to the photo
+            String photoPath = "listings/" + fileName;
+            photoPaths.add(photoPath);
         }
 
-        return photoUrls;
+        return photoPaths;
     }
 
     // Method to fetch all listings from Firestore
@@ -99,6 +99,7 @@ public class ListingService {
     }
 
     // Method to update photo URLs to be accessible from Firebase Storage
+    // Method to update photo URLs to be accessible from Firebase Storage
     private void updatePhotoUrls(Listing listing) {
         List<String> updatedPhotoUrls = new ArrayList<>();
 
@@ -113,16 +114,13 @@ public class ListingService {
                     .getService();
 
             for (String photoPath : listing.getPhotoUrls()) {
-                // Extract the path within the bucket
-                String blobName = photoPath.replace("https://storage.googleapis.com/" + BUCKET_NAME + "/", "");
-
-                Blob blob = storage.get(BUCKET_NAME, blobName);
+                Blob blob = storage.get(BUCKET_NAME, photoPath);
                 if (blob != null) {
                     // Generate signed URL valid for 7 days (you can modify the duration)
                     URL signedUrl = blob.signUrl(7, TimeUnit.DAYS, SignUrlOption.withV4Signature());
                     updatedPhotoUrls.add(signedUrl.toString());
                 } else {
-                    System.out.println("Blob not found for path: " + blobName); // Debug log
+                    System.out.println("Blob not found for path: " + photoPath); // Debug log
                 }
             }
         } catch (IOException e) {
