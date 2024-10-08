@@ -11,7 +11,7 @@ const HorizontalList = ({ title, listings, onItemPress, onViewAllPress }) => {
       return (
         <TouchableOpacity style={styles.listingItem} onPress={() => onItemPress(item)}>
           <Image 
-            source={require('../../assets/listing/listingPlaceholder.jpg')}
+            source={{ uri: imageUrl }} 
             style={styles.listingImage}
             onError={(error) => console.error('Image load failed for:', imageUrl, error.nativeEvent)}
           />

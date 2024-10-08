@@ -53,32 +53,32 @@ export default function ListingDetails() {
 
     return (
         <ScrollView style={styles.container}>
-            {/* Cover Image */}
-            {listing.photoUrls && listing.photoUrls.length > 0 ? (
-                <Image source={{ uri: listing.photoUrls[0] }} style={styles.coverImage} />
-            ) : (
-                <Image source={require('../../../../assets/listing/listingPlaceholder.jpg')} style={styles.coverImage} />
-            )}
+        {/* Cover Image */}
+        {listing.photoUrls && listing.photoUrls.length > 0 ? (
+            <Image source={{ uri: listing.photoUrls[0] }} style={styles.coverImage} />
+        ) : (
+            <Image source={require('../../../../assets/listing/listingPlaceholder.jpg')} style={styles.coverImage} />
+        )}
 
-            {/* Listing Info */}
-            <View style={styles.infoContainer}>
+        {/* Listing Info */}
+        <View style={styles.infoContainer}>
             <View style={styles.rowContainer}>
                 <Text style={styles.listingTitle}>{listing.address}</Text>
-                <Text style={styles.listingDetails}>City: {listing.city}, State: {listing.state}</Text>
-            </View>
-                <View style={styles.rowContainer}>
-                    <Text style={styles.listingPrice}>${listing.price}</Text>
-                    <Text style={styles.listingDetails}>{listing.bedrooms}B + {listing.bathrooms} Bath</Text>
-                </View>
-                <View style={styles.rowContainer}>
-                <Text style={styles.listingDescription}>Listing Details:</Text>
                 <Ionicons name="heart-outline" size={24} color="red" style={styles.favoriteIcon} />
-                </View>
-                <Text style={styles.listingDescription}>{listing.description}</Text>
             </View>
-            <StatusBar style="auto" />
-        </ScrollView>
-    );
+            <Text style={styles.listingDetails}>City: {listing.city}, State: {listing.state}</Text>
+
+            <View style={styles.rowContainer}>
+                <Text style={styles.listingPrice}>${listing.price}</Text>
+                <Text style={styles.listingDetails}>{listing.bedrooms}B + {listing.bathrooms} Bath</Text>
+            </View>
+
+            <Text style={styles.listingDescriptionTitle}>Listing Details:</Text>
+            <Text style={styles.listingDescription}>{listing.description}</Text>
+        </View>
+        <StatusBar style="auto" />
+    </ScrollView>
+);
 }
 
 const styles = StyleSheet.create({

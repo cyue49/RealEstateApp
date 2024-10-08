@@ -109,14 +109,16 @@ public class ListingService {
                     .getService();
 
             for (String photoPath : listing.getPhotoUrls()) {
-                // Extract the path within the bucket
-                String blobName = photoPath;
-                if (photoPath.startsWith("https://storage.googleapis.com/")) {
-                    // Strip out the prefix and retain only the relative path
-                    blobName = photoPath.replace("https://storage.googleapis.com/realestate-64b3d.appspot.com/", "");
+                String blobName;
+
+                // Extract the blob name correctly
+                if (photoPath.startsWith("https://storage.googleapis.com/" + BUCKET_NAME + "/")) {
+                    blobName = photoPath.replace("https://storage.googleapis.com/" + BUCKET_NAME + "/", "");
+                } else {
+                    blobName = photoPath; // If it's already in blob form
                 }
 
-                Blob blob = storage.get("realestate-64b3d.appspot.com", blobName);
+                Blob blob = storage.get(BUCKET_NAME, blobName);
                 if (blob != null) {
                     String photoUrl = "https://storage.googleapis.com/" + blob.getBucket() + "/" + blob.getName();
                     updatedPhotoUrls.add(photoUrl);
