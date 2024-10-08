@@ -46,9 +46,16 @@ public class UserController {
             firestoreService.saveUserToFirestore(user);
 
             return ResponseEntity.ok("User created and saved to Firestore successfully");
+        } catch (IllegalStateException e) {
+            // Handle custom exception for "email already exists"
+            return ResponseEntity.status(409).body(e.getMessage());
+        } catch (FirebaseAuthException e) {
+            // Handle other Firebase-specific errors
+            return ResponseEntity.status(500).body("Error creating user in Firebase: " + e.getMessage());
         } catch (FirestoreException e) {
+            // Handle Firestore-related errors
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Error creating user: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error saving user to Firestore: " + e.getMessage());
         }
     }
     

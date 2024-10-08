@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.example.backend.entity.User;
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthErrorCode;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
@@ -27,18 +28,26 @@ public class FirebaseAuthService {
 
     public User createUser(User user) throws FirebaseAuthException{
 
+       try {
         // Create a new user in Firebase
         UserRecord.CreateRequest request = new UserRecord.CreateRequest()
-        .setEmail(user.getEmail())
-        .setPassword(user.getPassword());
+            .setEmail(user.getEmail())
+            .setPassword(user.getPassword());
 
         UserRecord userRecord = FirebaseAuth.getInstance().createUser(request);
 
         // Set additional fields from the user object
         user.setuID(userRecord.getUid());
-        
 
         return user;
+        
+    } catch (FirebaseAuthException e) {
+        // Check if the error is due to the email already existing
+        if (e.getAuthErrorCode() == AuthErrorCode.EMAIL_ALREADY_EXISTS) {
+            throw new IllegalStateException("Email already exists. Please use a different email.");
+        }
+        throw e;  // Re-throw other exceptions if needed
+    }
     }
 
     public UserRecord getUserById(String userID) throws FirebaseAuthException {
