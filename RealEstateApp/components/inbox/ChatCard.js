@@ -132,7 +132,7 @@ export default ChatCard = ({ item, onPress }) => {
                 <TouchableOpacity
                     onPress={onPress}
                     onLongPress={handleLongPress}>
-                    <View style={styles.chatCard}>
+                    <View style={[styles.chatCard, item.hasUnreadMessage.includes(userId) ? {backgroundColor: Colors.appBlueLight, borderBottomColor: Colors.appBlue} : null]}>
                         <View style={styles.imageContainer}>
                             {
                                 chatProfile === null ?
