@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image,Text, View, Button, StyleSheet, TouchableOpacity,ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import { styles } from '../../../constants/commonStyles';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -9,8 +9,6 @@ import axios from 'axios';
 import {useRouter} from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 import { baseURL } from '../../../constants/baseURL'
-
-
 
 
 export default profile = ()  => {
@@ -51,7 +49,26 @@ export default profile = ()  => {
    
     if (error) {console.log(error)}
 
-
+// Function to handle sign-out
+const signOutUser = async () => {
+    try {
+      // First, retrieve the userId from AsyncStorage
+      const storedUserId = await AsyncStorage.getItem('userId');
+      if (storedUserId) {
+        // Perform any necessary actions before signing out, e.g., API call or cleanup
+  
+        // Clear the stored userId from AsyncStorage
+        await AsyncStorage.removeItem('userId');
+  
+        console.log('User signed out successfully');
+        router.replace('/signin');  // Navigate to sign-in page after signing out
+      } else {
+        console.log('No userId found in AsyncStorage');
+      }
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
     const navigateToEditPage = () => {
         router.push('./editprofile');
     };
@@ -64,14 +81,12 @@ export default profile = ()  => {
         router.push('/listings');
     };
 
- 
-   
-
-    const goBack = () => {
-        router.back(); // Use this if you're using a navigation system that supports back
+    const navigateToRegisterProperty = () => {
+        router.push('/registerProperty');
     };
 
     return (
+        <ScrollView>
         <View style={styles.container}>
             <View style={localstyles.blueBar}>
               
@@ -79,6 +94,15 @@ export default profile = ()  => {
                 <View style={localstyles.profileRow}>
                     <View style={localstyles.imagePlaceholder}>
                         {/* Image will be added here later */}
+                        {user?.photoUrl ? (
+                            <Image 
+                            source={user.photoUrl}
+                            style = {localstyles.profileImage}
+                            />
+                        ) : (
+                            <Text style={{ color: '#bbb' }}>No image available</Text> // Placeholder text
+                        )}
+
                     </View>
                     <View style={localstyles.profileInfo}>
                         <Text style={localstyles.email}>
@@ -106,26 +130,42 @@ export default profile = ()  => {
             <View style={localstyles.actions}>
             <View style={localstyles.greyBar}>
                 <TouchableOpacity style={localstyles.iconButton} onPress={navigateToEditPage}>
-                    <Icon name="home" size={30} color="appBlue" />
-                    <Text style = {localstyles.text}>edit profile</Text>
+                    <Icon name="edit" size={30} color="#2976D4" />
+                    <Text style = {localstyles.text}>Edit Profile</Text>
                 </TouchableOpacity>
                 </View>
                 <View style={localstyles.greyBar}>
                 <TouchableOpacity style={localstyles.iconButton} onPress={navigateToListing}>
-                    <Icon name="list" size={30} color="#appBlue" />
+                    <Icon name="list" size={30} color="#2976D4" />
                     <Text style = {localstyles.text}>View My List</Text>
+                </TouchableOpacity>
+                </View>
+                <View style={localstyles.greyBar}>
+                <TouchableOpacity style={localstyles.iconButton} onPress={navigateToRegisterProperty}>
+                    <Icon name="registered" size={30} color="#2976D4" />
+                    <Text style = {localstyles.text}>Register My Property</Text>
                 </TouchableOpacity>
                 </View>
             </View>
 
+          {/* Sign-out Button */}
+          <View style={localstyles.greyBar}>
+        <TouchableOpacity style={localstyles.iconButton} onPress={signOutUser}>
+          <Icon name="sign-out" size={30} color="red" />
+          <Text style={localstyles.text}>Sign Out</Text>
+        </TouchableOpacity>
+     </View>
         
             <Button
                 onPress={navigateToSignIn}
                 title='Go to sign in page'
                 accessibilityLabel='Navigation button'
             />
+
+   
             <StatusBar style="auto" />
         </View>
+        </ScrollView>
     );
 }
 
@@ -139,9 +179,7 @@ const localstyles = StyleSheet.create({
         
     },
 
-    backButton: {
-        marginRight: 10,
-    },
+  
 
 
 
@@ -182,18 +220,18 @@ const localstyles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-around',
         marginTop: 20,
-        marginBottom: 70,
+        marginBottom: 25,
        
     },
 
     greyBar: {
         backgroundColor: '#E5E4E2',
-        paddingVertical: 15,
+        paddingVertical: 5,
         paddingHorizontal: 20,
         flexDirection: 'row', // Align the icon and text in a row
         alignItems: 'center', // Center the contents vertically
-        marginHorizontal: 30, 
-        marginVertical: 10,
+        marginHorizontal: 10, 
+        marginVertical: 5,
        
        
     },
@@ -216,4 +254,10 @@ const localstyles = StyleSheet.create({
         fontWeight: 'bold',
       
      },
+
+     profileImage: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 40, // Ensure the image is circular
+    },
 });

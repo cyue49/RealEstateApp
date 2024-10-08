@@ -71,4 +71,19 @@ public class MessagesService {
             db.collection("chats").document(chatId).set(chat);
         }
     }
+
+    // update message read status
+    public Message updateRead(String id, boolean status) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+
+        // get message with id and set it as read
+        Message message = db.collection("messages").document(id).get().get().toObject(Message.class);
+        message.setRead(status);
+
+        // save message to firestore
+        WriteResult writeResult = db.collection("messages").document(id).set(message).get();
+        System.out.println("Message read at: " + writeResult.getUpdateTime());
+
+        return message;
+    }
 }

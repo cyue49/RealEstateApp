@@ -32,12 +32,7 @@ export default function SignUp() {
           address: address.trim()
         };
     
-        const response = await axios.post(
-
-          `${baseURL}/user/create`,
-
-          user 
-        );
+        const response = await axios.post(`${baseURL}/user/create`,user);
     
         // Handle successful sign-up (navigate to home screen)
 

@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { StyleSheet, SafeAreaView, View, TextInput, FlatList, Text } from 'react-native';
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, SafeAreaView, View, TextInput, FlatList, Text, TouchableOpacity } from 'react-native';
 import { router, useFocusEffect } from 'expo-router'
 import { Colors } from '../../../constants/Colors'
 import { baseURL } from '../../../constants/baseURL'
-import MessageCard from '../../../components/inbox/MessageCard'
+import ChatCard from '../../../components/inbox/ChatCard'
+import NewChatModal from '../../../components/inbox/NewChatModal'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -13,6 +14,7 @@ export default function Inbox() {
     const [query, setQuery] = useState('')
     const [chats, setChats] = useState([])
     const [userId, setUserId] = useState('')
+    const [newChatModalVisible, setNewChatModalVisible] = useState(false);
 
     // navigate to single message chat page
     const navigateToMessage = (id) => {
@@ -29,7 +31,7 @@ export default function Inbox() {
     }, [])
 
     // get all chats for this user
-    const getChats = useCallback(() => {
+    const getChats = () => {
         if (userId !== "") {
             axios.get(`${baseURL}/api/chats/forUser/${userId}`)
                 .then((res) => {
@@ -39,11 +41,26 @@ export default function Inbox() {
                     console.log(e)
                 })
         }
+    }
+
+    // get chats for user
+    useEffect(() => {
+        getChats()
     }, [userId])
 
+    // get updated chats every second when screen is focused
     useFocusEffect(() => {
-        getChats()
+        const myInterval = setInterval(() => {
+            getChats()
+        }, 1000)
+
+        return () => clearInterval(myInterval);
     })
+
+    // new chat button
+    const onNewChat = () => {
+        setNewChatModalVisible(true)
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -57,6 +74,12 @@ export default function Inbox() {
                     placeholder='Search chats'
                 />
             </View>
+            <TouchableOpacity onPress={onNewChat}>
+                <View style={styles.newChatContainer}>
+                    <FontAwesome name="plus" size={16} color={Colors.appBlue} />
+                    <Text style={styles.newChatText}>New Chat</Text>
+                </View>
+            </TouchableOpacity>
 
             {(() => {
                 if (userId === "") {
@@ -72,13 +95,15 @@ export default function Inbox() {
                         data={chats}
                         renderItem={({ item }) => {
                             if (item.chatName.toLowerCase().includes(query.toLowerCase())) {
-                                return <MessageCard item={item} onPress={() => navigateToMessage(item.id)} />
+                                return <ChatCard item={item} onPress={() => navigateToMessage(item.id)} />
                             }
                         }}
                         keyExtractor={item => item.id}
                     />
                 }
             })()}
+
+            <NewChatModal isVisible={newChatModalVisible} setisVisible={setNewChatModalVisible} userId={userId} setChats={setChats} />
 
         </SafeAreaView>
     );
@@ -102,5 +127,22 @@ const styles = StyleSheet.create({
     },
     searchBox: {
         flex: 1
+    },
+    newChatContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 15,
+        borderWidth: 1,
+        borderColor: Colors.appBlue,
+        borderRadius: 50,
+        padding: 6,
+        marginHorizontal: 10,
+        marginBottom: 6
+    },
+    newChatText: {
+        fontWeight: 'bold',
+        fontSize: 16,
+        color: Colors.appBlue
     }
 });

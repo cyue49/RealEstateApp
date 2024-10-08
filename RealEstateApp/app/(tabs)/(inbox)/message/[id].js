@@ -21,6 +21,7 @@ export default function Message() {
 
     // states
     const [message, setMessage] = useState('') // message user is currently typing
+    const [chat, setChat] = useState(null) // current chat
     const [chatMessages, setchatMessages] = useState([]) // list of all messages for the chat
     const [userId, setUserId] = useState('')
     const [stompClient, setStompClient] = useState(null);
@@ -34,7 +35,7 @@ export default function Message() {
         fetchUserId();
     }, [])
 
-    // fetch and set chatName from db
+    // fetch and set current chat and chatName from db
     useEffect(() => {
         // fetch chat title by id then set it
         axios.get(`${baseURL}/api/chats/id/${id}`)
@@ -42,6 +43,7 @@ export default function Message() {
                 navigation.setOptions({
                     headerTitle: res.data.chatName
                 })
+                setChat(res.data)
             })
             .catch((e) => {
                 console.log(e)
@@ -65,6 +67,20 @@ export default function Message() {
 
                         // send message on websocket
                         sendMessage(res.data)
+
+                        // add everyone else to has unread message list
+                        const otherUsers = []
+                        chat.users.forEach(uID => {
+                            if (uID !== userId) otherUsers.push(uID)
+                        });
+                        const users = {
+                            "hasUnreadMessage": otherUsers
+                        }
+
+                        axios.put(`${baseURL}/api/chats/id/${id}/updateUsersUnread`, users)
+                            .catch((e) => {
+                                console.log(e)
+                            })
                     }
                 })
                 .catch((e) => {
@@ -125,6 +141,37 @@ export default function Message() {
             stompClient.send(`/app/message`, {}, JSON.stringify(data));
         }
     }
+
+    // remove oneself from hasUnreadMessage list when entering a chat
+    useEffect(() => {
+        if (userId !== '' && userId !== undefined && userId !== null) {
+            // fetch chat hasUnreadMessage list
+            axios.get(`${baseURL}/api/chats/id/${id}`)
+                .then((res) => {
+                    // remove oneself from the list
+                    const otherUsers = []
+                    res.data.hasUnreadMessage.forEach(uID => {
+                        if (uID !== userId) otherUsers.push(uID)
+                    });
+                    const data = {
+                        "hasUnreadMessage": otherUsers
+                    }
+
+                    // update the list in db
+                    axios.put(`${baseURL}/api/chats/id/${id}/updateUsersUnread`, data)
+                        // .then((res) => {
+                        //     console.log("removed oneself from hasUnreadMessage list")
+                        // })
+                        .catch((e) => {
+                            console.log(e)
+                        })
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+        }
+
+    }, [userId, chatMessages])
 
     return (
         <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={100} style={styles.container}>

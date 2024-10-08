@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Modal, TextInput } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Modal, TextInput } from 'react-native';
 import { Colors } from '../../constants/Colors'
 
 export default PopupModal = ({ isVisible, setisVisible, handleCancel, handleConfirm, message, input, setInput }) => {

@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { Text, TextInput, View,SafeAreaView,TouchableOpacity,Button, ActivityIndicator, StyleSheet, Alert  } from 'react-native';
+import { Image,Text, TextInput, View,SafeAreaView,TouchableOpacity,Button, ActivityIndicator, StyleSheet, Alert,Modal } from 'react-native';
 import { styles } from '../../../constants/commonStyles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useRouter} from 'expo-router';
@@ -8,6 +8,30 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { baseURL } from '../../../constants/baseURL';
 
+const avatars = [
+    require('../../../assets/avatar/avatar1.png'),
+    require('../../../assets/avatar/avatar2.png'),
+    require('../../../assets/avatar/avatar3.png'),
+    require('../../../assets/avatar/avatar4.png'),
+    require('../../../assets/avatar/avatar5.png'),
+    require('../../../assets/avatar/avatar6.png'),
+    require('../../../assets/avatar/avatar7.png'),
+    require('../../../assets/avatar/avatar8.png'),
+    require('../../../assets/avatar/avatar9.png'),
+    require('../../../assets/avatar/avatar10.png'),
+    require('../../../assets/avatar/avatar11.png'),
+    require('../../../assets/avatar/avatar12.webp'),
+    require('../../../assets/avatar/avatar13.png'),
+    require('../../../assets/avatar/avatar14.png'),
+    require('../../../assets/avatar/avatar15.png'),
+    require('../../../assets/avatar/avatar16.png'),
+    require('../../../assets/avatar/avatar17.png'),
+    require('../../../assets/avatar/avatar18.png'),
+    require('../../../assets/avatar/avatar19.png'),
+    require('../../../assets/avatar/avatar20.png'),
+    require('../../../assets/avatar/avatar21.png'),
+    require('../../../assets/avatar/avatar22.png'),
+];
 
 export default function EditProfile() {
 
@@ -17,12 +41,13 @@ export default function EditProfile() {
         userName: '',
         address: '',
         phoneNumber: '',
-        imageUrl: '',
+        photoUrl: '',
     });
     const[loading,setLoading] = useState(true);
     const[error,setError] = useState(null);
-
     const [originalUserData, setOriginalUserData] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
+
 
 
     useEffect(() =>{
@@ -114,22 +139,40 @@ export default function EditProfile() {
     };
 
 
+
+      // Function to handle avatar selection
+      const handleAvatarSelect = (avatar) => {
+        setUser((prevUser) => ({
+            ...prevUser,
+            photoUrl: avatar,
+        }));
+        setModalVisible(false);
+
+      };
+
       if (loading) {
         return <ActivityIndicator size="large" color="#0000ff" />;
     }
 
       if (error) {console.log(error)}
 
-   
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
         <View style={localstyles.blueBar}>
         
             {/* New nested view for image and info */}
             <View style={localstyles.profileRow}>
-                <View style={localstyles.imagePlaceholder}>
-                    {/* Image will be added here later */}
-                </View>
+                <TouchableOpacity
+                    style = {localstyles.imagePlaceholder}
+                    onPress={() => setModalVisible(true)}>
+                        {user.photoUrl ? (
+                            <Image source = {user.photoUrl} style={{ width: '100%', height: '100%', borderRadius: 40 }} />
+                        ) : (
+                            <Icon name="user" size={40} color="#bbb" />
+                        )}
+
+                    </TouchableOpacity>
+             
                 <View style={localstyles.profileInfo}>
                     <Text style={localstyles.email}>Email: </Text>
                     <TextInput
@@ -179,21 +222,41 @@ export default function EditProfile() {
   <View style={localstyles.actions}>
             <View style={localstyles.greyBar}>
                 <TouchableOpacity style={localstyles.iconButton} onPress={handleUpdateProfile} >
-                    <Icon name="edit" size={30} color="appBlue" />
+                    <Icon name="edit" size={30} color="#2976D4" />
                     <Text style = {localstyles.text}>Update profile</Text>
                 </TouchableOpacity>
                 </View>
                 <View style={localstyles.greyBar}>
                 <TouchableOpacity style={localstyles.iconButton} onPress={handleDeleteProfile}>
-                    <Icon name="info-circle" size={30} color="#appBlue" />
+                    <Icon name="info-circle" size={30} color="#2976D4"/>
                     <Text style = {localstyles.text}>Delete Profile</Text>
                 </TouchableOpacity>
                 </View>
             </View>
 
+  {/* Avatar Selection Modal */}
+  <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => setModalVisible(false)}>
+            <View style={localstyles.modalContainer}>
+                <View style={localstyles.modalView}>
+                    <Text style={localstyles.modalTitle}>Select Avatar</Text>
+                    <View style={localstyles.avatarList}>
+                        {avatars.map((avatar, index) => (
+                            <TouchableOpacity key={index} onPress={() => handleAvatarSelect(avatar)}>
+                                <Image source={avatar} style={localstyles.avatar} />
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+                    <Button title="Close" onPress={() => setModalVisible(false)} />
+                </View>
+            </View>
+        </Modal>
 
         <StatusBar style="auto" />
-      </SafeAreaView>
+      </View>
    );
 }
 
@@ -211,10 +274,6 @@ input: {
     marginBottom: 16,
     paddingHorizontal: 8,
   },
-
-backButton: {
-    marginRight: 10,
-},
 
 
 profileRow: {
@@ -258,7 +317,7 @@ details: {
 
 greyBar: {
     backgroundColor: '#E5E4E2',
-    paddingVertical: 20,
+    paddingVertical: 5,
     paddingHorizontal: 20,
     flexDirection: 'row', // Align the icon and text in a row
     alignItems: 'center', // Center the contents vertically
@@ -276,8 +335,46 @@ greyBar: {
   iconButton: {
     flexDirection: 'row', // Ensure icon and text are in the same row
     alignItems: 'center',
-    
+    paddingVertical: 15,
+},
 
+modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+},
+modalView: {
+    width: '80%',
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 20,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+        width: 0,
+        height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+},
+modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 15,
+},
+avatarList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    marginBottom: 15,
+},
+avatar: {
+    width: 60,
+    height: 60,
+    margin: 5,
+    borderRadius: 30,
 },
 
 });
