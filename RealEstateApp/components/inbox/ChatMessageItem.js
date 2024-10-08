@@ -111,7 +111,7 @@ export default ChatMessageItem = ({ messageItem }) => {
                             messageItem.fromUser === userId ? null :
                                 <View>
                                     <Text style={{ paddingHorizontal: 10, paddingBottom: 5, fontSize: 12, color: Colors.appBlue }}>{messageItem.timestamp.split('T')[1].split('.')[0]}</Text>
-                                    <View style={styles.messageBoxRight}>
+                                    <View style={[styles.messageBoxRight, messageItem.read ? null : { borderWidth: 1, borderColor: Colors.appBlue }]}>
                                         <Text>{messageItem.message}</Text>
                                     </View>
                                 </View>
