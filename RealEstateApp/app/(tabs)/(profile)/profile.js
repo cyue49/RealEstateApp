@@ -11,8 +11,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { baseURL } from '../../../constants/baseURL'
 
 
-
-
 export default profile = ()  => {
     const router = useRouter();
     const [user, setUser] = useState(null);  // State to store user data
@@ -83,10 +81,8 @@ const signOutUser = async () => {
         router.push('/listings');
     };
 
- 
-
     const navigateToRegisterProperty = () => {
-        router.push('/RegisterProperty');
+        router.push('/registerProperty');
     };
 
     return (
