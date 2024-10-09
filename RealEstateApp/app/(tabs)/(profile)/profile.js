@@ -73,16 +73,12 @@ const signOutUser = async () => {
         router.push('./editprofile');
     };
 
-    const navigateToSignIn = () => {
-        router.replace('/signin');
-    };
-
     const navigateToListing = () => {
         router.push('/listings');
     };
 
     const navigateToRegisterProperty = () => {
-        router.push('/registerProperty');
+        router.push('/RegisterProperty');
     };
 
     return (
@@ -155,14 +151,6 @@ const signOutUser = async () => {
           <Text style={localstyles.text}>Sign Out</Text>
         </TouchableOpacity>
      </View>
-        
-            <Button
-                onPress={navigateToSignIn}
-                title='Go to sign in page'
-                accessibilityLabel='Navigation button'
-            />
-
-   
             <StatusBar style="auto" />
         </View>
         </ScrollView>
