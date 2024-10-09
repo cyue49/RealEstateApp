@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://127.0.0.1:8081") // or whatever your React Native dev server port is
 @RequestMapping("/api/messages")
 public class MessageController {
 
