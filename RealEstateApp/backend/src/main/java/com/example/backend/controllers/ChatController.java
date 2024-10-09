@@ -80,4 +80,15 @@ public class ChatController {
             return ResponseEntity.badRequest().body("error");
         }
     }
+
+    // update chat users with unread messages
+    @PutMapping("id/{id}/updateUsersUnread")
+    public ResponseEntity<Chat> updateUsersUnreadMessages(@PathVariable String id, @RequestBody Map<String, Object> requestBody) {
+        try {
+            Chat chat = chatsService.updateUsersUnreadMessages((List<String>) requestBody.get("hasUnreadMessage"), id);
+            return ResponseEntity.ok(chat);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 }

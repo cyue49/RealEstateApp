@@ -6,6 +6,12 @@ import { baseURL } from '../../../../constants/baseURL'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import ChatMessageItem from '../../../../components/inbox/ChatMessageItem'
 import DateDivider from '../../../../components/inbox/DateDivider'
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import SockJS from 'sockjs-client';
+import { Stomp } from '@stomp/stompjs';
+import { TextEncoder } from 'text-encoding';
+global.TextEncoder = TextEncoder;
 
 export default function Message() {
     const navigation = useNavigation();
@@ -15,17 +21,29 @@ export default function Message() {
 
     // states
     const [message, setMessage] = useState('') // message user is currently typing
+    const [chat, setChat] = useState(null) // current chat
     const [chatMessages, setchatMessages] = useState([]) // list of all messages for the chat
+    const [userId, setUserId] = useState('')
+    const [stompClient, setStompClient] = useState(null);
 
-    // fetch and set chatName from db
+    // get user id from storage
+    useEffect(() => {
+        const fetchUserId = async () => {
+            const id = await AsyncStorage.getItem('userId');
+            setUserId(id);
+        }
+        fetchUserId();
+    }, [])
+
+    // fetch and set current chat and chatName from db
     useEffect(() => {
         // fetch chat title by id then set it
-        fetch(`${baseURL}/api/chats/id/${id}`)
-            .then((res) => res.json())
-            .then((data) => {
+        axios.get(`${baseURL}/api/chats/id/${id}`)
+            .then((res) => {
                 navigation.setOptions({
-                    headerTitle: data.chatName
+                    headerTitle: res.data.chatName
                 })
+                setChat(res.data)
             })
             .catch((e) => {
                 console.log(e)
@@ -34,33 +52,136 @@ export default function Message() {
 
     // handle send message 
     const handleSend = () => {
-        // todo
+        const data = {
+            chatId: id,
+            fromUser: userId,
+            message: message.trim()
+        }
+
+        if (message.trim() !== '') {
+            // save message in db
+            axios.post(`${baseURL}/api/messages/create`, data)
+                .then((res) => {
+                    if (res.status === 200) {
+                        setMessage('')
+
+                        // send message on websocket
+                        sendMessage(res.data)
+
+                        // add everyone else to has unread message list
+                        const otherUsers = []
+                        chat.users.forEach(uID => {
+                            if (uID !== userId) otherUsers.push(uID)
+                        });
+                        const users = {
+                            "hasUnreadMessage": otherUsers
+                        }
+
+                        axios.put(`${baseURL}/api/chats/id/${id}/updateUsersUnread`, users)
+                            .catch((e) => {
+                                console.log(e)
+                            })
+                    }
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+        }
     }
 
     // fetch messages from db and keep track of the previous date to know when to display date dividers
     var previousDate = ''
-    useEffect(() => {
-        // fetch messages
-        fetch(`${baseURL}/api/messages/forChat/${id}`)
-            .then((res) => res.json())
-            .then((data) => {
-                setchatMessages(data)
+    const updateChat = () => {
+        axios.get(`${baseURL}/api/messages/forChat/${id}`)
+            .then((res) => {
+                setchatMessages(res.data)
                 // set initial previous date to the date of the first message
-                previousDate = data[0].timestamp.split('T')[0]
+                previousDate = res.data[0].timestamp.split('T')[0]
             })
             .catch((e) => {
                 console.log(e)
             })
+    }
+
+    // fetch all chat messages on page load
+    useEffect(() => {
+        updateChat()
     }, [])
+
+    // connect to websocket
+    useEffect(() => {
+        const socket = () => new SockJS(`${baseURL}/ws`);
+        client = Stomp.over(socket);
+
+        // set state
+        setStompClient(client);
+
+        // subscribe to websocket to listen for messages
+        client.connect({}, () => {
+            client.subscribe(`/user/${id}/reply`, (receivedMessage) => {
+                console.log('Received message:' + receivedMessage.body)
+                // update chat messages
+                updateChat()
+            });
+        });
+
+        // close connection
+        return () => {
+            if (stompClient) {
+                stompClient.disconnect(() => {
+                    console.log('Disconnected from websocket')
+                })
+            }
+        }
+    }, [])
+
+    // sending a message over the websocket
+    const sendMessage = (data) => {
+        if (stompClient) {
+            stompClient.send(`/app/message`, {}, JSON.stringify(data));
+        }
+    }
+
+    // remove oneself from hasUnreadMessage list when entering a chat
+    useEffect(() => {
+        if (userId !== '' && userId !== undefined && userId !== null) {
+            // fetch chat hasUnreadMessage list
+            axios.get(`${baseURL}/api/chats/id/${id}`)
+                .then((res) => {
+                    // remove oneself from the list
+                    const otherUsers = []
+                    res.data.hasUnreadMessage.forEach(uID => {
+                        if (uID !== userId) otherUsers.push(uID)
+                    });
+                    const data = {
+                        "hasUnreadMessage": otherUsers
+                    }
+
+                    // update the list in db
+                    axios.put(`${baseURL}/api/chats/id/${id}/updateUsersUnread`, data)
+                        // .then((res) => {
+                        //     console.log("removed oneself from hasUnreadMessage list")
+                        // })
+                        .catch((e) => {
+                            console.log(e)
+                        })
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+        }
+
+    }, [userId, chatMessages])
 
     return (
         <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={100} style={styles.container}>
-            {chatMessages.length === 0 ? <Text style = {{flex: 1, alignSelf: "center", margin: 10}}>No messages yet</Text> :
+            {chatMessages.length === 0 ? <Text style={{ flex: 1, alignSelf: "center", margin: 10 }}>No messages yet</Text> :
                 <FlatList
                     style={styles.flatList}
                     data={chatMessages}
                     inverted={true}
-                    renderItem={({ item }) => {
+                    renderItem={({ item, index }) => {
+                        if (index === 0) previousDate = ''
                         if (previousDate === item.timestamp.split('T')[0]) {
                             previousDate = item.timestamp.split('T')[0]
                             return <ChatMessageItem messageItem={item} />
@@ -74,7 +195,7 @@ export default function Message() {
                         }
                     }}
                     ListFooterComponent={() => <DateDivider date={previousDate} />}
-                    keyExtractor={item => item.id}
+                    keyExtractor={(item, index) => index.toString()}
                 />}
 
             <View style={{ height: 1, backgroundColor: Colors.appGray }}></View>

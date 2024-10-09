@@ -1,77 +1,71 @@
 package com.example.backend.controllers;
 
 import com.example.backend.entity.Listing;
-import com.example.backend.services.ListingsService;
+import com.example.backend.services.ListingService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RestController
-@CrossOrigin("*")
-@RequestMapping("/api/listings")
+@RequestMapping("/listing")
 public class ListingController {
 
-    @Autowired
-    private ListingsService listingsService;
+    private final ListingService listingService;
 
-    // Create a new listing
-    @PostMapping("/create")
-    public ResponseEntity<Listing> createListing(@RequestBody Listing listing) {
+    @Autowired
+    public ListingController(ListingService listingService) {
+        this.listingService = listingService;
+    }
+
+    @PostMapping(value = "/create", consumes = { "multipart/form-data" })
+    public ResponseEntity<String> createListing(
+            @RequestPart("listing") String listingJson,
+            @RequestPart("photos") List<MultipartFile> photos) {
+
         try {
-            Listing newListing = listingsService.createListing(listing);
-            return ResponseEntity.ok(newListing);
+            // Convert JSON String to Listing object
+            ObjectMapper objectMapper = new ObjectMapper();
+            Listing listing = objectMapper.readValue(listingJson, Listing.class);
+
+            // Save listing to Firestore
+            List<String> photoUrls = listingService.uploadPhotosAndGetUrls(photos);
+            listing.setPhotoUrls(photoUrls);
+
+            listingService.saveListing(listing); // Save the listing to Firestore
+            return ResponseEntity.ok("Listing created successfully");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.status(500).body("Error creating listing: " + e.getMessage());
         }
     }
 
-    // Get all listings
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseEntity<List<Listing>> getAllListings() {
         try {
-            List<Listing> listings = listingsService.getAllListings();
+            List<Listing> listings = listingService.getAllListings();
             return ResponseEntity.ok(listings);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
+            System.err.println("Error retrieving listings: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(null);
         }
     }
 
-    // Get a listing by ID
     @GetMapping("/{id}")
     public ResponseEntity<Listing> getListingById(@PathVariable String id) {
         try {
-            Listing listing = listingsService.getListingById(id);
+            Listing listing = listingService.getListingById(id);
             if (listing != null) {
                 return ResponseEntity.ok(listing);
             } else {
                 return ResponseEntity.notFound().build();
             }
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
-
-    // Update a listing
-    @PutMapping("/{id}")
-    public ResponseEntity<Listing> updateListing(@PathVariable String id, @RequestBody Listing updatedListing) {
-        try {
-            Listing updated = listingsService.updateListing(id, updatedListing);
-            return ResponseEntity.ok(updated);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
-
-    // Delete a listing
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteListing(@PathVariable String id) {
-        try {
-            listingsService.deleteListing(id);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+        } catch (ExecutionException | InterruptedException e) {
+            return ResponseEntity.status(500).body(null);
         }
     }
 }

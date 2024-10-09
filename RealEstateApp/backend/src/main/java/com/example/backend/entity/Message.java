@@ -7,19 +7,19 @@ public class Message {
     private String id;
     private String chatId;
     private String fromUser;
-    private String toUser;
     private String message;
     private Date timestamp;
+    private boolean read;
 
     public Message() {
     }
 
-    public Message(String chatId, String fromUser, String toUser, String message) {
+    public Message(String chatId, String fromUser, String message) {
         this.id = UUID.randomUUID().toString().replace("-", "");
         this.timestamp = new Date();
+        this.read = false;
         this.chatId = chatId;
         this.fromUser = fromUser;
-        this.toUser = toUser;
         this.message = message;
     }
 
@@ -35,16 +35,16 @@ public class Message {
         return fromUser;
     }
 
-    public String getToUser() {
-        return toUser;
-    }
-
     public String getMessage() {
         return message;
     }
 
     public Date getTimestamp() {
         return timestamp;
+    }
+
+    public boolean isRead() {
+        return read;
     }
 
     public void setId(String id) {
@@ -59,15 +59,15 @@ public class Message {
         this.fromUser = fromUser;
     }
 
-    public void setToUser(String toUser) {
-        this.toUser = toUser;
-    }
-
     public void setMessage(String message) {
         this.message = message;
     }
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
     }
 }

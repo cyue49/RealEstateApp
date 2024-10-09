@@ -1,5 +1,9 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, TouchableOpacity } from 'react-native'
 import { Colors } from './Colors'
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { useNavigation } from '@react-navigation/native';
+
+
 
 export const styles = StyleSheet.create({
     containerCenter: {
@@ -17,10 +21,21 @@ export const headerOptions = {
     headerStyle: {
         backgroundColor: Colors.appBlue
     },
+    // headerLeft: () => {
+    //     const navigation = useNavigation(); // Access navigation here
+    //     return (
+    //         <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginLeft: 10 }}>
+    //             <Icon name="arrow-left" size={25} color="#fff" />
+    //         </TouchableOpacity>
+    //     );
+    // },
+
     headerTintColor: Colors.appLight,
     headerTitleStyle: {
         fontWeight: 'bold',
     }
+
+ 
 }
 
 export const bottomTabBarOptions = {

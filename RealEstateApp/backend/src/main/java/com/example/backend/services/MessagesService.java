@@ -20,7 +20,7 @@ public class MessagesService {
         Firestore db = FirestoreClient.getFirestore();
 
         // create new message with auto generated id and timestamp
-        Message newMessage = new Message(message.getChatId(), message.getFromUser(), message.getToUser(), message.getMessage());
+        Message newMessage = new Message(message.getChatId(), message.getFromUser(), message.getMessage());
 
         // save message to firestore
         WriteResult writeResult = db.collection("messages").document(newMessage.getId()).set(newMessage).get();
@@ -70,5 +70,20 @@ public class MessagesService {
 
             db.collection("chats").document(chatId).set(chat);
         }
+    }
+
+    // update message read status
+    public Message updateRead(String id, boolean status) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+
+        // get message with id and set it as read
+        Message message = db.collection("messages").document(id).get().get().toObject(Message.class);
+        message.setRead(status);
+
+        // save message to firestore
+        WriteResult writeResult = db.collection("messages").document(id).set(message).get();
+        System.out.println("Message read at: " + writeResult.getUpdateTime());
+
+        return message;
     }
 }

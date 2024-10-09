@@ -69,7 +69,30 @@ public class ChatsService {
     public void deleteChat(String id) throws ExecutionException, InterruptedException {
         Firestore db = FirestoreClient.getFirestore();
 
+        // delete all messages of the chat
+        List<QueryDocumentSnapshot> list = db.collection("messages").whereEqualTo("chatId", id).get().get().getDocuments();
+
+        for (QueryDocumentSnapshot snapshot : list) {
+            snapshot.getReference().delete();
+        }
+
+        // delete the chat
         WriteResult writeResult = db.collection("chats").document(id).delete().get();
         System.out.println("Chat deleted at: " + writeResult.getUpdateTime());
+    }
+
+    // update users with unread messages
+    public Chat updateUsersUnreadMessages (List<String> users, String chatId) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+
+        // get chat with id and set users with unread messages
+        Chat chat = db.collection("chats").document(chatId).get().get().toObject(Chat.class);
+        chat.setHasUnreadMessage(users);
+
+        // save chat to firestore
+        WriteResult writeResult = db.collection("chats").document(chatId).set(chat).get();
+        System.out.println("Chat updated at: " + writeResult.getUpdateTime());
+
+        return chat;
     }
 }
