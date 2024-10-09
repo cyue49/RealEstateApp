@@ -46,9 +46,16 @@ public class UserController {
             firestoreService.saveUserToFirestore(user);
 
             return ResponseEntity.ok("User created and saved to Firestore successfully");
+        } catch (IllegalStateException e) {
+            // Handle custom exception for "email already exists"
+            return ResponseEntity.status(409).body(e.getMessage());
+        } catch (FirebaseAuthException e) {
+            // Handle other Firebase-specific errors
+            return ResponseEntity.status(500).body("Error creating user in Firebase: " + e.getMessage());
         } catch (FirestoreException e) {
+            // Handle Firestore-related errors
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Error creating user: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error saving user to Firestore: " + e.getMessage());
         }
     }
     
@@ -60,8 +67,15 @@ public class UserController {
             UserRecord userRecord = firebaseAuthService.getUserByEmail(user.getEmail());
             return ResponseEntity.ok(userRecord);
 
+        } catch (IllegalStateException e) {
+            // Handle custom exception for "user not found"
+            return ResponseEntity.status(404).body(e.getMessage());  // Return a 404 response
         } catch (FirebaseAuthException e) {
-            return ResponseEntity.badRequest().body("Invalid email or password.");
+            // Handle other Firebase-specific errors like invalid email, invalid request, etc.
+            return ResponseEntity.status(400).body("Invalid email or password.");
+        } catch (Exception e) {
+            // Catch any other exceptions
+            return ResponseEntity.status(500).body("An error occurred during sign-in.");
         }
     }
 

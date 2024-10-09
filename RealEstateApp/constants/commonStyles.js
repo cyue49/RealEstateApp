@@ -57,6 +57,7 @@ export const bottomTabBarOptions = {
     }
 }
 
+
 export const singleListingStyles = {
     listingItem: {
         flexDirection: 'row',
@@ -130,3 +131,34 @@ export const lsitingPropertyCardstyles = StyleSheet.create({
         paddingBottom: 100, // For better spacing at the bottom
     },
 });
+
+export const button = {
+        backgroundColor: Colors.appBlue,
+        paddingVertical: 15,
+        borderRadius: 25,
+        width: "100%",
+        alignItems: "center",
+        marginVertical: 10,
+        color: "#fff",
+        fontSize: 18,
+        fontWeight: "bold",
+}
+
+export const buttonText = {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+}
+
+export const link = {
+    color: Colors.appBlue,
+    marginTop: 15,
+    fontWeight: "bold",
+}
+
+export const favicon = {
+    width: 150,   
+    height: 150,  
+    marginBottom: 30
+}
+
