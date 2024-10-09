@@ -74,3 +74,44 @@ export const singleListingStyles = {
         color: 'green',
     },
 };
+
+export const lsitingPropertyCardstyles = StyleSheet.create({
+    containerCenter: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 16,
+    },
+    tabPageStyles: {
+        // Add styles for your tab pages if necessary
+    },
+    card: {
+        marginVertical: 10,
+        borderRadius: 10,
+        elevation: 3, // shadow effect for Android
+    },
+    cardTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    cardDetails: {
+        fontSize: 14,
+        color: '#555',
+    },
+    availableDate: {
+        fontSize: 12,
+        color: '#888',
+    },
+    cardButton: {
+        color: '#007BFF',
+        fontWeight: 'bold',
+    },
+    header: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
+    },
+    cardContainer: {
+        paddingBottom: 100, // For better spacing at the bottom
+    },
+});
