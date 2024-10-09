@@ -1,10 +1,10 @@
 import { StatusBar } from "expo-status-bar";
-import { Text, View, Button, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { Text, View, Image, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 import { useState } from "react"; 
 import axios from 'axios';
 import { baseURL } from '../../constants/baseURL'
-//import { styles } from "../../constants/commonStyles";
+import { button, buttonText, link, favicon } from "../../constants/commonStyles";
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 
 
@@ -67,6 +67,7 @@ export default function SignIn() {
 
   return (
     <View style={styles.container}>
+      <Image source={require('../../assets/favicon.png')} style={favicon} />
       <Text style={styles.title}>Sign In</Text>
       <TextInput
         style={styles.input}
@@ -82,11 +83,11 @@ export default function SignIn() {
         secureTextEntry
       />
       {error ? <Text style={styles.error}>{error}</Text> : null}
-      <TouchableOpacity style={styles.button} onPress={handleSignIn}>
-        <Text style={styles.buttonText}>Sign In</Text>
+      <TouchableOpacity style={button} onPress={handleSignIn}>
+        <Text style={buttonText}>Sign In</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={goToSignup}>
-        <Text style={styles.link}>Don't have an account? Sign Up</Text>
+        <Text>Don't have an account? <Text style={link}>Sign Up</Text></Text>
       </TouchableOpacity>
     </View>
     
@@ -125,23 +126,6 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingHorizontal: 20,
     marginVertical: 10,
-  },
-  button: {
-    backgroundColor: '#ff007a',
-    paddingVertical: 15,
-    borderRadius: 25,
-    width: '100%',
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  link: {
-    color: '#ff007a',
-    marginTop: 15,
   },
   error: {
     color: 'red',

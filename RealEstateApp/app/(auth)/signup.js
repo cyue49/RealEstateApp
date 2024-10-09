@@ -1,8 +1,7 @@
-import { StatusBar } from "expo-status-bar";
 import {
   Text,
   View,
-  Button,
+  Image,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -12,7 +11,7 @@ import { useState } from "react";
 import axios from "axios";
 
 import { baseURL } from "../../constants/baseURL";
-//import { styles } from "../../constants/commonStyles";
+import { button, buttonText, link, favicon } from "../../constants/commonStyles";
 
 export default function SignUp() {
   // const navigation = useNavigation();
@@ -64,6 +63,7 @@ export default function SignUp() {
 
   return (
     <View style={styles.container}>
+      <Image source={require('../../assets/favicon.png')} style={favicon} />
       <Text style={styles.title}>Sign Up</Text>
       <TextInput
         style={styles.input}
@@ -99,11 +99,11 @@ export default function SignUp() {
       />
 
       {error ? <Text style={styles.error}>{error}</Text> : null}
-      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-        <Text style={styles.buttonText}>Sign Up</Text>
+      <TouchableOpacity style={button} onPress={handleSignUp}>
+        <Text style={buttonText}>Sign Up</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={goToSignin}>
-        <Text style={styles.link}>Already have an account? Sign in</Text>
+        <Text>Already have an account?<Text style={link}> Sign in</Text></Text>
       </TouchableOpacity>
     </View>
   );
@@ -141,23 +141,6 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingHorizontal: 20,
     marginVertical: 10,
-  },
-  button: {
-    backgroundColor: "#ff007a",
-    paddingVertical: 15,
-    borderRadius: 25,
-    width: "100%",
-    alignItems: "center",
-    marginVertical: 10,
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  link: {
-    color: "#ff007a",
-    marginTop: 15,
   },
   error: {
     color: "red",
