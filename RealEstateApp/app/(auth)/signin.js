@@ -41,8 +41,27 @@ export default function SignIn() {
 
         goToHome();
       } catch (error) {
-        console.log("Error:", error)
-        setError('Invalid email or password' + error);
+        //console.error("Error:", error);
+      
+        if (error.response) {
+          // Handle user not found case (404)
+          if (error.response.status === 404) {
+            setError('The user does not exist.');
+          }
+          // Handle other error codes (e.g., invalid email or password)
+          else if (error.response.status === 400) {
+            setError('Invalid email or password.');
+          } else {
+            // Handle other server-side errors
+            setError('An error occurred during sign-in. Please try again later.');
+          }
+        } else if (error.request) {
+          // Handle case where no response was received from server
+          setError('No response from server. Check your network connection.');
+        } else {
+          // Handle other client-side errors (e.g., unexpected issues)
+          setError('An error occurred while sending the sign-in request.');
+        }
       }
   };
 

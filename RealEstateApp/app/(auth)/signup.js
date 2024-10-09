@@ -44,12 +44,12 @@ export default function SignUp() {
       console.log("Sign-Up successful:", response.data);
       goToSignin();
     } catch (error) {
-      console.error("Error:", error);
+      //console.error("Error:", error);
 
       if (error.response) {
         // Check for 409 Conflict response from the backend
         if (error.response.status === 409) {
-          setError("Email already exists. Please use a different email.");
+          setError("Email already exists.");
         } else {
           // Other errors from the server
           setError(error.response.data?.message || "Sign-up failed");

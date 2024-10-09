@@ -55,8 +55,17 @@ public class FirebaseAuthService {
     }
 
     public UserRecord getUserByEmail(String email) throws FirebaseAuthException {
-        System.out.println("In User Get Email ...");
-        return firebaseAuth.getUserByEmail(email);
+        try {
+            System.out.println("In User Get Email ...");
+            return firebaseAuth.getUserByEmail(email); // Attempt to get the user by email
+        } catch (FirebaseAuthException e) {
+            // Check if the error is because the user does not exist
+            if (e.getAuthErrorCode() == AuthErrorCode.USER_NOT_FOUND) {
+                throw new IllegalStateException("User with email " + email + " does not exist.");
+            }
+            // Re-throw other FirebaseAuthExceptions
+            throw e;
+        }
     }
 
     public void deleteUser(String userId) throws FirebaseAuthException {
