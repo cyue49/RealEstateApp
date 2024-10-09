@@ -6,6 +6,7 @@ import axios from 'axios';
 import { baseURL } from '../../constants/baseURL'
 import { button, buttonText, link, favicon } from "../../constants/commonStyles";
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
+import GoogleSigninButton from "../../components/auth/GoogleSigninButton";
 
 
 export default function SignIn() {
@@ -86,6 +87,9 @@ export default function SignIn() {
       <TouchableOpacity style={button} onPress={handleSignIn}>
         <Text style={buttonText}>Sign In</Text>
       </TouchableOpacity>
+      
+      <GoogleSigninButton/>
+
       <TouchableOpacity onPress={goToSignup}>
         <Text>Don't have an account? <Text style={link}>Sign Up</Text></Text>
       </TouchableOpacity>
