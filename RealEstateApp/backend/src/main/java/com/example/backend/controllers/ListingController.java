@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/listing")
 public class ListingController {
 
