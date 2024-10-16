@@ -1,0 +1,77 @@
+{
+  "project_info": {
+    "project_number": "995537696470",
+    "firebase_url": "https://realestate-64b3d-default-rtdb.firebaseio.com",
+    "project_id": "realestate-64b3d",
+    "storage_bucket": "realestate-64b3d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:995537696470:android:553d9f67ea55bb7b6d3b77",
+        "android_client_info": {
+          "package_name": "com.example.realestate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "995537696470-p6j7rqopgkcsur47ud5tso2nin17ef7h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCk70qdEOK4M_BIgrTY67M4NjiDSJFkkU0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "995537696470-p6j7rqopgkcsur47ud5tso2nin17ef7h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:995537696470:android:1734c2ceec93be696d3b77",
+        "android_client_info": {
+          "package_name": "com.kawtharmashkour.RealEstateApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "995537696470-i1oulq48mu9mfhj0ful191dddh5nm5pa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kawtharmashkour.RealEstateApp",
+            "certificate_hash": "6289677ba255810499a99f368794505b48152eb0"
+          }
+        },
+        {
+          "client_id": "995537696470-p6j7rqopgkcsur47ud5tso2nin17ef7h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCk70qdEOK4M_BIgrTY67M4NjiDSJFkkU0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "995537696470-p6j7rqopgkcsur47ud5tso2nin17ef7h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

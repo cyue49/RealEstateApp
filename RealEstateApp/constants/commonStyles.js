@@ -144,6 +144,20 @@ export const button = {
         fontWeight: "bold",
 }
 
+export const buttonOutLine = {
+    paddingVertical: 5,
+    borderRadius: 25,
+    width: "100%",
+    alignItems: "center",
+    marginVertical: 10,
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+    borderWidth: 2,     
+  borderColor: Colors.appBlue,
+  flexDirection: 'row', 
+  justifyContent: 'center'
+}
 export const buttonText = {
     color: "#fff",
     fontSize: 18,
