@@ -57,6 +57,81 @@ export const bottomTabBarOptions = {
     }
 }
 
+
+export const singleListingStyles = {
+    listingItem: {
+        flexDirection: 'row',
+        padding: 10,
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        marginVertical: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 5,
+    },
+    coverImage: {
+        width: 100,
+        height: 100,
+        borderRadius: 10,
+    },
+    detailsContainer: {
+        flex: 1,
+        paddingLeft: 10,
+        justifyContent: 'center',
+    },
+    address: {
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    price: {
+        fontSize: 14,
+        color: 'green',
+    },
+};
+
+export const lsitingPropertyCardstyles = StyleSheet.create({
+    containerCenter: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 16,
+    },
+    tabPageStyles: {
+        // Add styles for your tab pages if necessary
+    },
+    card: {
+        marginVertical: 10,
+        borderRadius: 10,
+        elevation: 3, // shadow effect for Android
+    },
+    cardTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    cardDetails: {
+        fontSize: 14,
+        color: '#555',
+    },
+    availableDate: {
+        fontSize: 12,
+        color: '#888',
+    },
+    cardButton: {
+        color: '#007BFF',
+        fontWeight: 'bold',
+    },
+    header: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
+    },
+    cardContainer: {
+        paddingBottom: 100, // For better spacing at the bottom
+    },
+});
+
 export const button = {
         backgroundColor: Colors.appBlue,
         paddingVertical: 15,
@@ -100,3 +175,4 @@ export const favicon = {
     height: 150,  
     marginBottom: 30
 }
+
